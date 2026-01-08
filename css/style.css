@@ -1,0 +1,115 @@
+:root {
+    --primary: #0a2540;
+    --secondary: #425466;
+    --background: #ffffff;
+    --gray-bg: #f5f7fa;
+    --accent: #2563eb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    color: var(--secondary);
+    background: var(--background);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.header {
+    background: var(--primary);
+    color: #fff;
+}
+
+.header h1 {
+    margin-bottom: 5px;
+    font-size: 2.4rem;
+}
+
+.header h2 {
+    font-weight: 400;
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+.location {
+    margin-top: 10px;
+    opacity: 0.85;
+}
+
+.contact span {
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+}
+
+.contact a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.section h3 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: var(--primary);
+}
+
+.section.gray {
+    background: var(--gray-bg);
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.skills-grid h4 {
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+.competencies {
+    list-style: none;
+    padding-left: 0;
+}
+
+.competencies li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.role {
+    margin-bottom: 30px;
+}
+
+.role h4 {
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+.role span {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.role ul {
+    margin-top: 10px;
+}
+
+.footer {
+    background: var(--primary);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+}
