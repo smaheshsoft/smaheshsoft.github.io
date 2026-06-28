@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mahesh – Interview Preparation</title>
+<style>
+  /* ── LIGHT THEME VARIABLES ── */
+  :root {
+    --bg:        #f0f4f8;
+    --surface:   #ffffff;
+    --surface2:  #f8fafc;
+    --border:    #e2e8f0;
+    --border2:   #cbd5e1;
+    --text:      #1e293b;
+    --text2:     #475569;
+    --muted:     #94a3b8;
+    --accent:    #2563eb;
+    --accent-bg: #eff6ff;
+    --accent-bd: #bfdbfe;
+    --green:     #16a34a;
+    --green-bg:  #f0fdf4;
+    --green-bd:  #bbf7d0;
+    --red:       #dc2626;
+    --red-bg:    #fef2f2;
+    --red-bd:    #fecaca;
+    --orange:    #ea580c;
+    --orange-bg: #fff7ed;
+    --orange-bd: #fed7aa;
+    --code-bg:   #1e293b;
+    --code-text: #7dd3fc;
+    --sidebar-w: 260px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.06);
+  }
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+  #sidebar .logo {
+    padding: 18px 16px; font-size: 15px; font-weight: 700;
+    color: var(--accent); border-bottom: 1px solid var(--border);
+    letter-spacing: 0.3px; flex-shrink: 0;
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 10;
+  }
+  #sidebar .logo span { color: var(--muted); font-weight: 400; font-size: 11px; display: block; margin-top: 2px; }
+
+  #sidebar nav { padding: 8px 0 20px; }
+  #sidebar nav .section-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--muted); padding: 12px 16px 4px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+    user-select: none;
+  }
+  #sidebar nav .section-label:hover { color: var(--accent); }
+  #sidebar nav .section-label .chevron { font-size: 9px; transition: transform 0.2s; display: inline-block; }
+  #sidebar nav .nav-group { overflow: hidden; transition: max-height 0.25s ease; }
+  #sidebar nav .nav-group.collapsed { max-height: 0 !important; }
+  #sidebar nav a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; color: var(--text2); text-decoration: none;
+    font-size: 13px; border-left: 3px solid transparent;
+    transition: all 0.15s;
+  }
+  #sidebar nav a:hover { background: var(--accent-bg); color: var(--accent); }
+  #sidebar nav a.active { background: var(--accent-bg); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+  #sidebar nav a .badge {
+    margin-left: auto; background: var(--bg); color: var(--muted);
+    font-size: 10px; padding: 1px 7px; border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── SIDEBAR TOGGLE BUTTON ── */
+  #sidebar-toggle {
+    position: fixed; top: 14px; left: calc(var(--sidebar-w) - 18px);
+    z-index: 200; width: 28px; height: 28px;
+    background: var(--surface); border: 1px solid var(--border2);
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--text2);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    transition: left 0.25s, background 0.15s;
+  }
+  #sidebar-toggle:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-bd); }
+
+  /* ── COLLAPSED STATE ── */
+  body.sidebar-collapsed #sidebar { transform: translateX(calc(-1 * var(--sidebar-w))); }
+  body.sidebar-collapsed #main { margin-left: 0; }
+  body.sidebar-collapsed #sidebar-toggle { left: 8px; }
+  #sidebar { transition: transform 0.25s ease; }
+
+  /* ── MAIN CONTENT ── */
+  #main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; max-width: 1100px; transition: margin-left 0.25s ease; }
+
+  /* Page header */
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-size: 26px; font-weight: 700; color: var(--text); }
+  .page-header p { color: var(--text2); margin-top: 6px; font-size: 14px; }
+  .breadcrumb { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .breadcrumb span { color: var(--accent); }
+
+  /* ── CARDS ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 24px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,0.12); }
+  .card .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .card p { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .card .card-meta { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+
+  /* Tags */
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: var(--bg); border: 1px solid var(--border); color: var(--text2); }
+  .tag.blue { background: var(--accent-bg); border-color: var(--accent-bd); color: var(--accent); }
+  .tag.green { background: var(--green-bg); border-color: var(--green-bd); color: var(--green); }
+  .tag.orange { background: var(--orange-bg); border-color: var(--orange-bd); color: var(--orange); }
+
+  /* ── STATS BAR ── */
+  .stats-bar { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 24px; flex: 1; min-width: 120px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .stat-box .num { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .stat-box .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ── ALERT BOX ── */
+  .alert { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 8px; padding: 14px 16px; margin-top: 16px; }
+  .alert.tip { background: var(--accent-bg); border-color: var(--accent-bd); }
+  .alert strong { color: var(--green); font-size: 13px; }
+  .alert.tip strong { color: var(--accent); }
+  .alert p { color: var(--text2); font-size: 13px; margin-top: 4px; line-height: 1.6; }
+
+  /* ── Q&A CARDS ── */
+  .qa-list { display: flex; flex-direction: column; gap: 16px; }
+  .qa-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; gap: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .qa-card.bonus { border-color: var(--orange-bd); background: var(--orange-bg); }
+  .qa-num { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 6px; padding: 4px 8px; height: fit-content; white-space: nowrap; min-width: 36px; text-align: center; }
+  .qa-card.bonus .qa-num { color: var(--orange); background: var(--orange-bg); border-color: var(--orange-bd); }
+  .qa-body { flex: 1; }
+  .qa-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 14px; line-height: 1.5; }
+  .qa-answer { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .ans-block { margin-bottom: 12px; }
+  .ans-block:last-child { margin-bottom: 0; }
+  .ans-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; font-weight: 700; }
+  .ans-block ul { padding-left: 18px; }
+  .ans-block ul li { margin-bottom: 3px; }
+  .ans-block p { color: var(--text2); }
+
+  /* ── CODE BOX ── */
+  .code-box { background: var(--code-bg); border: 1px solid #334155; border-radius: 8px; padding: 12px 14px; font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; color: var(--code-text); white-space: pre-wrap; margin-top: 4px; line-height: 1.6; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-box { display: flex; flex-direction: column; align-items: flex-start; gap: 0; margin: 8px 0; }
+  .flow-box.compact .flow-step { padding: 4px 10px; font-size: 12px; }
+  .flow-step { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 14px; font-size: 13px; color: var(--text2); }
+  .flow-step.blue { border-color: var(--accent-bd); color: var(--accent); background: var(--accent-bg); }
+  .flow-step.green { border-color: var(--green-bd); color: var(--green); background: var(--green-bg); }
+  .flow-step.red { border-color: var(--red-bd); color: var(--red); background: var(--red-bg); }
+  .flow-arrow { color: var(--border2); font-size: 14px; padding: 1px 14px; }
+
+  /* ── TIP / WARN ── */
+  .tip-box { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 6px; padding: 8px 12px; color: var(--green); font-size: 12px; margin-top: 10px; }
+  .warn-box { background: var(--orange-bg); border: 1px solid var(--orange-bd); border-radius: 6px; padding: 8px 12px; color: var(--orange); font-size: 12px; margin-top: 10px; }
+
+  /* ── TAG GRID ── */
+  .tag-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ── REFERENCE PAGES ── */
+  .ref-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 18px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .ref-title { background: var(--accent); padding: 12px 20px; font-size: 14px; font-weight: 700; color: #ffffff; border-bottom: 1px solid var(--border); letter-spacing: 0.3px; }
+  .ref-body { padding: 18px 20px; font-size: 13px; color: var(--text2); line-height: 1.7; }
+  .ref-body p { color: var(--text2); margin-bottom: 10px; }
+  .ref-body ul { padding-left: 20px; }
+  .ref-body ul li { margin-bottom: 4px; }
+  .ref-body ol { padding-left: 20px; }
+  .ref-body ol li { margin-bottom: 6px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 10px; }
+
+  /* Principle cards */
+  .principle-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .principle-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+  .principle-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .principle-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .principle-card p { font-size: 12px; color: var(--text2); margin: 0; }
+
+  /* Pattern table */
+  .pattern-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .pt-row { display: grid; grid-template-columns: 1.4fr 2fr 2fr 1.8fr; gap: 0; border-bottom: 1px solid var(--border); }
+  .pt-row:last-child { border-bottom: none; }
+  .pt-row > div { padding: 9px 12px; font-size: 12px; color: var(--text2); border-right: 1px solid var(--border); }
+  .pt-row > div:last-child { border-right: none; }
+  .pt-header { background: var(--bg); }
+  .pt-header > div { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+  .pt-row:nth-child(even) { background: var(--surface2); }
+  .pt-name { color: var(--accent) !important; font-weight: 600 !important; }
+
+  /* Decision table */
+  .decision-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; width: 100%; }
+  .dt-row { display: grid; border-bottom: 1px solid var(--border); }
+  .dt-row:last-child { border-bottom: none; }
+  .dt-row > div { padding: 9px 12px; font-size: 12px; color: var(--text2); border-right: 1px solid var(--border); }
+  .dt-row > div:last-child { border-right: none; }
+  .dt-header { background: var(--bg); }
+  .dt-header > div { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; }
+  .dt-row:nth-child(even) { background: var(--surface2); }
+  .dt-name { color: var(--text) !important; font-weight: 600 !important; }
+  .dt-yes { color: var(--green) !important; font-weight: 600 !important; }
+  .dt-no { color: var(--red) !important; font-weight: 600 !important; }
+
+  /* Topics Index */
+  .topic-section { margin-bottom: 28px; }
+  .topic-section-title { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-bd); }
+  .topic-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .topic-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-size: 13px; color: var(--text2); cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .topic-item:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR TOGGLE -->
+<button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">◀</button>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">
+    Interview Prep
+    <span>Mahesh – Principal Engineer</span>
+  </div>
+  <nav>
+    <div class="section-label" onclick="toggleGroup('grp-overview',this)">Overview <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-overview">
+      <a href="#" class="active" onclick="showPage('home',this);return false;">🏠 Home</a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-companies',this)">Company Rounds <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-companies">
+      <a href="#" onclick="showPage('wellsfargo',this);return false;">🏦 Wells Fargo <span class="badge">15</span></a>
+      <a href="#" onclick="showPage('alstom1',this);return false;">🚄 Alstom – Round 1 <span class="badge">6</span></a>
+      <a href="#" onclick="showPage('alstom2',this);return false;">🚄 Alstom – Round 2 <span class="badge">4</span></a>
+      <a href="#" onclick="showPage('bosch',this);return false;">⚙️ Bosch <span class="badge">8</span></a>
+      <a href="#" onclick="showPage('cts',this);return false;">💼 CTS <span class="badge">14</span></a>
+      <a href="#" onclick="showPage('netsmart',this);return false;">🏥 Netsmart <span class="badge">6</span></a>
+      <a href="#" onclick="showPage('wipro',this);return false;">🔷 Wipro <span class="badge">20</span></a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-topics',this)">Quick Topics <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-topics">
+      <a href="#" onclick="showPage('topics',this);return false;">📚 All Topics Index</a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-ref',this)">Architect Reference <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-ref">
+      <a href="#" onclick="showPage('ref-microservices',this);return false;">🧩 Microservices Architecture</a>
+      <a href="#" onclick="showPage('ref-kubernetes',this);return false;">☸️ Kubernetes, AKS &amp; OpenShift</a>
+      <a href="#" onclick="showPage('ref-azure-security',this);return false;">🔐 Azure Security</a>
+      <a href="#" onclick="showPage('ref-database',this);return false;">🗄️ Database Architecture</a>
+      <a href="#" onclick="showPage('ref-eventdriven',this);return false;">⚡ Event-Driven &amp; Messaging</a>
+      <a href="#" onclick="showPage('ref-patterns',this);return false;">🧱 Design Patterns</a>
+      <a href="#" onclick="showPage('ref-devops',this);return false;">🚀 CI/CD &amp; DevSecOps</a>
+      <a href="#" onclick="showPage('ref-frontend',this);return false;">🎨 Frontend Architecture</a>
+      <a href="#" onclick="showPage('ref-systemdesign',this);return false;">🏛️ System Design</a>
+      <a href="#" onclick="showPage('ref-migration',this);return false;">☁️ Cloud Migration</a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-deepdive',this)">Deep Dive Topics <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-deepdive">
+      <a href="#" onclick="showPage('ref-architecture-advanced',this);return false;">🏗️ Architecture &amp; DDD</a>
+      <a href="#" onclick="showPage('ref-distributed',this);return false;">🌐 Distributed Systems</a>
+      <a href="#" onclick="showPage('ref-database-advanced',this);return false;">🗄️ Database Deep Dive</a>
+      <a href="#" onclick="showPage('ref-messaging-advanced',this);return false;">📨 Messaging (Kafka/RabbitMQ)</a>
+      <a href="#" onclick="showPage('ref-dotnet',this);return false;">⚙️ .NET Architecture</a>
+      <a href="#" onclick="showPage('ref-networking',this);return false;">🌍 Networking</a>
+      <a href="#" onclick="showPage('ref-docker',this);return false;">🐳 Docker</a>
+      <a href="#" onclick="showPage('ref-ha',this);return false;">🔄 High Availability</a>
+      <a href="#" onclick="showPage('ref-performance',this);return false;">⚡ Performance Engineering</a>
+      <a href="#" onclick="showPage('ref-monitoring-advanced',this);return false;">📊 Monitoring &amp; Observability</a>
+      <a href="#" onclick="showPage('ref-security-advanced',this);return false;">🔐 Security Deep Dive</a>
+      <a href="#" onclick="showPage('ref-storage',this);return false;">💾 Storage Systems</a>
+      <a href="#" onclick="showPage('ref-leadership',this);return false;">🎯 Leadership &amp; Director</a>
+      <a href="#" onclick="showPage('ref-scenarios',this);return false;">🏗️ Real-World Scenarios</a>
+      <a href="#" onclick="showPage('ref-fundamentals',this);return false;">📐 SOLID · OSI · SQL vs NoSQL</a>
+      <a href="#" onclick="showPage('ref-perf-testing',this);return false;">🔬 Performance Testing (LoadRunner/BlazeMeter)</a>
+      <a href="#" onclick="showPage('ref-iac',this);return false;">🏗️ IaC — Terraform</a>
+      <a href="#" onclick="showPage('ref-deployments',this);return false;">🚀 Deployment Strategies (Blue-Green/Canary)</a>
+      <a href="#" onclick="showPage('ref-cloud-migration',this);return false;">☁️ Cloud Migration Strategy</a>
+      <a href="#" onclick="showPage('ref-ui-frameworks',this);return false;">🎨 Angular &amp; React</a>
+      <a href="#" onclick="showPage('ref-llm-ai',this);return false;">🤖 LLM &amp; Modern AI Chatbots</a>
+      <a href="#" onclick="showPage('ref-infosecops',this);return false;">🛡️ InfoSec Operations</a>
+    </div>
+  </nav>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+  <div id="content"></div>
+</div>
+
+<!-- Page JS files -->
+<script src="pages/home.js"></script>
+<script src="pages/wellsfargo.js"></script>
+<script src="pages/alstom1.js"></script>
+<script src="pages/alstom2.js"></script>
+<script src="pages/bosch.js"></script>
+<script src="pages/cts.js"></script>
+<script src="pages/netsmart.js"></script>
+<script src="pages/wipro.js"></script>
+<script src="pages/topics.js"></script>
+<script src="pages/ref-microservices.js"></script>
+<script src="pages/ref-kubernetes.js"></script>
+<script src="pages/ref-azure-security.js"></script>
+<script src="pages/ref-database.js"></script>
+<script src="pages/ref-eventdriven.js"></script>
+<script src="pages/ref-patterns.js"></script>
+<script src="pages/ref-devops.js"></script>
+<script src="pages/ref-frontend.js"></script>
+<script src="pages/ref-systemdesign.js"></script>
+<script src="pages/ref-migration.js"></script>
+<script src="pages/ref-architecture-advanced.js"></script>
+<script src="pages/ref-distributed.js"></script>
+<script src="pages/ref-database-advanced.js"></script>
+<script src="pages/ref-messaging-advanced.js"></script>
+<script src="pages/ref-dotnet.js"></script>
+<script src="pages/ref-networking.js"></script>
+<script src="pages/ref-docker.js"></script>
+<script src="pages/ref-ha.js"></script>
+<script src="pages/ref-performance.js"></script>
+<script src="pages/ref-monitoring-advanced.js"></script>
+<script src="pages/ref-security-advanced.js"></script>
+<script src="pages/ref-storage.js"></script>
+<script src="pages/ref-leadership.js"></script>
+<script src="pages/ref-scenarios.js"></script>
+<script src="pages/ref-fundamentals.js"></script>
+<script src="pages/ref-perf-testing.js"></script>
+<script src="pages/ref-iac.js"></script>
+<script src="pages/ref-deployments.js"></script>
+<script src="pages/ref-cloud-migration.js"></script>
+<script src="pages/ref-ui-frameworks.js"></script>
+<script src="pages/ref-llm-ai.js"></script>
+<script src="pages/ref-infosecops.js"></script>
+
+<script>
+function showPage(id, link) {
+  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+  if (link) link.classList.add('active');
+  const content = window.Pages[id];
+  if (content) {
+    document.getElementById('content').innerHTML = content;
+    window.scrollTo(0, 0);
+  } else {
+    document.getElementById('content').innerHTML = '<div class="page-header"><h1>Page not found: ' + id + '</h1></div>';
+  }
+}
+
+function toggleSidebar() {
+  const collapsed = document.body.classList.toggle('sidebar-collapsed');
+  document.getElementById('sidebar-toggle').textContent = collapsed ? '▶' : '◀';
+}
+
+function toggleGroup(id, label) {
+  const grp = document.getElementById(id);
+  const chevron = label.querySelector('.chevron');
+  const isCollapsed = grp.classList.toggle('collapsed');
+  chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+  if (!isCollapsed) grp.style.maxHeight = grp.scrollHeight + 'px';
+  else grp.style.maxHeight = '0';
+}
+
+// Set initial max-height so CSS transition works
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-group').forEach(g => {
+    g.style.maxHeight = g.scrollHeight + 'px';
+  });
+  // Load home page by default
+  showPage('home', document.querySelector('#grp-overview a'));
+});
+</script>
+</body>
+</html>
