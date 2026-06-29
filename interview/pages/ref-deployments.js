@@ -309,6 +309,390 @@ kubectl argo rollouts dashboard</div>
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">Progressive Delivery Tools — Argo Rollouts · Flagger · Azure DevOps</div>
+  <div class="ref-body">
+    <div class="pattern-table">
+      <div class="pt-row pt-header"><div>Tool</div><div>Model</div><div>Traffic Split</div><div>Metric Analysis</div><div>GitOps Native</div><div>Best For</div></div>
+      <div class="pt-row"><div class="pt-name">Argo Rollouts</div><div>K8s controller (Rollout CRD)</div><div>Istio, NGINX, AWS ALB, SMI</div><div>Prometheus, Datadog, Wavefront, CloudWatch</div><div>✅ Argo CD integration</div><div>K8s-first teams, fine-grained step control, manual gate approvals</div></div>
+      <div class="pt-row"><div class="pt-name">Flagger</div><div>K8s controller (Canary CRD)</div><div>Istio, NGINX, Contour, App Mesh</div><div>Prometheus, Datadog, CloudWatch, Graphite</div><div>✅ Flux / Argo CD</div><div>Fully automated zero-touch canary, GitOps pipelines with Flux</div></div>
+      <div class="pt-row"><div class="pt-name">Azure DevOps</div><div>YAML Pipeline + Release Gates</div><div>Azure App Service slots, Azure Front Door, AKS</div><div>Azure Monitor, App Insights, REST API gates</div><div>✅ via pipeline-as-code</div><div>Azure-heavy orgs, non-K8s workloads, App Service, VM deployments</div></div>
+    </div>
+
+    <div class="two-col" style="margin-top:16px;">
+      <div>
+        <div class="ans-label">Argo Rollouts — How It Works</div>
+        <div class="code-box">1. Replace Deployment → Rollout resource
+2. Define strategy: canary or blueGreen
+3. Steps control traffic % + pause points
+4. AnalysisTemplate queries metrics (Prometheus)
+5. If metrics pass → auto-promote to next step
+6. If metrics fail (failureLimit exceeded) → auto-abort
+   → traffic snaps back to stable instantly
+
+Key features:
+  • Manual pause/approval gates (pause: {})
+  • Header-based traffic routing (A/B testing)
+  • Blue-Green strategy built-in
+  • Mirror traffic (shadow testing)
+  • CLI + UI dashboard
+  • Argo CD integration: Rollout status in GitOps UI</div>
+      </div>
+      <div>
+        <div class="ans-label">Flagger — How It Works</div>
+        <div class="code-box">1. You deploy a normal Kubernetes Deployment
+2. Flagger watches for image/config changes
+3. On change: Flagger creates canary Deployment automatically
+4. Routes stepWeight % of traffic to canary each interval
+5. Queries metric providers at each step
+6. SUCCESS: all steps pass → Flagger scales up canary,
+            deletes old primary → primary = new version
+7. FAILURE: threshold exceeded → Flagger routes 0% to canary,
+            deletes canary → primary unchanged
+
+Key features:
+  • Zero Deployment changes needed — Flagger owns the canary
+  • Webhook gates — run load tests, integration tests per step
+  • Slack/Teams alerts on promotion/rollback
+  • Works with Flux CD: git push → Flagger picks it up
+  • A/B testing via Istio header routing</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <div class="ref-title">Argo Rollouts — Blue-Green + Canary Deep Dive</div>
+  <div class="ref-body">
+    <div class="two-col">
+      <div>
+        <div class="ans-label">Blue-Green with Argo Rollouts</div>
+        <div class="code-box">apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: orderservice
+spec:
+  replicas: 5
+  strategy:
+    blueGreen:
+      activeService:  orderservice-active   # production
+      previewService: orderservice-preview  # new version
+      autoPromotionEnabled: false           # manual gate
+      prePromotionAnalysis:
+        templates:
+        - templateName: smoke-test
+      postPromotionAnalysis:
+        templates:
+        - templateName: error-rate
+      scaleDownDelaySeconds: 300  # keep Blue alive 5 min after switch
+
+# Flow:
+#  1. Deploy new image → Rollout creates Preview pods
+#  2. prePromotionAnalysis runs smoke-test against preview
+#  3. If pass → waits for manual approval (autoPromotionEnabled: false)
+#  4. Operator runs: kubectl argo rollouts promote orderservice
+#  5. Active service switches to new pods (instant)
+#  6. postPromotionAnalysis runs error-rate check
+#  7. If fail → Argo auto-aborts, routes back to Blue pods</div>
+      </div>
+      <div>
+        <div class="ans-label">Argo Rollouts — Canary with Header Routing (A/B)</div>
+        <div class="code-box">apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+spec:
+  strategy:
+    canary:
+      canaryService: orderservice-canary
+      stableService: orderservice-stable
+      trafficRouting:
+        nginx:
+          stableIngress: orderservice-ingress
+      # A/B: route internal team to canary via header
+      canaryMetadata:
+        annotations:
+          nginx.ingress.kubernetes.io/canary-by-header: "X-Canary"
+          nginx.ingress.kubernetes.io/canary-by-header-value: "true"
+      steps:
+      - setWeight: 5
+      - pause: {duration: 5m}
+      - analysis:                     # inline analysis step
+          templates:
+          - templateName: latency-check
+      - setWeight: 30
+      - pause: {}                     # manual gate — Slack approval
+      - setWeight: 100
+
+# CLI commands
+kubectl argo rollouts get rollout orderservice --watch
+kubectl argo rollouts promote orderservice      # approve gate
+kubectl argo rollouts abort orderservice        # rollback now
+kubectl argo rollouts set image orderservice \
+  app=myacr.azurecr.io/orderservice:v2.0.0     # trigger rollout</div>
+      </div>
+    </div>
+    <div class="ans-label" style="margin-top:14px;">AnalysisTemplate — Prometheus + Datadog</div>
+    <div class="two-col" style="margin-top:6px;">
+      <div>
+        <div class="code-box"># Prometheus AnalysisTemplate
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: error-rate
+spec:
+  metrics:
+  - name: error-rate
+    interval: 1m
+    failureLimit: 3           # 3 consecutive failures → abort
+    successCondition: result[0] &lt; 0.01
+    provider:
+      prometheus:
+        address: http://prometheus:9090
+        query: |
+          rate(http_requests_total{
+            status=~"5..",app="orderservice-canary"
+          }[2m])
+          /
+          rate(http_requests_total{
+            app="orderservice-canary"
+          }[2m])
+
+  - name: p99-latency
+    interval: 1m
+    successCondition: result[0] &lt; 0.5   # &lt;500ms
+    provider:
+      prometheus:
+        query: |
+          histogram_quantile(0.99,
+            rate(http_request_duration_seconds_bucket{
+              app="orderservice-canary"
+            }[2m])
+          )</div>
+      </div>
+      <div>
+        <div class="code-box"># Datadog AnalysisTemplate
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: datadog-success-rate
+spec:
+  args:
+  - name: service-name
+  metrics:
+  - name: success-rate
+    interval: 1m
+    failureLimit: 2
+    successCondition: result >= 0.99
+    provider:
+      datadog:
+        apiVersion: v2
+        query: |
+          avg:trace.web.request.hits{
+            env:prod,
+            service:{{args.service-name}},
+            http.status_code:2*
+          }.as_rate()
+          /
+          avg:trace.web.request.hits{
+            env:prod,
+            service:{{args.service-name}}
+          }.as_rate()
+
+# CloudWatch, New Relic, Wavefront providers
+# also available — same structure, different provider block</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <div class="ref-title">Azure DevOps — Progressive Delivery</div>
+  <div class="ref-body">
+    <div class="code-box">Azure DevOps progressive delivery = pipeline-as-code (YAML) + deployment rings + release gates.
+Works for: Azure App Service, AKS, VMs, Azure Functions — not K8s-only.
+
+Three approaches in Azure DevOps:
+  1. Deployment Slots (App Service)     — Blue-Green, instant swap
+  2. Pipeline Stages + Gates            — Canary via controlled stage promotion
+  3. Azure Front Door / Traffic Manager — weighted traffic split across environments</div>
+
+    <div class="ans-label" style="margin-top:14px;">Approach 1 — Canary with Pipeline Stages + Approval Gates</div>
+    <div class="code-box"># azure-pipelines.yml — Canary via staged environments
+stages:
+
+# ── STAGE 1: Deploy to Canary (10% traffic) ────────────────
+- stage: DeployCanary
+  displayName: 'Deploy Canary (10%)'
+  jobs:
+  - deployment: CanaryDeploy
+    environment: 'production-canary'    # has approval gate configured
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'MyServiceConnection'
+              appName: 'orderservice'
+              slotName: 'canary'         # App Service canary slot
+              package: '$(Pipeline.Workspace)/drop/*.zip'
+
+          # Route 10% of traffic to canary slot via Azure CLI
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'MyServiceConnection'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az webapp traffic-routing set \
+                  --resource-group myRG \
+                  --name orderservice \
+                  --distribution canary=10
+
+# ── STAGE 2: Monitor Gate (wait + check App Insights) ──────
+- stage: MonitorCanary
+  displayName: 'Monitor Canary — 30 min'
+  dependsOn: DeployCanary
+  jobs:
+  - job: WaitAndValidate
+    pool: server                        # agentless — no runner needed
+    steps:
+    - task: InvokeRestAPI@1             # query App Insights REST API
+      inputs:
+        connectionType: 'connectedServiceName'
+        serviceConnection: 'AppInsightsGate'
+        method: 'GET'
+        urlSuffix: '/query?query=requests | where timestamp > ago(15m) | summarize error_rate=countif(success==false)/count()'
+        successCriteria: 'eq(root[''tables''][0][''rows''][0][0], 0)'
+    - task: ManualValidation@0          # human approval gate
+      inputs:
+        notifyUsers: 'lead-engineer@company.com'
+        instructions: 'Canary healthy for 15 min. Approve to promote to 100%.'
+        onTimeout: 'reject'
+        timeout: '60'                   # auto-reject if no response in 60 min
+
+# ── STAGE 3: Full Promotion ─────────────────────────────────
+- stage: PromoteFull
+  displayName: 'Promote to Production (100%)'
+  dependsOn: MonitorCanary
+  jobs:
+  - deployment: FullPromotion
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureCLI@2
+            inputs:
+              scriptType: 'bash'
+              inlineScript: |
+                # Route 100% to canary (now production)
+                az webapp traffic-routing clear \
+                  --resource-group myRG --name orderservice
+                # Swap canary slot → production
+                az webapp deployment slot swap \
+                  --resource-group myRG --name orderservice \
+                  --slot canary --target-slot production</div>
+
+    <div class="ans-label" style="margin-top:16px;">Approach 2 — Canary on AKS via Azure DevOps</div>
+    <div class="two-col" style="margin-top:6px;">
+      <div>
+        <div class="code-box"># azure-pipelines.yml — AKS canary with built-in strategy
+- stage: DeployAKSCanary
+  jobs:
+  - deployment: AKSCanary
+    environment: 'aks-production.orderservice'
+    strategy:
+      canary:
+        increments: [10, 25, 50]   # ADO manages replica math
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'deploy'
+              namespace: 'production'
+              manifests: 'k8s/orderservice.yaml'
+              containers: |
+                myacr.azurecr.io/orderservice:$(Build.BuildId)
+              strategy: canary
+              percentage: $(System.RolloutPercentage)
+        postRouteTraffic:
+          steps:
+          - task: KubernetesManifest@0
+            inputs:
+              action: 'promote'   # or 'reject' on gate failure
+              strategy: canary
+              manifests: 'k8s/orderservice.yaml'
+
+# ADO calculates replicas automatically:
+# increment=10 → 1 canary pod : 9 stable pods
+# increment=25 → 3 canary pods: 9 stable pods
+# increment=50 → 5 canary pods: 5 stable pods</div>
+      </div>
+      <div>
+        <div class="ans-label">Approach 3 — Azure Front Door Weighted Routing</div>
+        <div class="code-box"># Multi-region canary via Azure Front Door
+# Stable origin → v1 (weight 90)
+# Canary origin → v2 (weight 10)
+
+az afd origin create \
+  --origin-group-name orderservice-origins \
+  --origin-name orderservice-v1 \
+  --host-name orderservice-v1.azurewebsites.net \
+  --weight 90
+
+az afd origin create \
+  --origin-group-name orderservice-origins \
+  --origin-name orderservice-v2 \
+  --host-name orderservice-v2.azurewebsites.net \
+  --weight 10    # 10% canary traffic
+
+# Pipeline stages increment weight:
+# Stage 1: v2 weight=10  → monitor gates
+# Stage 2: v2 weight=25  → monitor gates
+# Stage 3: v2 weight=100 → v1 decommissioned
+
+# ✅ Global — works across Azure regions
+# ✅ No K8s required
+# ✅ Works for App Service, Functions,
+#    Container Apps, custom origins</div>
+
+        <div class="ans-label" style="margin-top:10px;">Azure DevOps Release Gates</div>
+        <div class="code-box">Gates run automatically — pipeline pauses until gate passes.
+
+Gate types:
+  InvokeRestAPI      — call any HTTP endpoint
+  QueryAzureMonitor  — check metric threshold in Azure Monitor
+  QueryWorkItems     — ensure no open P1 bugs in Azure Boards
+  InvokeAzureFunction— run custom validation logic
+  ManualValidation   — human approval with email + timeout
+
+Example: App Insights error rate gate
+  Endpoint: Azure Monitor REST API
+  Query: requests
+    | summarize failRate = countif(success==false) * 100.0 / count()
+    | where failRate &lt; 1.0
+  Sampling: every 5 min, 3 samples required
+  → All 3 must pass → stage promoted ✅
+  → Any fail → stage rejected, rollback triggered ❌</div>
+      </div>
+    </div>
+
+    <div class="ans-label" style="margin-top:16px;">Tool Comparison — When to Use Which</div>
+    <div class="pattern-table" style="margin-top:6px;">
+      <div class="pt-row pt-header"><div>Scenario</div><div>Best Tool</div><div>Why</div></div>
+      <div class="pt-row"><div class="pt-name">Pure K8s, fine-grained step control</div><div>Argo Rollouts</div><div>Purpose-built K8s controller. Steps, pauses, analysis in one CRD. Rich CLI + dashboard UI.</div></div>
+      <div class="pt-row"><div class="pt-name">GitOps with Flux, zero-touch automation</div><div>Flagger</div><div>Git push → Flagger handles everything automatically. Best for fully hands-off pipelines.</div></div>
+      <div class="pt-row"><div class="pt-name">Azure App Service / non-K8s workloads</div><div>Azure DevOps</div><div>Deployment slots + pipeline stages are native to Azure PaaS. No K8s needed.</div></div>
+      <div class="pt-row"><div class="pt-name">Multi-region traffic split</div><div>Azure Front Door + ADO</div><div>Front Door weighted routing works globally across regions and services.</div></div>
+      <div class="pt-row"><div class="pt-name">Enterprise: manual approval gate required</div><div>Azure DevOps or Argo Rollouts</div><div>Both support human approval with timeout and email notification.</div></div>
+      <div class="pt-row"><div class="pt-name">Metric-driven auto-rollback</div><div>Argo Rollouts or Flagger</div><div>Both query Prometheus/Datadog and auto-abort on threshold breach.</div></div>
+      <div class="pt-row"><div class="pt-name">A/B testing by user header/cookie</div><div>Argo Rollouts + Istio</div><div>Header/cookie-based routing with Istio VirtualService gives per-user traffic split.</div></div>
+      <div class="pt-row"><div class="pt-name">ADO pipeline + K8s traffic management</div><div>ADO + Argo Rollouts</div><div>ADO owns CI/CD pipeline; Argo owns K8s traffic. Best of both worlds in enterprise teams.</div></div>
+    </div>
+    <div class="tip-box" style="margin-top:10px;">✅ Common real-world combo: Azure DevOps pipeline triggers Argo Rollouts via <code>kubectl argo rollouts set image</code> — ADO handles build/test/promote approval; Argo handles K8s traffic shifting and metric analysis.</div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Flagger — GitOps-Native Progressive Delivery</div>
   <div class="ref-body">
     <div class="code-box">Flagger: CNCF project, works with Flux/ArgoCD for GitOps.

@@ -225,6 +225,79 @@
   .dt-yes { color: var(--green) !important; font-weight: 600 !important; }
   .dt-no { color: var(--red) !important; font-weight: 600 !important; }
 
+  /* ── TOP SEARCH BAR ── */
+  #topbar {
+    position: fixed; top: 0;
+    left: var(--sidebar-w); right: 0; height: 52px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 32px;
+    z-index: 90; gap: 14px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.07);
+    transition: left .25s ease;
+  }
+  body.sidebar-collapsed #topbar { left: 0; }
+  #topbar .tb-label {
+    font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap;
+  }
+  #topbar-search-wrap { position: relative; flex: 1; max-width: 500px; }
+  #search-input {
+    width: 100%; padding: 9px 38px 9px 38px;
+    border: 1px solid var(--border2); border-radius: 24px;
+    background: var(--bg); color: var(--text);
+    font-size: 13px; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  #search-input::placeholder { color: var(--muted); }
+  #search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    background: var(--surface);
+  }
+  #topbar-search-wrap .s-icon {
+    position: absolute; left: 13px; top: 50%;
+    transform: translateY(-50%); color: var(--muted);
+    font-size: 14px; pointer-events: none;
+  }
+  #topbar-search-wrap .s-clear {
+    position: absolute; right: 13px; top: 50%;
+    transform: translateY(-50%); color: var(--muted);
+    font-size: 16px; cursor: pointer; display: none; line-height: 1;
+  }
+  #topbar-search-wrap .s-clear:hover { color: var(--accent); }
+  /* push main content below the topbar */
+  #main { margin-top: 52px; }
+
+  /* ── SEARCH RESULTS PAGE ── */
+  .sr-header { margin-bottom: 20px; }
+  .sr-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+  .sr-header p  { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .sr-list { display: flex; flex-direction: column; gap: 12px; }
+  .sr-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px; cursor: pointer;
+    transition: border-color .15s, transform .1s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .sr-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.1); }
+  .sr-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .sr-card-icon { font-size: 20px; }
+  .sr-card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .sr-card-cat { margin-left: auto; font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; }
+  .sr-card-cat.cat-company   { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
+  .sr-card-cat.cat-reference { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
+  .sr-card-cat.cat-deepdive  { background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; }
+  .sr-card-cat.cat-overview  { background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe; }
+  .sr-snippets { display: flex; flex-direction: column; gap: 5px; }
+  .sr-snippet {
+    font-size: 12px; color: var(--text2); line-height: 1.5;
+    background: var(--bg); border-radius: 5px; padding: 5px 10px;
+    border-left: 3px solid var(--accent-bd);
+  }
+  .sr-snippet mark { background: #fef9c3; color: #854d0e; border-radius: 2px; padding: 0 1px; font-style: normal; }
+  .sr-none { text-align: center; padding: 40px 0; color: var(--muted); font-size: 14px; }
+  .sr-none .sr-none-icon { font-size: 36px; margin-bottom: 10px; }
+
   /* Topics Index */
   .topic-section { margin-bottom: 28px; }
   .topic-section-title { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-bd); }
@@ -244,6 +317,7 @@
     Interview Prep
     <span>Mahesh – Principal Engineer</span>
   </div>
+
   <nav>
     <div class="section-label" onclick="toggleGroup('grp-overview',this)">Overview <span class="chevron">▼</span></div>
     <div class="nav-group" id="grp-overview">
@@ -308,6 +382,17 @@
   </nav>
 </div>
 
+<!-- TOP SEARCH BAR -->
+<div id="topbar">
+  <div id="topbar-search-wrap">
+    <span class="s-icon">🔍</span>
+    <input id="search-input" type="text" placeholder="Search across all topics, patterns, keywords…"
+           oninput="onSearchInput(this.value)"
+           onkeydown="if(event.key==='Escape'){clearSearch();}">
+    <span class="s-clear" id="search-clear" onclick="clearSearch()">✕</span>
+  </div>
+</div>
+
 <!-- MAIN CONTENT -->
 <div id="main">
   <div id="content"></div>
@@ -357,16 +442,66 @@
 <script src="pages/ref-infosecops.js"></script>
 
 <script>
+// ── PAGE METADATA ─────────────────────────────────────────────────────────────
+const PAGE_META = {
+  'home':                     { title:'Home',                          icon:'🏠', cat:'overview'  },
+  'wellsfargo':               { title:'Wells Fargo',                   icon:'🏦', cat:'company'   },
+  'alstom1':                  { title:'Alstom – Round 1',              icon:'🚄', cat:'company'   },
+  'alstom2':                  { title:'Alstom – Round 2',              icon:'🚄', cat:'company'   },
+  'bosch':                    { title:'Bosch',                         icon:'⚙️', cat:'company'   },
+  'cts':                      { title:'CTS',                           icon:'💼', cat:'company'   },
+  'netsmart':                 { title:'Netsmart',                      icon:'🏥', cat:'company'   },
+  'wipro':                    { title:'Wipro',                         icon:'🔷', cat:'company'   },
+  'topics':                   { title:'All Topics Index',              icon:'📚', cat:'overview'  },
+  'ref-microservices':        { title:'Microservices Architecture',    icon:'🧩', cat:'reference' },
+  'ref-kubernetes':           { title:'Kubernetes, AKS & OpenShift',  icon:'☸️', cat:'reference' },
+  'ref-azure-security':       { title:'Azure Security',               icon:'🔐', cat:'reference' },
+  'ref-database':             { title:'Database Architecture',         icon:'🗄️', cat:'reference' },
+  'ref-eventdriven':          { title:'Event-Driven & Messaging',      icon:'⚡', cat:'reference' },
+  'ref-patterns':             { title:'Design Patterns',               icon:'🧱', cat:'reference' },
+  'ref-devops':               { title:'CI/CD & DevSecOps',             icon:'🚀', cat:'reference' },
+  'ref-frontend':             { title:'Frontend Architecture',         icon:'🎨', cat:'reference' },
+  'ref-systemdesign':         { title:'System Design',                 icon:'🏛️', cat:'reference' },
+  'ref-migration':            { title:'Cloud Migration',               icon:'☁️', cat:'reference' },
+  'ref-architecture-advanced':{ title:'Architecture & DDD',            icon:'🏗️', cat:'deepdive'  },
+  'ref-distributed':          { title:'Distributed Systems',           icon:'🌐', cat:'deepdive'  },
+  'ref-database-advanced':    { title:'Database Deep Dive',            icon:'🗄️', cat:'deepdive'  },
+  'ref-messaging-advanced':   { title:'Messaging (Kafka/RabbitMQ)',    icon:'📨', cat:'deepdive'  },
+  'ref-dotnet':               { title:'.NET Architecture',             icon:'⚙️', cat:'deepdive'  },
+  'ref-networking':           { title:'Networking',                    icon:'🌍', cat:'deepdive'  },
+  'ref-docker':               { title:'Docker',                        icon:'🐳', cat:'deepdive'  },
+  'ref-ha':                   { title:'High Availability',             icon:'🔄', cat:'deepdive'  },
+  'ref-performance':          { title:'Performance Engineering',       icon:'⚡', cat:'deepdive'  },
+  'ref-monitoring-advanced':  { title:'Monitoring & Observability',    icon:'📊', cat:'deepdive'  },
+  'ref-security-advanced':    { title:'Security Deep Dive',            icon:'🔐', cat:'deepdive'  },
+  'ref-storage':              { title:'Storage Systems',               icon:'💾', cat:'deepdive'  },
+  'ref-leadership':           { title:'Leadership & Director',         icon:'🎯', cat:'deepdive'  },
+  'ref-scenarios':            { title:'Real-World Scenarios',          icon:'🏗️', cat:'deepdive'  },
+  'ref-fundamentals':         { title:'SOLID · OSI · SQL vs NoSQL',    icon:'📐', cat:'deepdive'  },
+  'ref-perf-testing':         { title:'Performance Testing',           icon:'🔬', cat:'deepdive'  },
+  'ref-iac':                  { title:'IaC — Terraform',               icon:'🏗️', cat:'deepdive'  },
+  'ref-deployments':          { title:'Deployment Strategies',         icon:'🚀', cat:'deepdive'  },
+  'ref-cloud-migration':      { title:'Cloud Migration Strategy',      icon:'☁️', cat:'deepdive'  },
+  'ref-ui-frameworks':        { title:'Angular & React',               icon:'🎨', cat:'deepdive'  },
+  'ref-llm-ai':               { title:'LLM & Modern AI Chatbots',      icon:'🤖', cat:'deepdive'  },
+  'ref-infosecops':           { title:'InfoSec Operations',            icon:'🛡️', cat:'deepdive'  },
+};
+const CAT_LABEL = { company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview' };
+
+// ── NAVIGATION ────────────────────────────────────────────────────────────────
+let _lastPageId   = 'home';
+let _lastPageLink = null;
+
 function showPage(id, link) {
   document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
   if (link) link.classList.add('active');
+  _lastPageId   = id;
+  _lastPageLink = link;
   const content = window.Pages[id];
-  if (content) {
-    document.getElementById('content').innerHTML = content;
-    window.scrollTo(0, 0);
-  } else {
-    document.getElementById('content').innerHTML = '<div class="page-header"><h1>Page not found: ' + id + '</h1></div>';
-  }
+  document.getElementById('content').innerHTML = content
+    ? content
+    : '<div class="page-header"><h1>Page not found: ' + id + '</h1></div>';
+  window.scrollTo(0, 0);
 }
 
 function toggleSidebar() {
@@ -379,16 +514,136 @@ function toggleGroup(id, label) {
   const chevron = label.querySelector('.chevron');
   const isCollapsed = grp.classList.toggle('collapsed');
   chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
-  if (!isCollapsed) grp.style.maxHeight = grp.scrollHeight + 'px';
-  else grp.style.maxHeight = '0';
+  grp.style.maxHeight = isCollapsed ? '0' : grp.scrollHeight + 'px';
 }
 
-// Set initial max-height so CSS transition works
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+
+// Strip all HTML tags and collapse whitespace → plain text
+function stripHtml(html) {
+  return html
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ').trim();
+}
+
+// Find up to `maxSnippets` context snippets around each match
+function getSnippets(text, query, maxSnippets) {
+  const lower = text.toLowerCase();
+  const lq    = query.toLowerCase();
+  const snippets = [];
+  let pos = 0;
+  while (snippets.length < maxSnippets) {
+    const idx = lower.indexOf(lq, pos);
+    if (idx === -1) break;
+    const start = Math.max(0, idx - 70);
+    const end   = Math.min(text.length, idx + query.length + 90);
+    let frag = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+    // highlight the match
+    const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    frag = frag.replace(re, '<mark>$1</mark>');
+    snippets.push(frag);
+    pos = idx + query.length;
+    // skip to next non-overlapping region (at least 80 chars away)
+    pos = Math.max(pos, idx + 80);
+  }
+  return snippets;
+}
+
+// Count total occurrences
+function countMatches(text, query) {
+  const re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  return (text.match(re) || []).length;
+}
+
+let _searchDebounce = null;
+
+function onSearchInput(val) {
+  document.getElementById('search-clear').style.display = val ? 'block' : 'none';
+  clearTimeout(_searchDebounce);
+  if (!val.trim()) {
+    // Restore last page
+    showPage(_lastPageId, _lastPageLink);
+    return;
+  }
+  _searchDebounce = setTimeout(() => runSearch(val.trim()), 180);
+}
+
+function clearSearch() {
+  const inp = document.getElementById('search-input');
+  inp.value = '';
+  document.getElementById('search-clear').style.display = 'none';
+  inp.focus();
+  showPage(_lastPageId, _lastPageLink);
+}
+
+function runSearch(query) {
+  document.querySelectorAll('#sidebar nav a').forEach(a => a.classList.remove('active'));
+
+  const results = [];
+  for (const [id, html] of Object.entries(window.Pages || {})) {
+    const plain = stripHtml(html);
+    const count = countMatches(plain, query);
+    if (count === 0) continue;
+    const snippets = getSnippets(plain, query, 3);
+    results.push({ id, count, snippets });
+  }
+
+  // Sort by match count descending
+  results.sort((a, b) => b.count - a.count);
+
+  // Build results HTML
+  let html = '<div class="sr-header">'
+    + '<h2>🔍 Search Results</h2>'
+    + '<p>' + (results.length > 0
+        ? 'Found <strong>' + results.length + ' page' + (results.length > 1 ? 's' : '') + '</strong> matching <strong>"' + escHtml(query) + '"</strong>'
+        : 'No results for <strong>"' + escHtml(query) + '"</strong>')
+    + '</p></div>';
+
+  if (results.length === 0) {
+    html += '<div class="sr-none"><div class="sr-none-icon">🔎</div>Try a different keyword — e.g. "CQRS", "Kubernetes", "Polly", "Saga"</div>';
+  } else {
+    html += '<div class="sr-list">';
+    for (const r of results) {
+      const meta = PAGE_META[r.id] || { title: r.id, icon: '📄', cat: 'overview' };
+      const catCls = 'cat-' + meta.cat;
+      const catLbl = CAT_LABEL[meta.cat] || meta.cat;
+      html += '<div class="sr-card" onclick="searchNavigate(\'' + r.id + '\')">'
+        + '<div class="sr-card-top">'
+        +   '<span class="sr-card-icon">' + meta.icon + '</span>'
+        +   '<span class="sr-card-title">' + escHtml(meta.title) + '</span>'
+        +   '<span class="sr-card-cat ' + catCls + '">' + catLbl + '</span>'
+        + '</div>'
+        + '<div class="sr-snippets">'
+        + r.snippets.map(s => '<div class="sr-snippet">' + s + '</div>').join('')
+        + '</div>'
+        + '</div>';
+    }
+    html += '</div>';
+  }
+
+  document.getElementById('content').innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+function searchNavigate(id) {
+  // Find the sidebar link for this page and navigate
+  const link = document.querySelector('#sidebar nav a[onclick*="\'' + id + '\'"]');
+  clearSearch();
+  showPage(id, link || null);
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.nav-group').forEach(g => {
     g.style.maxHeight = g.scrollHeight + 'px';
   });
-  // Load home page by default
   showPage('home', document.querySelector('#grp-overview a'));
 });
 </script>

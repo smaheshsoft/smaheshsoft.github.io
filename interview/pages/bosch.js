@@ -31,12 +31,141 @@ window.Pages['bosch'] = `
       <div class="qa-body">
         <div class="qa-question">Scope vs Transient (Dependency Injection lifetimes)</div>
         <div class="qa-answer">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-            <div class="ans-block"><div class="ans-label">Transient</div><p>New instance every time it is requested.</p><div class="code-box">services.AddTransient&lt;IService, Service&gt;();</div></div>
-            <div class="ans-block"><div class="ans-label">Scoped</div><p>One instance per HTTP request.</p><div class="code-box">services.AddScoped&lt;IService, Service&gt;();</div></div>
-            <div class="ans-block"><div class="ans-label">Singleton</div><p>One instance for entire application lifetime.</p><div class="code-box">services.AddSingleton&lt;IService, Service&gt;();</div></div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+            <div class="ans-block">
+              <div class="ans-label" style="color:#38bdf8;">Transient</div>
+              <p>New instance <strong>every time</strong> it is requested from the container.</p>
+              <div class="code-box">services.AddTransient
+  &lt;IEmailSender, EmailSender&gt;();
+
+// Each inject → fresh object
+// Safe for stateless helpers</div>
+            </div>
+            <div class="ans-block">
+              <div class="ans-label" style="color:#4ade80;">Scoped</div>
+              <p>One instance <strong>per HTTP request</strong>. Shared within the same request, disposed at end.</p>
+              <div class="code-box">services.AddScoped
+  &lt;IOrderRepository, OrderRepository&gt;();
+
+// Same instance for entire request
+// DbContext is always Scoped ✅</div>
+            </div>
+            <div class="ans-block">
+              <div class="ans-label" style="color:#fb923c;">Singleton</div>
+              <p>One instance for the <strong>entire app lifetime</strong>. Created once, reused forever.</p>
+              <div class="code-box">services.AddSingleton
+  &lt;IConfigService, ConfigService&gt;();
+
+// Same instance for all requests
+// Must be thread-safe ✅</div>
+            </div>
           </div>
-          <div class="warn-box">⚠️ Never inject Scoped into Singleton — causes captive dependency bug.</div>
+
+          <div class="ans-block">
+            <div class="ans-label">Which Lifetime to Use — Decision Guide</div>
+            <div class="pattern-table" style="margin-top:6px;">
+              <div class="pt-row pt-header"><div>Service Type</div><div>Use Lifetime</div><div>Why</div></div>
+              <div class="pt-row"><div class="pt-name">DbContext (EF Core)</div><div>Scoped</div><div>One context per request keeps transactions consistent. Disposing per-request prevents memory leaks.</div></div>
+              <div class="pt-row"><div class="pt-name">Repository / UnitOfWork</div><div>Scoped</div><div>Must share the same DbContext within a request. Multiple repositories in one request share one transaction.</div></div>
+              <div class="pt-row"><div class="pt-name">Business / Domain Service</div><div>Scoped or Transient</div><div>Scoped if it depends on a Scoped service (e.g. repository). Transient if fully stateless with no dependencies.</div></div>
+              <div class="pt-row"><div class="pt-name">HttpClient / IHttpClientFactory</div><div>Transient (via factory)</div><div>Each call gets a managed HttpClient. Factory is Singleton; individual clients are Transient to avoid socket exhaustion.</div></div>
+              <div class="pt-row"><div class="pt-name">Stateless helper / Validator</div><div>Transient</div><div>No state to share. Lightweight objects — safe to create per injection. No captive dependency risk.</div></div>
+              <div class="pt-row"><div class="pt-name">Configuration / Settings</div><div>Singleton</div><div>Read-only after startup. Same values for entire lifetime. Thread-safe by nature.</div></div>
+              <div class="pt-row"><div class="pt-name">In-memory Cache / MemoryCache</div><div>Singleton</div><div>Must survive across requests to be useful. Shared across all users.</div></div>
+              <div class="pt-row"><div class="pt-name">Background Service / Hosted Service</div><div>Singleton</div><div>Runs outside request scope. Cannot use Scoped services directly — must use IServiceScopeFactory.</div></div>
+              <div class="pt-row"><div class="pt-name">Logger (ILogger&lt;T&gt;)</div><div>Singleton</div><div>Framework registers it as Singleton. Safe to inject anywhere — thread-safe by design.</div></div>
+            </div>
+          </div>
+
+          <div class="ans-block" style="margin-top:14px;">
+            <div class="ans-label">Captive Dependency Bug — Explained</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;">
+              <div>
+                <div class="code-box">// ❌ WRONG — captive dependency
+public class ReportService  // Singleton
+{
+    private readonly IOrderRepo _repo; // Scoped!
+
+    public ReportService(IOrderRepo repo)
+    {
+        _repo = repo; // captured at startup
+    }
+}
+// IOrderRepo was created for Request #1.
+// ReportService lives forever.
+// Request #2, #3 ... all use the
+// SAME IOrderRepo from Request #1.
+// → stale DbContext, wrong data,
+//   ObjectDisposedException 💥</div>
+              </div>
+              <div>
+                <div class="code-box">// ✅ FIX 1 — make ReportService Scoped
+services.AddScoped&lt;ReportService&gt;();
+// Now ReportService is recreated
+// every request → gets fresh IOrderRepo
+
+// ✅ FIX 2 — use IServiceScopeFactory
+//  (for Singletons that truly must stay)
+public class ReportService  // Singleton
+{
+    private readonly IServiceScopeFactory _sf;
+    public ReportService(IServiceScopeFactory sf)
+        => _sf = sf;
+
+    public void Generate() {
+        using var scope = _sf.CreateScope();
+        var repo = scope.ServiceProvider
+            .GetRequiredService&lt;IOrderRepo&gt;();
+        // repo is fresh, scoped to this call
+    }
+}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ans-block" style="margin-top:14px;">
+            <div class="ans-label">Injection Compatibility Rules</div>
+            <div class="pattern-table" style="margin-top:6px;">
+              <div class="pt-row pt-header"><div>Inject INTO →</div><div>Transient</div><div>Scoped</div><div>Singleton</div></div>
+              <div class="pt-row"><div class="pt-name">Transient service</div><div class="dt-yes">✅ Safe</div><div class="dt-yes">✅ Safe</div><div class="dt-yes">✅ Safe</div></div>
+              <div class="pt-row"><div class="pt-name">Scoped service</div><div class="dt-yes">✅ Safe</div><div class="dt-yes">✅ Safe</div><div class="dt-no">❌ Captive bug</div></div>
+              <div class="pt-row"><div class="pt-name">Singleton service</div><div class="dt-yes">✅ Safe</div><div class="dt-no">❌ Captive bug</div><div class="dt-yes">✅ Safe</div></div>
+            </div>
+            <div class="tip-box" style="margin-top:8px;">✅ Rule: a service can only depend on services of <strong>equal or longer</strong> lifetime. Singleton can safely take Transient or Singleton. Scoped can take Transient or Scoped. Never shorter-lived into longer-lived.</div>
+          </div>
+
+          <div class="ans-block" style="margin-top:14px;">
+            <div class="ans-label">Background Service — Common Gotcha</div>
+            <div class="code-box">// ❌ This crashes at runtime — Scoped inside Singleton
+public class OrderProcessor : BackgroundService  // Singleton
+{
+    public OrderProcessor(IOrderRepo repo) { } // Scoped → CRASH
+}
+
+// ✅ Correct — create a scope per job run
+public class OrderProcessor : BackgroundService
+{
+    private readonly IServiceScopeFactory _sf;
+    public OrderProcessor(IServiceScopeFactory sf) => _sf = sf;
+
+    protected override async Task ExecuteAsync(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            using (var scope = _sf.CreateScope())
+            {
+                var repo = scope.ServiceProvider
+                    .GetRequiredService&lt;IOrderRepo&gt;();
+                await repo.ProcessPendingOrdersAsync();
+            }
+            await Task.Delay(TimeSpan.FromSeconds(30), ct);
+        }
+    }
+}</div>
+            <div class="warn-box" style="margin-top:8px;">⚠️ ASP.NET Core validates scope at startup (in Development). Enable it in Production too: <code>services.BuildServiceProvider(validateScopes: true)</code></div>
+          </div>
+
         </div>
       </div>
     </div>
