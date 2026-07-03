@@ -16,11 +16,11 @@ window.Pages['home'] = `
 
   <div class="alert tip">
     <strong>💡 How to use this guide</strong>
-    <p>Click any company card below or use the sidebar to navigate. Each section has the original interview questions with detailed answers. Study topic-by-topic before your next round.</p>
+    <p>Click any company card below to open the Company Rounds page, or use the sidebar for reference & deep-dive topics. Each section has the original interview questions with detailed answers.</p>
   </div>
 
   <div class="card-grid">
-    <div class="card" onclick="showPage('wellsfargo', document.querySelector('[onclick*=wellsfargo]'))">
+    <div class="card" onclick="location.href='companies.html?p=wellsfargo'">
       <div class="card-icon">🏦</div>
       <h3>Wells Fargo</h3>
       <p>Principal Engineer / Microservices / AKS. Service mesh, auth, CAP theorem, distributed transactions.</p>
@@ -29,7 +29,7 @@ window.Pages['home'] = `
         <span class="tag">Microservices</span><span class="tag">Kubernetes</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('alstom1', document.querySelector('[onclick*=alstom1]'))">
+    <div class="card" onclick="location.href='companies.html?p=alstom1'">
       <div class="card-icon">🚄</div>
       <h3>Alstom – Round 1</h3>
       <p>Builder pattern, HTTPS/TLS, certificates, symmetric vs asymmetric encryption, DevOps, High Availability.</p>
@@ -37,7 +37,7 @@ window.Pages['home'] = `
         <span class="tag blue">6 Questions</span><span class="tag">Design Patterns</span><span class="tag">Security</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('alstom2', document.querySelector('[onclick*=alstom2]'))">
+    <div class="card" onclick="location.href='companies.html?p=alstom2'">
       <div class="card-icon">🚄</div>
       <h3>Alstom – Round 2</h3>
       <p>CORS, high-volume inserts, batch processing, large file uploads, JSON storage decision — PostgreSQL vs MongoDB vs Redis.</p>
@@ -45,7 +45,7 @@ window.Pages['home'] = `
         <span class="tag blue">4 Questions</span><span class="tag">Architecture</span><span class="tag">Database</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('bosch', document.querySelector('[onclick*=bosch]'))">
+    <div class="card" onclick="location.href='companies.html?p=bosch'">
       <div class="card-icon">⚙️</div>
       <h3>Bosch</h3>
       <p>Clean architecture, monolithic to microservices migration, system design, application performance improvements.</p>
@@ -53,7 +53,7 @@ window.Pages['home'] = `
         <span class="tag blue">8 Questions</span><span class="tag">System Design</span><span class="tag">Migration</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('cts', document.querySelector('[onclick*=cts]'))">
+    <div class="card" onclick="location.href='companies.html?p=cts'">
       <div class="card-icon">💼</div>
       <h3>CTS (Cognizant)</h3>
       <p>Azure Key Vault auth, Blob storage protection, private endpoints, Terraform state, Workload Identity, AKS networking.</p>
@@ -61,7 +61,7 @@ window.Pages['home'] = `
         <span class="tag blue">14 Questions</span><span class="tag">Azure Security</span><span class="tag">Terraform</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('netsmart', document.querySelector('[onclick*=netsmart]'))">
+    <div class="card" onclick="location.href='companies.html?p=netsmart'">
       <div class="card-icon">🏥</div>
       <h3>Netsmart</h3>
       <p>EY project architecture, Azure Functions in containers, KEDA auto-scaling, CAP theorem, multi-tenant architecture.</p>
@@ -69,7 +69,7 @@ window.Pages['home'] = `
         <span class="tag blue">6 Questions</span><span class="tag">KEDA</span><span class="tag">Multi-Tenant</span>
       </div>
     </div>
-    <div class="card" onclick="showPage('wipro', document.querySelector('[onclick*=wipro]'))">
+    <div class="card" onclick="location.href='companies.html?p=wipro'">
       <div class="card-icon">🔷</div>
       <h3>Wipro</h3>
       <p>URL shortener design, Saga pattern, State machine, DevSecOps, VM migration (6R), Micro Frontend, Angular NgRx.</p>

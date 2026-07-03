@@ -67,9 +67,21 @@ function bootApp() {
   // Restore which sidebar sections are expanded/collapsed, then its scroll offset.
   restoreNavGroups();
   restoreSidebarScroll();
-  // Restore the last page + scroll; fall back to Home on first visit.
+  // Deep link: ?p=<pageId> opens a specific page (used by the home-page company cards).
+  try {
+    const deepLink = new URLSearchParams(location.search).get('p');
+    if (deepLink && window.Pages && window.Pages[deepLink]) {
+      const dlLink = document.querySelector('#sidebar nav a[onclick*="\'' + deepLink + '\'"]');
+      showPage(deepLink, dlLink || null);
+      history.replaceState(null, '', location.pathname);  // drop ?p= so a later refresh restores scroll
+      return;
+    }
+  } catch (e) { /* ignore malformed query */ }
+  // Restore the last page + scroll; fall back to the page's default on first visit.
   if (!restoreNavState()) {
-    showPage('home', document.querySelector('#grp-overview a'));
+    const home = window.APP_HOME || 'home';
+    const homeLink = document.querySelector('#sidebar nav a[onclick*="\'' + home + '\'"]');
+    showPage(home, homeLink || null);   // null → no wrong highlight when home has no nav link
   }
 }
 

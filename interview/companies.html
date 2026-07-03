@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Interview Questions</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- LOGIN GATE (shown until correct credentials are entered) -->
+<div id="login-overlay">
+  <form class="login-card" onsubmit="attemptLogin(event)">
+    <div class="login-lock">🔐</div>
+    <div class="login-logo">Company Rounds</div>
+    <div class="login-sub">Protected content — please sign in</div>
+    <label for="login-user">Username</label>
+    <input id="login-user" type="text" autocomplete="username" autofocus>
+    <label for="login-pass">Password</label>
+    <input id="login-pass" type="password" autocomplete="current-password">
+    <button type="submit" id="login-btn">Sign in</button>
+    <div id="login-error"></div>
+  </form>
+</div>
+
+<!-- SIDEBAR TOGGLE -->
+<button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">◀</button>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="logo">
+    Company Rounds
+    <span>Mahesh – Interview Questions</span>
+  </div>
+
+  <nav>
+    <div class="section-label" onclick="toggleGroup('grp-overview',this)">Overview <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-overview">
+      <a href="index.html">🏠 Home</a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-companies',this)">Company Rounds <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-companies">
+      <a href="#" onclick="showPage('wellsfargo',this);return false;">🏦 Wells Fargo <span class="badge">15</span></a>
+      <a href="#" onclick="showPage('alstom1',this);return false;">🚄 Alstom – Round 1 <span class="badge">6</span></a>
+      <a href="#" onclick="showPage('alstom2',this);return false;">🚄 Alstom – Round 2 <span class="badge">4</span></a>
+      <a href="#" onclick="showPage('bosch',this);return false;">⚙️ Bosch <span class="badge">8</span></a>
+      <a href="#" onclick="showPage('cts',this);return false;">💼 CTS <span class="badge">14</span></a>
+      <a href="#" onclick="showPage('netsmart',this);return false;">🏥 Netsmart <span class="badge">6</span></a>
+      <a href="#" onclick="showPage('wipro',this);return false;">🔷 Wipro <span class="badge">20</span></a>
+    </div>
+
+    <div class="section-label" onclick="toggleGroup('grp-topics',this)">Quick Topics <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-topics">
+      <a href="#" onclick="showPage('topics',this);return false;">📚 All Topics Index</a>
+    </div>
+  </nav>
+</div>
+
+<!-- TOP SEARCH BAR -->
+<div id="topbar">
+  <div id="topbar-search-wrap">
+    <span class="s-icon">🔍</span>
+    <input id="search-input" type="text" placeholder="Search company interview questions…"
+           oninput="onSearchInput(this.value)"
+           onkeydown="if(event.key==='Escape'){clearSearch();}">
+    <span class="s-clear" id="search-clear" onclick="clearSearch()">✕</span>
+  </div>
+  <button id="logout-btn" onclick="logout()" title="Sign out">⏻ Logout</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+  <div id="content"></div>
+</div>
+
+<!-- Company page content (plain, editable JS) -->
+<script>window.Pages = window.Pages || {};</script>
+<script src="pages/wellsfargo.js"></script>
+<script src="pages/alstom1.js"></script>
+<script src="pages/alstom2.js"></script>
+<script src="pages/bosch.js"></script>
+<script src="pages/cts.js"></script>
+<script src="pages/netsmart.js"></script>
+<script src="pages/wipro.js"></script>
+<script src="pages/topics.js"></script>
+
+<!-- Shared app logic (this page keeps its OWN saved page/scroll/section state) -->
+<script>window.APP_NS = 'interviewPrepCompanies'; window.APP_HOME = 'wellsfargo';</script>
+<script src="app.js"></script>
+
+<!-- Login / auth gate (shares the login session with index.html) -->
+<script src="auth.js"></script>
+</body>
+</html>
