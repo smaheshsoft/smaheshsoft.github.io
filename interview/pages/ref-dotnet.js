@@ -262,6 +262,107 @@ public class OrderHub : Hub {
 builder.Services.AddSignalR()
     .AddStackExchangeRedis("redis-connection-string");
 // All servers see all messages via Redis pub/sub</div>
+
+    <div class="ans-label" style="margin-top:12px;">🔴 The Problem — Why a single server isn't enough</div>
+    <div class="ref-body">
+      A SignalR connection (WebSocket) is <strong>stateful and sticky</strong> — it
+      lives entirely in the memory of ONE server instance. When you scale out to
+      multiple instances behind a load balancer, each server only tracks the
+      connections it personally holds. So:
+      <div class="code-box">Client A ──connected──▶ Server 1   (Server 1 knows about A)
+Client B ──connected──▶ Server 2   (Server 2 knows about B)
+
+Server 2 calls: Clients.All.SendAsync("update", ...)
+  ✔ Client B  gets it   (B is on Server 2)
+  ✘ Client A  MISSED it (A is on Server 1 — Server 2 has no idea A exists)</div>
+      Groups, users, and broadcasts all break the same way: a server can only
+      reach connections stored in its own memory.
+    </div>
+
+    <div class="ans-label" style="margin-top:12px;">🟢 How Redis Resolves It — the Backplane + Pub/Sub</div>
+    <div class="ref-body">
+      Redis sits <em>between</em> all the servers as a shared message bus (the
+      "backplane"). It uses the <strong>publish/subscribe</strong> pattern:
+      <ul>
+        <li><strong>Every server SUBSCRIBES</strong> to the SignalR Redis channel(s) at startup.</li>
+        <li>When any server needs to send a message, instead of only writing to its
+        own local sockets, it <strong>PUBLISHES</strong> the message to Redis.</li>
+        <li>Redis <strong>fans the message out</strong> to every subscribed server.</li>
+        <li>Each server then delivers it to the matching connections it holds locally.</li>
+      </ul>
+      <div class="code-box">Step-by-step: Server 2 broadcasts to all clients
+
+1. Server 2:  Clients.All.SendAsync("update", data)
+2. SignalR ─▶ PUBLISH to Redis channel  ("update", data)
+                     │
+                     ▼
+              ┌──────────────┐
+              │    REDIS     │   pub/sub broadcast
+              │  (backplane) │
+              └──────┬───────┘
+             ┌───────┼───────┐
+             ▼       ▼       ▼
+        Server 1  Server 2  Server 3   ← ALL subscribers receive it
+             │       │       │
+             ▼       ▼       ▼
+        Client A  Client B  Client C   ← each server delivers to its own sockets
+
+Result: Client A (on Server 1) NOW gets the message. ✔</div>
+      <strong>Key point:</strong> Redis does <em>not</em> hold the WebSocket
+      connections — those stay in each server's memory. Redis only relays the
+      <em>messages</em> so every instance can deliver to the clients it owns.
+      This makes the cluster behave like one logical SignalR server.
+    </div>
+
+    <div class="warn-box">⚠️ Notes: Redis is a message relay, not persistent storage — if a
+    client is offline when a message is published, it won't be replayed (use a DB/queue for that).
+    You still need <strong>sticky sessions</strong> at the load balancer so the initial
+    negotiate/handshake and the long-lived connection land on the same server. Alternatives to
+    the Redis backplane include Azure SignalR Service (fully managed, no backplane needed).</div>
+
+    <div class="ans-label" style="margin-top:12px;">☁️ Azure SignalR Service — Managed Alternative (no backplane)</div>
+    <div class="ref-body">
+      Instead of running your own Redis backplane, Azure SignalR Service acts as a
+      fully-managed hub. Your app servers hand off the WebSocket connections to
+      Azure, which holds them and does the fan-out. Your servers stay stateless —
+      they only publish messages, so scale-out and sticky sessions become Azure's job.
+      <div class="code-box">// 1. Install the package
+dotnet add package Microsoft.Azure.SignalR
+
+// 2. Program.cs — just add .AddAzureSignalR()
+builder.Services.AddSignalR()
+    .AddAzureSignalR(builder.Configuration["Azure:SignalR:ConnectionString"]);
+    // or .AddAzureSignalR() to read "Azure:SignalR:ConnectionString" automatically
+
+// 3. appsettings.json (connection string from the Azure portal)
+"Azure": {
+  "SignalR": {
+    "ConnectionString": "Endpoint=https://&lt;name&gt;.service.signalr.net;AccessKey=&lt;key&gt;;Version=1.0;"
+  }
+}
+
+// 4. Map the hub exactly as before — Hub code is UNCHANGED
+app.MapHub&lt;OrderHub&gt;("/orderhub");
+
+// Your Hub stays identical — no code changes needed:
+public class OrderHub : Hub {
+    public async Task SendOrderUpdate(string orderId, string status) =>
+        await Clients.Group(orderId).SendAsync("OrderStatusChanged", orderId, status);
+}</div>
+      <strong>How the flow changes:</strong>
+      <div class="code-box">Client ──WebSocket──▶  AZURE SignalR Service  ◀──── App Server (stateless)
+                       (holds all connections    (only sends messages,
+                        + does the fan-out)       never holds sockets)
+
+• Client connects → app server redirects it to Azure (negotiate step).
+• Client's live connection is held by Azure, NOT your server.
+• Server calls Clients.All.SendAsync(...) → routed through Azure → Azure fans out.</div>
+      <strong>Redis backplane vs Azure SignalR Service:</strong>
+      <ul>
+        <li><strong>Redis:</strong> you host & scale Redis + your servers hold the sockets; more control, more ops work.</li>
+        <li><strong>Azure:</strong> Azure holds the sockets & fans out; near-zero ops, auto-scales to 100k+ connections, pay-per-use. Just swap <code>.AddStackExchangeRedis(...)</code> for <code>.AddAzureSignalR(...)</code> — the rest of your Hub/client code is identical.</li>
+      </ul>
+    </div>
   </div>
 </div>
 `;

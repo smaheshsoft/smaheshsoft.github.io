@@ -304,9 +304,69 @@
   .topic-grid { display: flex; flex-wrap: wrap; gap: 8px; }
   .topic-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-size: 13px; color: var(--text2); cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
   .topic-item:hover { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
+
+  /* ── LOGIN GATE ── */
+  /* Hide the whole app until the user has authenticated + content is decrypted. */
+  body:not(.authed) #sidebar,
+  body:not(.authed) #sidebar-toggle,
+  body:not(.authed) #topbar,
+  body:not(.authed) #main { display: none !important; }
+
+  #login-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  }
+  body.authed #login-overlay { display: none; }
+  .login-card {
+    width: 100%; max-width: 380px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .login-card .login-logo { font-size: 20px; font-weight: 700; color: var(--accent); text-align: center; }
+  .login-card .login-sub { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px; margin-bottom: 22px; }
+  .login-card label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin: 14px 0 5px; }
+  .login-card input {
+    width: 100%; padding: 11px 13px; border: 1px solid var(--border2); border-radius: 9px;
+    background: var(--bg); color: var(--text); font-size: 14px; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .login-card input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); background: var(--surface); }
+  .login-card button {
+    width: 100%; margin-top: 22px; padding: 12px; border: none; border-radius: 9px;
+    background: var(--accent); color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background .15s;
+  }
+  .login-card button:hover { background: #1d4ed8; }
+  .login-card button:disabled { background: var(--muted); cursor: progress; }
+  #login-error { margin-top: 14px; font-size: 12px; color: var(--red); text-align: center; min-height: 16px; }
+  .login-lock { font-size: 34px; text-align: center; margin-bottom: 8px; }
+
+  /* Logout button in the top bar */
+  #logout-btn {
+    margin-left: auto; padding: 7px 14px; border: 1px solid var(--border2); border-radius: 20px;
+    background: var(--bg); color: var(--text2); font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: all .15s; white-space: nowrap;
+  }
+  #logout-btn:hover { border-color: var(--red-bd); color: var(--red); background: var(--red-bg); }
 </style>
 </head>
 <body>
+
+<!-- LOGIN GATE (shown until credentials decrypt the content) -->
+<div id="login-overlay">
+  <form class="login-card" onsubmit="attemptLogin(event)">
+    <div class="login-lock">🔐</div>
+    <div class="login-logo">Interview Prep</div>
+    <div class="login-sub">Protected content — please sign in</div>
+    <label for="login-user">Username</label>
+    <input id="login-user" type="text" autocomplete="username" autofocus>
+    <label for="login-pass">Password</label>
+    <input id="login-pass" type="password" autocomplete="current-password">
+    <button type="submit" id="login-btn">Sign in</button>
+    <div id="login-error"></div>
+  </form>
+</div>
 
 <!-- SIDEBAR TOGGLE -->
 <button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">◀</button>
@@ -392,6 +452,7 @@
            onkeydown="if(event.key==='Escape'){clearSearch();}">
     <span class="s-clear" id="search-clear" onclick="clearSearch()">✕</span>
   </div>
+  <button id="logout-btn" onclick="logout()" title="Sign out">⏻ Logout</button>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -505,6 +566,7 @@ function showPage(id, link) {
     ? content
     : '<div class="page-header"><h1>Page not found: ' + id + '</h1></div>';
   window.scrollTo(0, 0);
+  persistNavState(0);   // remember page across refresh (scroll resets to top on nav)
 }
 
 function toggleSidebar() {
@@ -518,6 +580,36 @@ function toggleGroup(id, label) {
   const isCollapsed = grp.classList.toggle('collapsed');
   chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
   grp.style.maxHeight = isCollapsed ? '0' : grp.scrollHeight + 'px';
+  persistNavGroups();   // remember expanded/collapsed sections across refresh
+}
+
+// ── SIDEBAR GROUP STATE (survive refresh) ──────────────────────────────────────
+// Remembers which sidebar sections are collapsed, so a refresh restores the same
+// expanded/collapsed layout (just like the content page + scroll position).
+const NAV_GROUPS_KEY = 'interviewPrep.navGroups';
+
+function persistNavGroups() {
+  try {
+    const collapsed = [];
+    document.querySelectorAll('#sidebar nav .nav-group').forEach(g => {
+      if (g.classList.contains('collapsed')) collapsed.push(g.id);
+    });
+    localStorage.setItem(NAV_GROUPS_KEY, JSON.stringify(collapsed));
+  } catch (e) { /* storage unavailable — ignore */ }
+}
+
+function restoreNavGroups() {
+  let collapsed = [];
+  try { collapsed = JSON.parse(localStorage.getItem(NAV_GROUPS_KEY) || '[]'); } catch (e) {}
+  const collapsedSet = new Set(collapsed);
+  document.querySelectorAll('#sidebar nav .nav-group').forEach(g => {
+    const isCollapsed = collapsedSet.has(g.id);   // groups not saved default to expanded
+    const label = g.previousElementSibling;       // the matching .section-label
+    const chevron = label ? label.querySelector('.chevron') : null;
+    g.classList.toggle('collapsed', isCollapsed);
+    if (chevron) chevron.style.transform = isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+    g.style.maxHeight = isCollapsed ? '0' : g.scrollHeight + 'px';
+  });
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
@@ -642,13 +734,81 @@ function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.nav-group').forEach(g => {
-    g.style.maxHeight = g.scrollHeight + 'px';
-  });
-  showPage('home', document.querySelector('#grp-overview a'));
-});
+// ── STATE PERSISTENCE (survive page refresh) ────────────────────────────────────
+// Remembers which page you were on AND how far you had scrolled, so a refresh
+// (or reopening the tab) lands you back exactly where you left off.
+const NAV_STATE_KEY = 'interviewPrep.navState';
+let _scrollSaveTimer = null;
+
+function persistNavState(scrollY) {
+  try {
+    localStorage.setItem(NAV_STATE_KEY, JSON.stringify({
+      pageId:  _lastPageId,
+      scrollY: (typeof scrollY === 'number') ? scrollY : window.scrollY
+    }));
+  } catch (e) { /* storage unavailable (private mode / quota) — ignore */ }
+}
+
+// Save scroll position as the user scrolls (debounced to avoid thrashing storage).
+window.addEventListener('scroll', () => {
+  clearTimeout(_scrollSaveTimer);
+  _scrollSaveTimer = setTimeout(() => persistNavState(), 120);
+}, { passive: true });
+
+// ── SIDEBAR SCROLL (survive refresh) ────────────────────────────────────────────
+// The sidebar scrolls independently of the page, so remember its scroll offset too.
+const SIDEBAR_SCROLL_KEY = 'interviewPrep.sidebarScroll';
+let _sidebarScrollTimer = null;
+
+function persistSidebarScroll() {
+  try {
+    const sb = document.getElementById('sidebar');
+    if (sb) localStorage.setItem(SIDEBAR_SCROLL_KEY, String(sb.scrollTop));
+  } catch (e) { /* ignore */ }
+}
+
+function restoreSidebarScroll() {
+  try {
+    const sb = document.getElementById('sidebar');
+    const y = parseInt(localStorage.getItem(SIDEBAR_SCROLL_KEY) || '0', 10);
+    if (sb && y > 0) {
+      // Restore after layout settles (section heights affect scrollable range).
+      requestAnimationFrame(() => requestAnimationFrame(() => { sb.scrollTop = y; }));
+    }
+  } catch (e) { /* ignore */ }
+}
+
+(function () {
+  const sb = document.getElementById('sidebar');
+  if (sb) sb.addEventListener('scroll', () => {
+    clearTimeout(_sidebarScrollTimer);
+    _sidebarScrollTimer = setTimeout(persistSidebarScroll, 120);
+  }, { passive: true });
+})();
+
+// Final save right before the tab unloads / refreshes.
+window.addEventListener('beforeunload', () => { persistNavState(); persistSidebarScroll(); });
+
+function restoreNavState() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(NAV_STATE_KEY) || 'null'); } catch (e) {}
+
+  if (saved && saved.pageId && window.Pages && window.Pages[saved.pageId]) {
+    // Re-select the matching sidebar link so the active highlight is correct.
+    const link = document.querySelector('#sidebar nav a[onclick*="\'' + saved.pageId + '\'"]');
+    showPage(saved.pageId, link || null);   // this resets scroll to 0 first...
+    // ...then restore the saved scroll after the DOM has laid out (two frames).
+    const y = saved.scrollY || 0;
+    if (y > 0) {
+      requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo(0, y)));
+    }
+    return true;
+  }
+  return false;
+}
 </script>
+
+<!-- Login / auth gate (must load AFTER the main script + page content above) -->
+<script src="auth.js"></script>
 </body>
 </html>
