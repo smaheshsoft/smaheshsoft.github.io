@@ -36,7 +36,7 @@
   <nav>
     <div class="section-label" onclick="toggleGroup('grp-overview',this)">Overview <span class="chevron">▼</span></div>
     <div class="nav-group" id="grp-overview">
-      <a href="index.html">🏠 Home</a>
+      <a href="#" onclick="showPage('companies-home',this);return false;">🏠 Home</a>
     </div>
 
     <div class="section-label" onclick="toggleGroup('grp-companies',this)">Company Rounds <span class="chevron">▼</span></div>
@@ -76,6 +76,7 @@
 
 <!-- Company page content (plain, editable JS) -->
 <script>window.Pages = window.Pages || {};</script>
+<script src="pages/companies-home.js"></script>
 <script src="pages/wellsfargo.js"></script>
 <script src="pages/alstom1.js"></script>
 <script src="pages/alstom2.js"></script>
@@ -86,7 +87,7 @@
 <script src="pages/topics.js"></script>
 
 <!-- Shared app logic (this page keeps its OWN saved page/scroll/section state) -->
-<script>window.APP_NS = 'interviewPrepCompanies'; window.APP_HOME = 'wellsfargo';</script>
+<script>window.APP_NS = 'interviewPrepCompanies'; window.APP_HOME = 'companies-home';</script>
 <script src="app.js"></script>
 
 <!-- Login / auth gate (shares the login session with index.html) -->

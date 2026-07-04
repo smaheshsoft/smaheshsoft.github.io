@@ -40,6 +40,10 @@ Diagram: Class diagrams, ERDs, sequence diagrams</div>
       </div>
     </div>
     <div class="tip-box">✅ Architect interview tip: Always start with HLD — clarify scale, then drill into LLD for the most complex components.</div>
+    <div class="alert tip" style="margin-top:12px;">
+      <strong>💡 Full deep dives</strong>
+      <p>For capacity estimation, NFR checklists, diagram types and worked examples see <a href="#" onclick="showPage('ref-hld',document.querySelector('[onclick*=ref-hld]'));return false;">📐 High-Level Design (HLD)</a> and <a href="#" onclick="showPage('ref-lld',document.querySelector('[onclick*=ref-lld]'));return false;">🔍 Low-Level Design (LLD)</a>.</p>
+    </div>
   </div>
 </div>
 

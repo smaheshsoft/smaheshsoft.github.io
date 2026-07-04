@@ -281,6 +281,8 @@
   .sr-card-cat.cat-reference { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
   .sr-card-cat.cat-deepdive  { background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; }
   .sr-card-cat.cat-overview  { background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe; }
+  .sr-card-cat.cat-cloud     { background:#ecfdf5; color:#0d9488; border:1px solid #99f6e4; }
+  .sr-card-cat.cat-sysdesign { background:#fdf2f8; color:#db2777; border:1px solid #fbcfe8; }
   .sr-snippets { display: flex; flex-direction: column; gap: 5px; }
   .sr-snippet {
     font-size: 12px; color: var(--text2); line-height: 1.5;

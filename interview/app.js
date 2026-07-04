@@ -18,7 +18,33 @@ const PAGE_META = {
   'ref-devops':               { title:'CI/CD & DevSecOps',             icon:'🚀', cat:'reference' },
   'ref-frontend':             { title:'Frontend Architecture',         icon:'🎨', cat:'reference' },
   'ref-systemdesign':         { title:'System Design',                 icon:'🏛️', cat:'reference' },
+  'ref-hld':                  { title:'High-Level Design (HLD)',       icon:'📐', cat:'reference' },
+  'ref-lld':                  { title:'Low-Level Design (LLD)',        icon:'🔍', cat:'reference' },
   'ref-migration':            { title:'Cloud Migration',               icon:'☁️', cat:'reference' },
+  'cloud-azure':              { title:'Microsoft Azure',               icon:'🔷', cat:'cloud'      },
+  'cloud-aws':                { title:'Amazon AWS',                    icon:'🟧', cat:'cloud'      },
+  'cloud-gcp':                { title:'Google Cloud (GCP)',            icon:'🟢', cat:'cloud'      },
+  'cloud-compare':            { title:'Compare — Service Equivalence', icon:'⚖️', cat:'cloud'      },
+  'sd-facebook':              { title:'Facebook',                      icon:'📘', cat:'sysdesign'  },
+  'sd-instagram':             { title:'Instagram',                     icon:'📷', cat:'sysdesign'  },
+  'sd-whatsapp':              { title:'WhatsApp',                      icon:'💬', cat:'sysdesign'  },
+  'sd-youtube':               { title:'YouTube',                       icon:'▶️', cat:'sysdesign'  },
+  'sd-netflix':               { title:'Netflix',                       icon:'🎬', cat:'sysdesign'  },
+  'sd-uber':                  { title:'Uber (Cab Booking)',            icon:'🚕', cat:'sysdesign'  },
+  'sd-bookmyshow':            { title:'BookMyShow',                    icon:'🎟️', cat:'sysdesign'  },
+  'sd-swiggy-zomato':         { title:'Swiggy / Zomato',                icon:'🍔', cat:'sysdesign'  },
+  'sd-tinyurl':               { title:'TinyURL / Bitly',               icon:'🔗', cat:'sysdesign'  },
+  'sd-ev-charging':           { title:'EV Charging Stations',          icon:'🔌', cat:'sysdesign'  },
+  'sd-google-drive':          { title:'Google Drive',                  icon:'📁', cat:'sysdesign'  },
+  'sd-amazon':                { title:'Amazon',                        icon:'🛒', cat:'sysdesign'  },
+  'sd-linkedin':              { title:'LinkedIn',                      icon:'💼', cat:'sysdesign'  },
+  'sd-twitter-x':             { title:'Twitter / X',                   icon:'🐦', cat:'sysdesign'  },
+  'sd-gmail':                 { title:'Gmail',                         icon:'📧', cat:'sysdesign'  },
+  'sd-google-maps':           { title:'Google Maps',                   icon:'🗺️', cat:'sysdesign'  },
+  'sd-spotify':               { title:'Spotify',                       icon:'🎵', cat:'sysdesign'  },
+  'sd-zoom':                  { title:'Zoom',                          icon:'📹', cat:'sysdesign'  },
+  'sd-paytm':                 { title:'Paytm',                         icon:'💳', cat:'sysdesign'  },
+  'sd-upi':                   { title:'UPI Payment System',            icon:'🇮🇳', cat:'sysdesign'  },
   'ref-architecture-advanced':{ title:'Architecture & DDD',            icon:'🏗️', cat:'deepdive'  },
   'ref-distributed':          { title:'Distributed Systems',           icon:'🌐', cat:'deepdive'  },
   'ref-database-advanced':    { title:'Database Deep Dive',            icon:'🗄️', cat:'deepdive'  },
@@ -43,7 +69,7 @@ const PAGE_META = {
   'ref-llm-ai':               { title:'LLM & Modern AI Chatbots',      icon:'🤖', cat:'deepdive'  },
   'ref-infosecops':           { title:'InfoSec Operations',            icon:'🛡️', cat:'deepdive'  },
 };
-const CAT_LABEL = { company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview' };
+const CAT_LABEL = { company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 
 // ── STORAGE NAMESPACE ───────────────────────────────────────────────────────────
 // Each page (index.html, companies.html, …) sets window.APP_NS so their remembered
