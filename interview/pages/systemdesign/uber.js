@@ -6,6 +6,140 @@ window.Pages['sd-uber'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer labels -->
+      <text x="14" y="74" font-size="11" fill="#888" font-family="monospace" transform="rotate(-90,14,74)">CLIENT</text>
+      <text x="14" y="164" font-size="11" fill="#888" font-family="monospace" transform="rotate(-90,14,164)">GATEWAY</text>
+      <text x="14" y="254" font-size="11" fill="#888" font-family="monospace" transform="rotate(-90,14,254)">SERVICES</text>
+      <text x="14" y="364" font-size="11" fill="#888" font-family="monospace" transform="rotate(-90,14,364)">DATA</text>
+
+      <!-- Layer bands -->
+      <rect x="30" y="20" width="860" height="70" rx="6" fill="#ffffff08"/>
+      <rect x="30" y="100" width="860" height="60" rx="6" fill="#ffffff06"/>
+      <rect x="30" y="170" width="860" height="120" rx="6" fill="#ffffff05"/>
+      <rect x="30" y="300" width="860" height="105" rx="6" fill="#ffffff06"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Rider App -->
+      <rect x="120" y="32" width="110" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="175" y="52" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📱 Rider</text>
+      <text x="175" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Rider App</text>
+
+      <!-- Driver App -->
+      <rect x="670" y="32" width="110" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="725" y="52" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📱 Driver</text>
+      <text x="725" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Driver App</text>
+
+      <!-- GATEWAY LAYER -->
+      <rect x="340" y="112" width="220" height="36" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="450" y="127" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🌐 API Gateway</text>
+      <text x="450" y="141" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Auth · Rate Limit · Route</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- Trip Service -->
+      <rect x="45" y="182" width="110" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="100" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🚕 Trip</text>
+      <text x="100" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Trip Service</text>
+
+      <!-- Matching Service -->
+      <rect x="175" y="182" width="115" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="233" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔗 Match</text>
+      <text x="233" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Matching Svc</text>
+
+      <!-- Location Service -->
+      <rect x="310" y="182" width="120" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="370" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📍 Location</text>
+      <text x="370" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Redis Geo/H3</text>
+
+      <!-- Pricing/Surge Service -->
+      <rect x="450" y="182" width="115" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="508" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Pricing</text>
+      <text x="508" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Surge Engine</text>
+
+      <!-- Notification Service -->
+      <rect x="580" y="182" width="120" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="640" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔔 Notify</text>
+      <text x="640" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Push/SMS</text>
+
+      <!-- Payment Service -->
+      <rect x="718" y="182" width="115" height="46" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="775" y="202" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">💳 Payment</text>
+      <text x="775" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Stripe</text>
+
+      <!-- Kafka -->
+      <rect x="340" y="248" width="220" height="36" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="450" y="263" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📨 Kafka</text>
+      <text x="450" y="277" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">location-pings · trip-events</text>
+
+      <!-- DATA LAYER -->
+      <!-- PostgreSQL -->
+      <rect x="50" y="312" width="130" height="46" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="115" y="332" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗄️ Postgres</text>
+      <text x="115" y="348" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Trips (SQL)</text>
+
+      <!-- Redis -->
+      <rect x="210" y="312" width="130" height="46" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="275" y="332" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Redis</text>
+      <text x="275" y="348" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Live Locations</text>
+
+      <!-- Cassandra -->
+      <rect x="370" y="312" width="160" height="46" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="450" y="332" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗃️ Cassandra</text>
+      <text x="450" y="348" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Location History</text>
+
+      <!-- Stripe -->
+      <rect x="560" y="312" width="130" height="46" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="625" y="332" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">💳 Stripe</text>
+      <text x="625" y="348" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Payment Gateway</text>
+
+      <!-- Monitoring -->
+      <rect x="720" y="312" width="130" height="46" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="785" y="332" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📊 Monitor</text>
+      <text x="785" y="348" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Prometheus/Grafana</text>
+
+      <!-- ARROWS: Client → Gateway -->
+      <line x1="175" y1="78" x2="390" y2="112" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="725" y1="78" x2="510" y2="112" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Gateway → Services -->
+      <line x1="390" y1="148" x2="160" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="420" y1="148" x2="290" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="450" y1="148" x2="420" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="480" y1="148" x2="510" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="510" y1="148" x2="640" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="510" y1="148" x2="775" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Services → Kafka -->
+      <line x1="233" y1="228" x2="370" y2="248" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="370" y1="228" x2="420" y2="248" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="508" y1="228" x2="480" y2="248" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Services → Data direct -->
+      <line x1="100" y1="228" x2="115" y2="312" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="370" y1="228" x2="275" y2="312" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="775" y1="228" x2="625" y2="312" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Kafka → Data -->
+      <line x1="420" y1="284" x2="275" y2="312" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="450" y1="284" x2="450" y2="312" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Monitoring line from services -->
+      <line x1="775" y1="228" x2="785" y2="312" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

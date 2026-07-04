@@ -6,6 +6,182 @@ window.Pages['sd-netflix'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer Labels -->
+      <text x="14" y="68" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="14" y="158" font-size="11" fill="#888" font-family="monospace">CDN</text>
+      <text x="14" y="248" font-size="11" fill="#888" font-family="monospace">GATEWAY</text>
+      <text x="14" y="310" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="14" y="388" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="80" y1="82" x2="888" y2="82" stroke="#1e2937" stroke-width="1"/>
+      <line x1="80" y1="172" x2="888" y2="172" stroke="#1e2937" stroke-width="1"/>
+      <line x1="80" y1="262" x2="888" y2="262" stroke="#1e2937" stroke-width="1"/>
+      <line x1="80" y1="334" x2="888" y2="334" stroke="#1e2937" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- TV -->
+      <rect x="90" y="22" width="90" height="48" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="135" y="42" font-size="14" text-anchor="middle" font-family="monospace">📺</text>
+      <text x="135" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Smart TV</text>
+      <text x="135" y="66" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">HLS/DASH</text>
+
+      <!-- Mobile -->
+      <rect x="210" y="22" width="90" height="48" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="255" y="42" font-size="14" text-anchor="middle" font-family="monospace">📱</text>
+      <text x="255" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Mobile</text>
+      <text x="255" y="66" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">iOS/Android</text>
+
+      <!-- Web -->
+      <rect x="330" y="22" width="90" height="48" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="375" y="42" font-size="14" text-anchor="middle" font-family="monospace">💻</text>
+      <text x="375" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Web</text>
+      <text x="375" y="66" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Browser</text>
+
+      <!-- CDN LAYER -->
+      <!-- Open Connect CDN -->
+      <rect x="160" y="96" width="200" height="58" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="260" y="116" font-size="14" text-anchor="middle" font-family="monospace">🌐</text>
+      <text x="260" y="131" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Open Connect CDN</text>
+      <text x="260" y="144" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">ISP-embedded appliances</text>
+
+      <!-- S3 Encoded Video -->
+      <rect x="400" y="96" width="130" height="58" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="465" y="116" font-size="14" text-anchor="middle" font-family="monospace">🗄️</text>
+      <text x="465" y="131" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">S3 Video Store</text>
+      <text x="465" y="144" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Encoded renditions (PBs)</text>
+
+      <!-- GATEWAY LAYER -->
+      <rect x="310" y="186" width="160" height="52" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="390" y="206" font-size="14" text-anchor="middle" font-family="monospace">🔀</text>
+      <text x="390" y="221" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">API Gateway / Zuul</text>
+      <text x="390" y="231" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Auth, Rate Limit, Route</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- Streaming Service -->
+      <rect x="86" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="140" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">▶ Streaming</text>
+      <text x="140" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Manifest / Session</text>
+      <text x="140" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">ABR Control</text>
+
+      <!-- Content Catalog -->
+      <rect x="208" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="262" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📋 Catalog</text>
+      <text x="262" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Metadata / Search</text>
+      <text x="262" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Elasticsearch</text>
+
+      <!-- Recommendation Engine -->
+      <rect x="330" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="384" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🤖 Reco ML</text>
+      <text x="384" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Personalization</text>
+      <text x="384" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Homepage Ranking</text>
+
+      <!-- User Profile -->
+      <rect x="452" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="506" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">👤 Profile</text>
+      <text x="506" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">User / Auth</text>
+      <text x="506" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Multi-profile</text>
+
+      <!-- Playback License -->
+      <rect x="574" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="628" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔐 DRM</text>
+      <text x="628" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Playback License</text>
+      <text x="628" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Widevine/FairPlay</text>
+
+      <!-- A/B Testing -->
+      <rect x="696" y="272" width="108" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="750" y="291" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔬 A/B Test</text>
+      <text x="750" y="304" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Experimentation</text>
+      <text x="750" y="315" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Feature Flags</text>
+
+      <!-- DATA LAYER -->
+      <!-- Kafka -->
+      <rect x="86" y="352" width="96" height="50" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="134" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Kafka</text>
+      <text x="134" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Event Streaming</text>
+      <text x="134" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Trillions/day</text>
+
+      <!-- Cassandra -->
+      <rect x="198" y="352" width="96" height="50" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="246" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗃 Cassandra</text>
+      <text x="246" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">User Activity</text>
+      <text x="246" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Watch History</text>
+
+      <!-- EVCache (Redis) -->
+      <rect x="310" y="352" width="96" height="50" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="358" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ EVCache</text>
+      <text x="358" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Redis-based</text>
+      <text x="358" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Global Cache</text>
+
+      <!-- MySQL Billing -->
+      <rect x="422" y="352" width="96" height="50" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="470" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗄 MySQL</text>
+      <text x="470" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Billing / Subs</text>
+      <text x="470" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Accounts</text>
+
+      <!-- Elasticsearch -->
+      <rect x="534" y="352" width="96" height="50" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="582" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔍 Elastic</text>
+      <text x="582" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Search Index</text>
+      <text x="582" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Catalog Search</text>
+
+      <!-- Monitoring -->
+      <rect x="696" y="352" width="108" height="50" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="750" y="371" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📊 Atlas/Chaos</text>
+      <text x="750" y="384" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Metrics / Chaos</text>
+      <text x="750" y="395" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="monospace">Engineering</text>
+
+      <!-- ARROWS: Client → Open Connect CDN (video) -->
+      <line x1="135" y1="70" x2="220" y2="96" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="255" y1="70" x2="260" y2="96" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="375" y1="70" x2="320" y2="96" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Client → API Gateway (control) -->
+      <line x1="375" y1="70" x2="390" y2="186" stroke="#4a9eff" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+      <!-- Open Connect CDN → S3 (origin pull) -->
+      <line x1="360" y1="125" x2="400" y2="125" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- API Gateway → Services -->
+      <line x1="370" y1="238" x2="180" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="380" y1="238" x2="300" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="390" y1="238" x2="390" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="400" y1="238" x2="490" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="410" y1="238" x2="610" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="420" y1="238" x2="730" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services → Kafka -->
+      <line x1="140" y1="322" x2="134" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="262" y1="322" x2="200" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="384" y1="322" x2="300" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services → Cassandra -->
+      <line x1="262" y1="322" x2="246" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services → EVCache -->
+      <line x1="384" y1="322" x2="358" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Profile → MySQL -->
+      <line x1="506" y1="322" x2="470" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Catalog → Elasticsearch -->
+      <line x1="262" y1="322" x2="540" y2="352" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

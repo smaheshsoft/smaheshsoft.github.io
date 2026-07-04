@@ -6,6 +6,143 @@ window.Pages['sd-whatsapp'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer Labels -->
+      <text x="30" y="60" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="30" y="150" font-size="11" fill="#888" font-family="monospace">GATEWAY</text>
+      <text x="30" y="250" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="30" y="365" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="20" y1="75" x2="880" y2="75" stroke="#1e2530" stroke-width="1"/>
+      <line x1="20" y1="170" x2="880" y2="170" stroke="#1e2530" stroke-width="1"/>
+      <line x1="20" y1="290" x2="880" y2="290" stroke="#1e2530" stroke-width="1"/>
+      <line x1="20" y1="380" x2="880" y2="380" stroke="#1e2530" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Mobile Client -->
+      <rect x="120" y="22" width="130" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="185" y="41" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4F1; Mobile Client</text>
+      <text x="185" y="57" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">iOS / Android / Web</text>
+
+      <!-- Web Client -->
+      <rect x="290" y="22" width="130" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="355" y="41" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F5A5; Web Client</text>
+      <text x="355" y="57" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">WhatsApp Web / Desktop</text>
+
+      <!-- Arrows: Clients to Gateway -->
+      <line x1="185" y1="68" x2="185" y2="98" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="355" y1="68" x2="320" y2="98" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- GATEWAY LAYER -->
+      <!-- WebSocket Gateway -->
+      <rect x="120" y="98" width="260" height="54" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="250" y="120" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x26A1; WebSocket Gateway</text>
+      <text x="250" y="136" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Persistent Connections | Load Balancer | TLS</text>
+
+      <!-- Load Balancer -->
+      <rect x="420" y="98" width="130" height="54" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="485" y="120" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F310; API Gateway</text>
+      <text x="485" y="136" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">REST / Media Upload</text>
+
+      <!-- Arrow: Gateway to Services -->
+      <line x1="250" y1="152" x2="250" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="485" y1="152" x2="485" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- SERVICES LAYER -->
+      <!-- Chat Service -->
+      <rect x="30" y="182" width="110" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="85" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4AC; Chat Svc</text>
+      <text x="85" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">1:1 Messaging</text>
+
+      <!-- Group Service -->
+      <rect x="155" y="182" width="110" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="210" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F465; Group Svc</text>
+      <text x="210" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Fan-out / Members</text>
+
+      <!-- Media Service -->
+      <rect x="280" y="182" width="110" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="335" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4F7; Media Svc</text>
+      <text x="335" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Upload / CDN</text>
+
+      <!-- Presence Service -->
+      <rect x="405" y="182" width="110" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="460" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F7E2; Presence Svc</text>
+      <text x="460" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Online / Last Seen</text>
+
+      <!-- E2E Encryption -->
+      <rect x="530" y="182" width="120" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="590" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F512; E2E Encrypt</text>
+      <text x="590" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Signal Protocol</text>
+
+      <!-- Notification Service -->
+      <rect x="665" y="182" width="120" height="50" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="725" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F514; Notify Svc</text>
+      <text x="725" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">APNs / FCM Push</text>
+
+      <!-- Kafka Message Queue -->
+      <rect x="800" y="182" width="85" height="50" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="842" y="202" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4E8; Kafka</text>
+      <text x="842" y="218" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Msg Queue</text>
+
+      <!-- Arrows: Services to Data -->
+      <line x1="85" y1="232" x2="85" y2="300" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="210" y1="232" x2="210" y2="300" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="335" y1="232" x2="750" y2="300" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="460" y1="232" x2="460" y2="300" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="842" y1="232" x2="600" y2="300" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- DATA LAYER -->
+      <!-- Cassandra -->
+      <rect x="30" y="300" width="130" height="50" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="95" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F5C4; Cassandra</text>
+      <text x="95" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Messages (NoSQL)</text>
+
+      <!-- PostgreSQL -->
+      <rect x="180" y="300" width="130" height="50" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="245" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4CA; PostgreSQL</text>
+      <text x="245" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Users / Groups (SQL)</text>
+
+      <!-- Redis -->
+      <rect x="330" y="300" width="130" height="50" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="395" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x26A1; Redis</text>
+      <text x="395" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Presence / Sessions</text>
+
+      <!-- S3 Media -->
+      <rect x="480" y="300" width="130" height="50" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="545" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x2601; S3 / CDN</text>
+      <text x="545" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Media Storage</text>
+
+      <!-- Monitoring -->
+      <rect x="630" y="300" width="130" height="50" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="695" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4C8; Monitoring</text>
+      <text x="695" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Metrics / Alerting</text>
+
+      <!-- Kafka offset store -->
+      <rect x="780" y="300" width="105" height="50" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="832" y="320" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="#e2e8f0">&#x1F4E6; Offsets</text>
+      <text x="832" y="336" text-anchor="middle" font-family="monospace" font-size="9" fill="#94a3b8">Kafka Topics</text>
+
+      <!-- Arrow from API Gateway to Media Svc -->
+      <line x1="485" y1="152" x2="335" y2="182" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Data flow label -->
+      <text x="450" y="412" text-anchor="middle" font-family="monospace" font-size="10" fill="#555">WhatsApp — Real-Time Messaging Architecture</text>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

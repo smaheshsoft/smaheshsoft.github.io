@@ -6,6 +6,131 @@ window.Pages['sd-tinyurl'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer: Client -->
+      <text x="30" y="55" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <rect x="20" y="62" width="110" height="54" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="75" y="83" text-anchor="middle" font-size="14" fill="#e2e8f0">📱</text>
+      <text x="75" y="97" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Browser</text>
+      <text x="75" y="109" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">/ Mobile App</text>
+
+      <!-- Arrow: Client -> CDN -->
+      <line x1="130" y1="89" x2="178" y2="89" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Layer: CDN -->
+      <text x="183" y="55" font-size="11" fill="#888" font-family="monospace">CDN / CACHE</text>
+      <rect x="180" y="62" width="115" height="54" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="237" y="83" text-anchor="middle" font-size="14" fill="#e2e8f0">🌐</text>
+      <text x="237" y="97" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">CDN Edge</text>
+      <text x="237" y="109" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">CloudFront/Fastly</text>
+
+      <!-- Arrow: CDN -> API Gateway -->
+      <line x1="295" y1="89" x2="343" y2="89" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Layer: API Gateway -->
+      <text x="348" y="55" font-size="11" fill="#888" font-family="monospace">API GATEWAY</text>
+      <rect x="345" y="62" width="120" height="54" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="405" y="83" text-anchor="middle" font-size="14" fill="#e2e8f0">🔀</text>
+      <text x="405" y="97" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">API Gateway</text>
+      <text x="405" y="109" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Auth / Rate Limit</text>
+
+      <!-- Layer label: Microservices -->
+      <text x="530" y="55" font-size="11" fill="#888" font-family="monospace">MICROSERVICES</text>
+
+      <!-- Arrow: Gateway -> URL Shortener -->
+      <line x1="465" y1="80" x2="518" y2="80" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Arrow: Gateway -> Redirect Svc -->
+      <line x1="465" y1="89" x2="518" y2="159" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Arrow: Gateway -> Rate Limiter -->
+      <line x1="465" y1="89" x2="518" y2="240" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- URL Shortener Service -->
+      <rect x="520" y="62" width="140" height="54" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="590" y="83" text-anchor="middle" font-size="13" fill="#e2e8f0">⚙️</text>
+      <text x="590" y="97" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">URL Shortener</text>
+      <text x="590" y="109" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Base62 Encode</text>
+
+      <!-- Redirect Service -->
+      <rect x="520" y="140" width="140" height="54" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="590" y="161" text-anchor="middle" font-size="13" fill="#e2e8f0">↪️</text>
+      <text x="590" y="175" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Redirect Svc</text>
+      <text x="590" y="187" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">301/302 Lookup</text>
+
+      <!-- Rate Limiter -->
+      <rect x="520" y="218" width="140" height="54" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="590" y="239" text-anchor="middle" font-size="13" fill="#e2e8f0">🚦</text>
+      <text x="590" y="253" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Rate Limiter</text>
+      <text x="590" y="265" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Token Bucket</text>
+
+      <!-- Analytics Service -->
+      <rect x="520" y="296" width="140" height="54" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="590" y="317" text-anchor="middle" font-size="13" fill="#e2e8f0">📊</text>
+      <text x="590" y="331" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Analytics Svc</text>
+      <text x="590" y="343" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Click Tracking</text>
+
+      <!-- Arrow: Redirect -> Analytics -->
+      <line x1="590" y1="194" x2="590" y2="294" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Layer: Data -->
+      <text x="710" y="55" font-size="11" fill="#888" font-family="monospace">DATA LAYER</text>
+
+      <!-- Arrow: URL Shortener -> Redis -->
+      <line x1="660" y1="89" x2="710" y2="89" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Arrow: Redirect -> Redis -->
+      <line x1="660" y1="167" x2="710" y2="105" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Redis Cache -->
+      <rect x="712" y="62" width="150" height="54" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="787" y="83" text-anchor="middle" font-size="13" fill="#e2e8f0">⚡</text>
+      <text x="787" y="97" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Redis Cache</text>
+      <text x="787" y="109" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Hot URL mappings</text>
+
+      <!-- Arrow: URL Shortener -> Cassandra -->
+      <line x1="660" y1="100" x2="710" y2="160" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Arrow: Redis -> Cassandra (cache miss) -->
+      <line x1="787" y1="116" x2="787" y2="140" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Cassandra / DynamoDB -->
+      <rect x="712" y="142" width="150" height="54" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="787" y="163" text-anchor="middle" font-size="13" fill="#e2e8f0">🗄️</text>
+      <text x="787" y="177" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Cassandra</text>
+      <text x="787" y="189" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">URL mappings DB</text>
+
+      <!-- Arrow: Analytics -> Kafka -->
+      <line x1="660" y1="323" x2="710" y2="245" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Kafka -->
+      <rect x="712" y="222" width="150" height="54" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="787" y="243" text-anchor="middle" font-size="13" fill="#e2e8f0">📨</text>
+      <text x="787" y="257" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">Kafka</text>
+      <text x="787" y="269" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Click event stream</text>
+
+      <!-- Arrow: Kafka -> S3 -->
+      <line x1="787" y1="276" x2="787" y2="302" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- S3 -->
+      <rect x="712" y="304" width="150" height="54" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="787" y="325" text-anchor="middle" font-size="13" fill="#e2e8f0">🪣</text>
+      <text x="787" y="339" text-anchor="middle" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold">S3 Storage</text>
+      <text x="787" y="351" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="monospace">Analytics exports</text>
+
+      <!-- Flow label -->
+      <text x="450" y="410" text-anchor="middle" font-size="10" fill="#4b5563" font-family="monospace">Data flow: Client → CDN → Gateway → Services → Cache/DB/Queue</text>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

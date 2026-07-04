@@ -6,6 +6,177 @@ window.Pages['sd-youtube'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer Labels -->
+      <text x="14" y="68" font-family="monospace" font-size="11" fill="#888">CLIENT</text>
+      <text x="14" y="148" font-family="monospace" font-size="11" fill="#888">CDN / GW</text>
+      <text x="14" y="248" font-family="monospace" font-size="11" fill="#888">SERVICES</text>
+      <text x="14" y="358" font-family="monospace" font-size="11" fill="#888">DATA</text>
+
+      <!-- Horizontal dividers -->
+      <line x1="90" y1="80" x2="890" y2="80" stroke="#1e2a3a" stroke-width="1"/>
+      <line x1="90" y1="165" x2="890" y2="165" stroke="#1e2a3a" stroke-width="1"/>
+      <line x1="90" y1="275" x2="890" y2="275" stroke="#1e2a3a" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Browser -->
+      <rect x="100" y="30" width="100" height="42" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="150" y="48" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4BB; Browser</text>
+      <text x="150" y="62" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">HTML5 / HLS.js</text>
+
+      <!-- Mobile -->
+      <rect x="230" y="30" width="100" height="42" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="280" y="48" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4F1; Mobile</text>
+      <text x="280" y="62" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">iOS / Android</text>
+
+      <!-- Smart TV -->
+      <rect x="360" y="30" width="100" height="42" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="410" y="48" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4FA; Smart TV</text>
+      <text x="410" y="62" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Android TV</text>
+
+      <!-- CDN / GATEWAY LAYER -->
+      <!-- CDN -->
+      <rect x="100" y="95" width="110" height="42" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="155" y="113" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F310; CDN</text>
+      <text x="155" y="127" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">HLS chunks/edge</text>
+
+      <!-- API Gateway -->
+      <rect x="240" y="95" width="120" height="42" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="300" y="113" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F6E1;&#xFE0F; API Gateway</text>
+      <text x="300" y="127" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Auth / Rate Limit</text>
+
+      <!-- Redis hot cache -->
+      <rect x="390" y="95" width="110" height="42" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="445" y="113" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x26A1; Redis</text>
+      <text x="445" y="127" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Hot metadata</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- Upload Service -->
+      <rect x="100" y="185" width="100" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="150" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x2B06;&#xFE0F; Upload</text>
+      <text x="150" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Chunked / TUS</text>
+
+      <!-- Transcoding -->
+      <rect x="215" y="185" width="110" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="270" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F3AC; Transcode</text>
+      <text x="270" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">FFmpeg workers</text>
+
+      <!-- Metadata Service -->
+      <rect x="340" y="185" width="110" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="395" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4CB; Metadata</text>
+      <text x="395" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">CRUD / index</text>
+
+      <!-- Recommendation -->
+      <rect x="465" y="185" width="110" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="520" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F9E0; Recommend</text>
+      <text x="520" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">ML ranking</text>
+
+      <!-- Search -->
+      <rect x="590" y="185" width="100" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="640" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F50D; Search</text>
+      <text x="640" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Elasticsearch</text>
+
+      <!-- Comment Service -->
+      <rect x="705" y="185" width="100" height="42" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="755" y="203" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4AC; Comment</text>
+      <text x="755" y="217" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">+ Ad Service</text>
+
+      <!-- Kafka -->
+      <rect x="340" y="240" width="230" height="28" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="455" y="259" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4E8; Kafka — Event Bus</text>
+
+      <!-- DATA LAYER -->
+      <!-- GCS -->
+      <rect x="100" y="295" width="105" height="42" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="152" y="313" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4BE; GCS</text>
+      <text x="152" y="327" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Raw/processed video</text>
+
+      <!-- Bigtable -->
+      <rect x="220" y="295" width="105" height="42" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="272" y="313" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F5C4;&#xFE0F; Bigtable</text>
+      <text x="272" y="327" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Video metadata</text>
+
+      <!-- Spanner -->
+      <rect x="340" y="295" width="105" height="42" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="392" y="313" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F511; Spanner</text>
+      <text x="392" y="327" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Users / channels</text>
+
+      <!-- Elasticsearch store -->
+      <rect x="460" y="295" width="115" height="42" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="517" y="313" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F50E; Elastic</text>
+      <text x="517" y="327" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Search index</text>
+
+      <!-- Monitoring -->
+      <rect x="590" y="295" width="110" height="42" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="645" y="313" font-family="monospace" font-size="11" fill="#e2e8f0" font-weight="bold" text-anchor="middle">&#x1F4CA; Monitor</text>
+      <text x="645" y="327" font-family="monospace" font-size="9" fill="#94a3b8" text-anchor="middle">Metrics / Alerts</text>
+
+      <!-- ARROWS — Client to CDN/GW -->
+      <line x1="150" y1="72" x2="152" y2="93" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="280" y1="72" x2="295" y2="93" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="410" y1="72" x2="360" y2="95" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- CDN to GCS (video delivery) -->
+      <line x1="152" y1="137" x2="152" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- API GW to Upload -->
+      <line x1="285" y1="137" x2="195" y2="183" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- API GW to Metadata -->
+      <line x1="300" y1="137" x2="370" y2="183" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- API GW to Recommend -->
+      <line x1="330" y1="116" x2="460" y2="116" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- API GW to Comment/Ad -->
+      <line x1="360" y1="126" x2="700" y2="200" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Upload to Transcode -->
+      <line x1="200" y1="206" x2="213" y2="206" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Upload to GCS -->
+      <line x1="150" y1="227" x2="150" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- Transcode to GCS -->
+      <line x1="240" y1="227" x2="230" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services to Kafka -->
+      <line x1="395" y1="227" x2="420" y2="238" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="520" y1="227" x2="500" y2="238" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="640" y1="227" x2="560" y2="238" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Kafka to Data stores -->
+      <line x1="420" y1="268" x2="390" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="455" y1="268" x2="515" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="455" y1="268" x2="275" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Redis to Metadata -->
+      <line x1="445" y1="137" x2="410" y2="183" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+
+      <!-- Search svc to Elastic store -->
+      <line x1="640" y1="227" x2="580" y2="293" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Legend -->
+      <rect x="720" y="295" width="165" height="95" rx="6" fill="#0d1117" stroke="#2d3748" stroke-width="1"/>
+      <text x="802" y="312" font-family="monospace" font-size="10" fill="#888" text-anchor="middle">Legend</text>
+      <line x1="730" y1="323" x2="760" y2="323" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <text x="770" y="327" font-family="monospace" font-size="9" fill="#94a3b8">Data flow</text>
+      <line x1="730" y1="340" x2="760" y2="340" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+      <text x="770" y="344" font-family="monospace" font-size="9" fill="#94a3b8">Cache read</text>
+      <rect x="730" y="352" width="12" height="10" rx="2" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1"/>
+      <text x="748" y="361" font-family="monospace" font-size="9" fill="#94a3b8">Microservice</text>
+      <rect x="730" y="368" width="12" height="10" rx="2" fill="#1a2040" stroke="#34d399" stroke-width="1"/>
+      <text x="748" y="377" font-family="monospace" font-size="9" fill="#94a3b8">NoSQL store</text>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

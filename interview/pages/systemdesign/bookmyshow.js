@@ -6,6 +6,173 @@ window.Pages['sd-bookmyshow'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer labels -->
+      <text x="14" y="68" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="14" y="148" font-size="11" fill="#888" font-family="monospace">GATEWAY</text>
+      <text x="14" y="248" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="14" y="368" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="10" y1="80" x2="890" y2="80" stroke="#1e2733" stroke-width="1"/>
+      <line x1="10" y1="165" x2="890" y2="165" stroke="#1e2733" stroke-width="1"/>
+      <line x1="10" y1="280" x2="890" y2="280" stroke="#1e2733" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Web Browser -->
+      <rect x="80" y="22" width="100" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="130" y="41" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🌐</text>
+      <text x="130" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Web</text>
+      <text x="130" y="65" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Browser</text>
+
+      <!-- Mobile App -->
+      <rect x="220" y="22" width="100" height="46" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="270" y="41" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">📱</text>
+      <text x="270" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Mobile</text>
+      <text x="270" y="65" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">iOS / Android</text>
+
+      <!-- CDN -->
+      <rect x="380" y="22" width="120" height="46" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="440" y="41" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🌍</text>
+      <text x="440" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">CDN</text>
+      <text x="440" y="65" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Posters / Static</text>
+
+      <!-- Waiting Room -->
+      <rect x="560" y="22" width="120" height="46" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="620" y="41" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">⏳</text>
+      <text x="620" y="56" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Virtual Queue</text>
+      <text x="620" y="65" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Waiting Room</text>
+
+      <!-- GATEWAY LAYER -->
+      <!-- API Gateway -->
+      <rect x="280" y="100" width="160" height="46" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="360" y="119" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🔀</text>
+      <text x="360" y="134" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">API Gateway</text>
+      <text x="360" y="143" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Auth · Rate Limit · Route</text>
+
+      <!-- Load Balancer -->
+      <rect x="490" y="100" width="130" height="46" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="555" y="119" font-size="14" fill="#e2e8f0" font-family="monospace" text-anchor="middle">⚖️</text>
+      <text x="555" y="134" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Load Balancer</text>
+      <text x="555" y="143" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">L7 / Nginx</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- Event/Show Service -->
+      <rect x="30" y="185" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="85" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🎬</text>
+      <text x="85" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Event/Show</text>
+      <text x="85" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+
+      <!-- Seat Inventory Service -->
+      <rect x="160" y="185" width="120" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="220" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">💺</text>
+      <text x="220" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Seat Inventory</text>
+      <text x="220" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Redis Lock</text>
+
+      <!-- Booking Service -->
+      <rect x="300" y="185" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="355" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🎟️</text>
+      <text x="355" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Booking</text>
+      <text x="355" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+
+      <!-- Payment Service -->
+      <rect x="430" y="185" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="485" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">💳</text>
+      <text x="485" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Payment</text>
+      <text x="485" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+
+      <!-- Notification Service -->
+      <rect x="560" y="185" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="615" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🔔</text>
+      <text x="615" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Notification</text>
+      <text x="615" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+
+      <!-- Search Service -->
+      <rect x="690" y="185" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="745" y="205" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🔍</text>
+      <text x="745" y="220" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Search</text>
+      <text x="745" y="231" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+
+      <!-- Kafka -->
+      <rect x="300" y="258" width="130" height="46" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="365" y="277" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">📨</text>
+      <text x="365" y="292" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Kafka</text>
+      <text x="365" y="301" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Event Bus</text>
+
+      <!-- DATA LAYER -->
+      <!-- PostgreSQL -->
+      <rect x="30" y="318" width="130" height="52" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="95" y="338" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🗄️</text>
+      <text x="95" y="353" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">PostgreSQL</text>
+      <text x="95" y="364" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Events / Bookings</text>
+
+      <!-- Redis -->
+      <rect x="190" y="318" width="130" height="52" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="255" y="338" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">⚡</text>
+      <text x="255" y="353" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Redis</text>
+      <text x="255" y="364" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Seat Locks / Queue</text>
+
+      <!-- Elasticsearch -->
+      <rect x="350" y="318" width="130" height="52" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="415" y="338" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🔎</text>
+      <text x="415" y="353" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Elasticsearch</text>
+      <text x="415" y="364" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Search Index</text>
+
+      <!-- S3 -->
+      <rect x="510" y="318" width="130" height="52" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="575" y="338" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">🪣</text>
+      <text x="575" y="353" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">S3 Storage</text>
+      <text x="575" y="364" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Posters / Assets</text>
+
+      <!-- Monitoring -->
+      <rect x="700" y="318" width="130" height="52" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="765" y="338" font-size="12" fill="#e2e8f0" font-family="monospace" text-anchor="middle">📊</text>
+      <text x="765" y="353" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Monitoring</text>
+      <text x="765" y="364" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Prometheus / Grafana</text>
+
+      <!-- ARROWS: Client → Gateway -->
+      <line x1="130" y1="68" x2="320" y2="100" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="270" y1="68" x2="340" y2="100" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="440" y1="68" x2="420" y2="100" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="620" y1="68" x2="530" y2="100" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Gateway → Services -->
+      <line x1="330" y1="146" x2="85" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="345" y1="146" x2="220" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="360" y1="146" x2="355" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="375" y1="146" x2="485" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="490" y1="146" x2="615" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="555" y1="146" x2="745" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Services → Kafka -->
+      <line x1="355" y1="237" x2="355" y2="258" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="485" y1="237" x2="420" y2="258" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="615" y1="237" x2="450" y2="258" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Services → Data -->
+      <line x1="85" y1="237" x2="95" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="220" y1="237" x2="255" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="745" y1="237" x2="415" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="490" y1="237" x2="540" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- ARROWS: Kafka → Data -->
+      <line x1="365" y1="304" x2="190" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="370" y1="304" x2="370" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

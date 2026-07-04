@@ -6,6 +6,158 @@ window.Pages['sd-instagram'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer labels -->
+      <text x="14" y="68" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="14" y="158" font-size="11" fill="#888" font-family="monospace">GATEWAY</text>
+      <text x="14" y="258" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="14" y="368" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="80" y1="90" x2="890" y2="90" stroke="#1e2533" stroke-width="1"/>
+      <line x1="80" y1="180" x2="890" y2="180" stroke="#1e2533" stroke-width="1"/>
+      <line x1="80" y1="290" x2="890" y2="290" stroke="#1e2533" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Mobile App -->
+      <rect x="120" y="30" width="110" height="48" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="175" y="50" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📱</text>
+      <text x="175" y="64" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Mobile App</text>
+      <text x="175" y="74" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">iOS / Android</text>
+
+      <!-- CDN -->
+      <rect x="320" y="30" width="110" height="48" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="375" y="50" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🌐</text>
+      <text x="375" y="64" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">CDN</text>
+      <text x="375" y="74" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Media Delivery</text>
+
+      <!-- GATEWAY LAYER -->
+      <rect x="220" y="110" width="130" height="48" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="285" y="130" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔀</text>
+      <text x="285" y="144" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">API Gateway</text>
+      <text x="285" y="154" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Auth / Rate Limit</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- User/Profile Service -->
+      <rect x="90" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="143" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">👤</text>
+      <text x="143" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">User/Profile</text>
+      <text x="143" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Follow graph</text>
+
+      <!-- Feed Service -->
+      <rect x="210" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="263" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📰</text>
+      <text x="263" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Feed Service</text>
+      <text x="263" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Pull model</text>
+
+      <!-- Media Upload -->
+      <rect x="330" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="383" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⬆️</text>
+      <text x="383" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Media Upload</text>
+      <text x="383" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Transcode</text>
+
+      <!-- Reels Service -->
+      <rect x="450" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="503" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🎬</text>
+      <text x="503" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Reels Service</text>
+      <text x="503" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Short videos</text>
+
+      <!-- Explore/Search -->
+      <rect x="570" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="623" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔍</text>
+      <text x="623" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Explore/Search</text>
+      <text x="623" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Recommendations</text>
+
+      <!-- Notification Service -->
+      <rect x="690" y="205" width="105" height="48" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="743" y="225" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔔</text>
+      <text x="743" y="239" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Notification</text>
+      <text x="743" y="249" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Push / FCM</text>
+
+      <!-- Kafka (Message Queue) -->
+      <rect x="780" y="110" width="100" height="48" rx="8" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="830" y="130" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📨</text>
+      <text x="830" y="144" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Kafka</text>
+      <text x="830" y="154" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Event stream</text>
+
+      <!-- DATA LAYER -->
+      <!-- PostgreSQL -->
+      <rect x="90" y="315" width="105" height="48" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="143" y="335" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🐘</text>
+      <text x="143" y="349" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">PostgreSQL</text>
+      <text x="143" y="359" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Users/Posts</text>
+
+      <!-- Cassandra -->
+      <rect x="210" y="315" width="105" height="48" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="263" y="335" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗄️</text>
+      <text x="263" y="349" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Cassandra</text>
+      <text x="263" y="359" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Feed / Stories</text>
+
+      <!-- Redis Cache -->
+      <rect x="330" y="315" width="105" height="48" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="383" y="335" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡</text>
+      <text x="383" y="349" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Redis</text>
+      <text x="383" y="359" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Session/Cache</text>
+
+      <!-- S3 + CDN -->
+      <rect x="450" y="315" width="105" height="48" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="503" y="335" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🪣</text>
+      <text x="503" y="349" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">S3 + CDN</text>
+      <text x="503" y="359" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Images/Videos</text>
+
+      <!-- Elasticsearch -->
+      <rect x="570" y="315" width="105" height="48" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="623" y="335" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔎</text>
+      <text x="623" y="349" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Elasticsearch</text>
+      <text x="623" y="359" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Search index</text>
+
+      <!-- ARROWS: Client → CDN -->
+      <line x1="230" y1="54" x2="320" y2="54" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Client → API Gateway -->
+      <line x1="175" y1="78" x2="260" y2="110" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- CDN → API Gateway -->
+      <line x1="375" y1="78" x2="320" y2="110" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- API Gateway → Services (fan out) -->
+      <line x1="250" y1="158" x2="180" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="272" y1="158" x2="263" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="295" y1="158" x2="355" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="310" y1="154" x2="480" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="320" y1="148" x2="600" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="330" y1="144" x2="720" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- API Gateway → Kafka -->
+      <line x1="350" y1="134" x2="780" y2="134" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Kafka → Notification Service -->
+      <line x1="830" y1="158" x2="790" y2="205" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services → Data layer -->
+      <line x1="143" y1="253" x2="143" y2="315" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="263" y1="253" x2="263" y2="315" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="383" y1="253" x2="383" y2="315" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="490" y1="253" x2="503" y2="315" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="623" y1="253" x2="623" y2="315" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Feed Service → Redis -->
+      <line x1="280" y1="253" x2="360" y2="315" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

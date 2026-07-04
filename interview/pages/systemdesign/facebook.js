@@ -6,6 +6,171 @@ window.Pages['sd-facebook'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer labels -->
+      <text x="14" y="72" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="14" y="152" font-size="11" fill="#888" font-family="monospace">EDGE</text>
+      <text x="14" y="232" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="14" y="342" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="80" y1="90" x2="890" y2="90" stroke="#1e2530" stroke-width="1"/>
+      <line x1="80" y1="170" x2="890" y2="170" stroke="#1e2530" stroke-width="1"/>
+      <line x1="80" y1="270" x2="890" y2="270" stroke="#1e2530" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Mobile App -->
+      <rect x="90" y="42" width="100" height="44" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="140" y="61" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📱 Mobile</text>
+      <text x="140" y="75" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">iOS / Android</text>
+
+      <!-- Web Browser -->
+      <rect x="210" y="42" width="100" height="44" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="260" y="61" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🌐 Web</text>
+      <text x="260" y="75" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">React SPA</text>
+
+      <!-- EDGE LAYER -->
+      <!-- CDN -->
+      <rect x="90" y="110" width="120" height="44" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="150" y="129" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🌍 CDN</text>
+      <text x="150" y="143" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Video / Images</text>
+
+      <!-- API Gateway -->
+      <rect x="240" y="110" width="130" height="44" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="305" y="129" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔀 API Gateway</text>
+      <text x="305" y="143" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Auth / Rate Limit</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- User Service -->
+      <rect x="90" y="185" width="105" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="142" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">👤 User Svc</text>
+      <text x="142" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Profile / Friends</text>
+
+      <!-- News Feed Service -->
+      <rect x="210" y="185" width="115" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="267" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📰 Feed Svc</text>
+      <text x="267" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Fan-out / Rank</text>
+
+      <!-- Post Service -->
+      <rect x="340" y="185" width="105" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="392" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📝 Post Svc</text>
+      <text x="392" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">CRUD Posts</text>
+
+      <!-- Messenger Service -->
+      <rect x="460" y="185" width="115" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="517" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">💬 Messenger</text>
+      <text x="517" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">WebSocket / Chat</text>
+
+      <!-- Search Service -->
+      <rect x="590" y="185" width="110" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="645" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔍 Search</text>
+      <text x="645" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">TAO / Haystack</text>
+
+      <!-- Ads Service -->
+      <rect x="715" y="185" width="100" height="44" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="765" y="204" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📢 Ads Svc</text>
+      <text x="765" y="218" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Targeting</text>
+
+      <!-- Kafka -->
+      <rect x="340" y="245" width="110" height="18" rx="5" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="395" y="258" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Kafka Event Bus</text>
+
+      <!-- DATA LAYER -->
+      <!-- MySQL + TAO -->
+      <rect x="90" y="290" width="115" height="44" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="147" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗄️ MySQL+TAO</text>
+      <text x="147" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Social Graph</text>
+
+      <!-- Cassandra -->
+      <rect x="220" y="290" width="115" height="44" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="277" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗃️ Cassandra</text>
+      <text x="277" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Timeline / Feed</text>
+
+      <!-- Memcache -->
+      <rect x="350" y="290" width="105" height="44" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="402" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Memcache</text>
+      <text x="402" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">L1/L2 Cache</text>
+
+      <!-- Haystack -->
+      <rect x="470" y="290" width="115" height="44" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="527" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📸 Haystack</text>
+      <text x="527" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Photo Storage</text>
+
+      <!-- Hive -->
+      <rect x="600" y="290" width="105" height="44" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="652" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🐝 Hive</text>
+      <text x="652" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Analytics / DW</text>
+
+      <!-- ZooKeeper / Config -->
+      <rect x="720" y="290" width="110" height="44" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="775" y="309" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📊 Monitoring</text>
+      <text x="775" y="323" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">ODS / Scuba</text>
+
+      <!-- ARROWS: Client to Edge -->
+      <line x1="140" y1="86" x2="150" y2="110" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="260" y1="86" x2="305" y2="110" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- CDN arrows to Haystack -->
+      <line x1="150" y1="154" x2="527" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Gateway to Services -->
+      <line x1="305" y1="154" x2="200" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="305" y1="154" x2="267" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="305" y1="154" x2="392" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="305" y1="154" x2="517" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="305" y1="154" x2="645" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="305" y1="154" x2="765" y2="185" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services to Kafka -->
+      <line x1="267" y1="229" x2="360" y2="245" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="392" y1="229" x2="395" y2="245" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="517" y1="229" x2="430" y2="245" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Services to Data -->
+      <line x1="142" y1="229" x2="147" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="267" y1="229" x2="277" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="392" y1="229" x2="402" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="517" y1="229" x2="527" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="645" y1="229" x2="652" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="765" y1="229" x2="775" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Kafka to Hive -->
+      <line x1="430" y1="263" x2="652" y2="290" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Legend -->
+      <rect x="90" y="375" width="12" height="12" rx="2" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="108" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Client</text>
+      <rect x="155" y="375" width="12" height="12" rx="2" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="173" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Gateway</text>
+      <rect x="230" y="375" width="12" height="12" rx="2" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="248" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Microservice</text>
+      <rect x="330" y="375" width="12" height="12" rx="2" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="348" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Msg Queue</text>
+      <rect x="425" y="375" width="12" height="12" rx="2" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="443" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Cache</text>
+      <rect x="490" y="375" width="12" height="12" rx="2" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="508" y="385" font-size="9" fill="#94a3b8" font-family="monospace">SQL DB</text>
+      <rect x="560" y="375" width="12" height="12" rx="2" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="578" y="385" font-size="9" fill="#94a3b8" font-family="monospace">NoSQL DB</text>
+      <rect x="635" y="375" width="12" height="12" rx="2" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="653" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Storage</text>
+      <rect x="700" y="375" width="12" height="12" rx="2" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="718" y="385" font-size="9" fill="#94a3b8" font-family="monospace">Monitoring</text>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">

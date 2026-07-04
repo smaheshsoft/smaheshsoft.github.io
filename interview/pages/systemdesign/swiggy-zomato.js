@@ -6,6 +6,165 @@ window.Pages['sd-swiggy-zomato'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">System Architecture Diagram</div>
+  <div class="ref-body" style="overflow-x:auto;">
+    <svg viewBox="0 0 900 420" style="width:100%;max-width:900px;display:block;margin:0 auto;border-radius:10px;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/>
+        </marker>
+      </defs>
+      <!-- Background -->
+      <rect width="900" height="420" fill="#0d1117" rx="10"/>
+
+      <!-- Layer Labels -->
+      <text x="14" y="68" font-size="11" fill="#888" font-family="monospace">CLIENT</text>
+      <text x="14" y="168" font-size="11" fill="#888" font-family="monospace">GATEWAY</text>
+      <text x="14" y="268" font-size="11" fill="#888" font-family="monospace">SERVICES</text>
+      <text x="14" y="378" font-size="11" fill="#888" font-family="monospace">DATA</text>
+
+      <!-- Layer dividers -->
+      <line x1="90" y1="90" x2="890" y2="90" stroke="#1e2a3a" stroke-width="1"/>
+      <line x1="90" y1="190" x2="890" y2="190" stroke="#1e2a3a" stroke-width="1"/>
+      <line x1="90" y1="300" x2="890" y2="300" stroke="#1e2a3a" stroke-width="1"/>
+
+      <!-- CLIENT LAYER -->
+      <!-- Customer App -->
+      <rect x="100" y="22" width="120" height="52" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="160" y="43" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📱</text>
+      <text x="160" y="57" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Customer</text>
+      <text x="160" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">iOS / Android</text>
+
+      <!-- Restaurant App -->
+      <rect x="260" y="22" width="120" height="52" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="320" y="43" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🍽️</text>
+      <text x="320" y="57" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Restaurant</text>
+      <text x="320" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Tablet / Web</text>
+
+      <!-- Delivery Partner App -->
+      <rect x="420" y="22" width="130" height="52" rx="8" fill="#1a2740" stroke="#4a9eff" stroke-width="1.5"/>
+      <text x="485" y="43" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🛵</text>
+      <text x="485" y="57" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">Delivery</text>
+      <text x="485" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Partner App</text>
+
+      <!-- CDN / S3 Images -->
+      <rect x="590" y="22" width="120" height="52" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="650" y="43" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">☁️</text>
+      <text x="650" y="57" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">CDN / S3</text>
+      <text x="650" y="68" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Images/Assets</text>
+
+      <!-- GATEWAY LAYER -->
+      <rect x="200" y="108" width="460" height="52" rx="8" fill="#1a2d20" stroke="#4ade80" stroke-width="1.5"/>
+      <text x="430" y="129" font-size="13" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔀</text>
+      <text x="430" y="143" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">API Gateway + Load Balancer</text>
+      <text x="430" y="155" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Auth · Rate Limiting · Routing · SSL Termination</text>
+
+      <!-- SERVICES LAYER -->
+      <!-- Order Service -->
+      <rect x="100" y="208" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="155" y="228" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📋 Order</text>
+      <text x="155" y="242" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+      <text x="155" y="253" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">cart · lifecycle</text>
+
+      <!-- Restaurant/Menu Service -->
+      <rect x="224" y="208" width="115" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="281" y="228" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🍕 Menu</text>
+      <text x="281" y="242" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+      <text x="281" y="253" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">catalog · search</text>
+
+      <!-- Location & Assignment -->
+      <rect x="352" y="208" width="120" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="412" y="228" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📍 Dispatch</text>
+      <text x="412" y="242" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Location Svc</text>
+      <text x="412" y="253" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Redis Geo · assign</text>
+
+      <!-- Pricing/ETA Service -->
+      <rect x="485" y="208" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="540" y="228" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⏱️ ETA</text>
+      <text x="540" y="242" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Pricing Svc</text>
+      <text x="540" y="253" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">prep + delivery</text>
+
+      <!-- Payment Service -->
+      <rect x="608" y="208" width="110" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="663" y="228" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">💳 Payment</text>
+      <text x="663" y="242" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Service</text>
+      <text x="663" y="253" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">auth · refunds</text>
+
+      <!-- Notification + Rating -->
+      <rect x="731" y="208" width="120" height="52" rx="8" fill="#2a1f3d" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="791" y="224" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔔 Notify</text>
+      <text x="791" y="237" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">push · SMS</text>
+      <text x="791" y="248" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">⭐ Rating Svc</text>
+      <text x="791" y="258" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">reviews</text>
+
+      <!-- Kafka -->
+      <rect x="352" y="272" width="196" height="22" rx="6" fill="#2d2a1a" stroke="#fbbf24" stroke-width="1.5"/>
+      <text x="450" y="287" font-size="10" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Kafka — Event Stream</text>
+
+      <!-- DATA LAYER -->
+      <!-- PostgreSQL -->
+      <rect x="100" y="318" width="130" height="52" rx="8" fill="#1a2040" stroke="#60a5fa" stroke-width="1.5"/>
+      <text x="165" y="339" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🗄️ PostgreSQL</text>
+      <text x="165" y="352" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">orders · users</text>
+      <text x="165" y="362" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">restaurants</text>
+
+      <!-- Redis -->
+      <rect x="248" y="318" width="120" height="52" rx="8" fill="#2d1a1a" stroke="#f87171" stroke-width="1.5"/>
+      <text x="308" y="339" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">⚡ Redis</text>
+      <text x="308" y="352" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">location · locks</text>
+      <text x="308" y="362" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">sessions · cache</text>
+
+      <!-- Elasticsearch -->
+      <rect x="386" y="318" width="130" height="52" rx="8" fill="#1a2040" stroke="#34d399" stroke-width="1.5"/>
+      <text x="451" y="339" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">🔍 Elastic</text>
+      <text x="451" y="352" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">menu search</text>
+      <text x="451" y="362" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">restaurant index</text>
+
+      <!-- S3 -->
+      <rect x="534" y="318" width="110" height="52" rx="8" fill="#1f2d1a" stroke="#86efac" stroke-width="1.5"/>
+      <text x="589" y="339" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">☁️ S3</text>
+      <text x="589" y="352" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">food images</text>
+      <text x="589" y="362" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">receipts · logs</text>
+
+      <!-- Monitoring -->
+      <rect x="662" y="318" width="120" height="52" rx="8" fill="#2d1f1a" stroke="#fb923c" stroke-width="1.5"/>
+      <text x="722" y="339" font-size="11" fill="#e2e8f0" font-family="monospace" font-weight="bold" text-anchor="middle">📊 Monitor</text>
+      <text x="722" y="352" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Prometheus</text>
+      <text x="722" y="362" font-size="9" fill="#94a3b8" font-family="monospace" text-anchor="middle">Grafana · alerts</text>
+
+      <!-- Arrows: Client → Gateway -->
+      <line x1="160" y1="74" x2="340" y2="108" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="320" y1="74" x2="390" y2="108" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="485" y1="74" x2="450" y2="108" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Arrows: Gateway → Services -->
+      <line x1="310" y1="160" x2="200" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="360" y1="160" x2="310" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="410" y1="160" x2="412" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="460" y1="160" x2="500" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="510" y1="160" x2="620" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="560" y1="160" x2="770" y2="208" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Arrows: Services → Kafka -->
+      <line x1="155" y1="260" x2="370" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="412" y1="260" x2="430" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="663" y1="260" x2="530" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="791" y1="260" x2="548" y2="272" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Arrows: Services → Data stores -->
+      <line x1="155" y1="260" x2="165" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="412" y1="260" x2="308" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="281" y1="260" x2="430" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="540" y1="260" x2="560" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="791" y1="260" x2="722" y2="318" stroke="#4b5563" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- CDN → S3 -->
+      <line x1="650" y1="74" x2="620" y2="318" stroke="#4b5563" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+    </svg>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">1. Executive Summary</div>
   <div class="ref-body">
     <div class="two-col">
