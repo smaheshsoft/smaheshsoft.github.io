@@ -4,6 +4,13 @@
     --background: #ffffff;
     --gray-bg: #f5f7fa;
     --accent: #2563eb;
+    --accent-light: #7dd3fc;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --dur: 0.7s;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 * {
@@ -25,8 +32,40 @@ body {
 }
 
 .header {
-    background: var(--primary);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(120deg, #0a2540 0%, #123a63 45%, #0d2b4a 100%);
+    background-size: 180% 180%;
+    animation: header-drift 18s ease-in-out infinite;
     color: #fff;
+}
+
+/* Soft light bloom drifting behind the header content. */
+.header::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -10%;
+    width: 60%;
+    height: 180%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.35) 0%, rgba(37, 99, 235, 0) 65%);
+    animation: bloom 14s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.header .container {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes header-drift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes bloom {
+    from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.75; }
+    to { transform: translate3d(40%, 10%, 0) scale(1.25); opacity: 1; }
 }
 
 .header h1 {
@@ -86,9 +125,28 @@ body {
 }
 
 .section h3 {
+    position: relative;
     font-size: 1.6rem;
-    margin-bottom: 20px;
+    margin-bottom: 26px;
+    padding-bottom: 12px;
     color: var(--primary);
+}
+
+/* Accent rule that draws itself in as the heading is revealed. */
+.section h3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transition: width 0.9s var(--ease-out) 0.15s;
+}
+
+.section h3.reveal-in::after {
+    width: 64px;
 }
 
 .section.gray {
@@ -99,6 +157,23 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+}
+
+.skills-grid > div {
+    padding: 18px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid #e6ebf1;
+    border-left: 3px solid transparent;
+    transition: transform 0.35s var(--ease-out),
+                box-shadow 0.35s var(--ease-out),
+                border-left-color 0.35s var(--ease-out);
+}
+
+.skills-grid > div:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(10, 37, 64, 0.1);
+    border-left-color: var(--accent);
 }
 
 .skills-grid h4 {
@@ -112,12 +187,61 @@ body {
 }
 
 .competencies li {
-    padding: 8px 0;
+    padding: 10px 0 10px 0;
     border-bottom: 1px solid #e0e6ed;
+    transition: padding-left 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+.competencies li:hover {
+    padding-left: 12px;
+    color: var(--primary);
 }
 
 .role {
+    position: relative;
     margin-bottom: 30px;
+    padding-left: 22px;
+}
+
+/* Timeline spine + node for each role. */
+.role::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 10px;
+    bottom: -30px;
+    width: 2px;
+    background: #e0e6ed;
+}
+
+.role:last-child::before {
+    bottom: auto;
+    height: 0;
+}
+
+.role::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--accent);
+    transform: scale(0.6);
+    opacity: 0;
+    transition: transform 0.5s var(--ease-out) 0.2s, opacity 0.5s var(--ease-out) 0.2s;
+}
+
+.role.reveal-in::after {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.role:hover::after {
+    background: var(--accent);
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.15);
 }
 
 .role h4 {
@@ -143,12 +267,38 @@ body {
 }
 
 .project {
+    position: relative;
+    overflow: hidden;
     border: 1px solid #e0e6ed;
     border-radius: 10px;
     padding: 28px;
     margin-bottom: 30px;
     background: #fff;
     box-shadow: 0 1px 3px rgba(10, 37, 64, 0.06);
+    transition: transform 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out);
+}
+
+/* Accent bar that slides across the top edge on hover. */
+.project::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-out);
+}
+
+.project:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 45px rgba(10, 37, 64, 0.14);
+}
+
+.project:hover::before {
+    transform: scaleX(1);
 }
 
 .project-head {
@@ -277,6 +427,14 @@ body {
     border-radius: 8px;
 }
 
+.outcome {
+    transition: transform 0.35s var(--ease-out);
+}
+
+.outcome:hover {
+    transform: translateY(-3px);
+}
+
 .outcome strong {
     display: block;
     font-size: 1.4rem;
@@ -302,6 +460,32 @@ body {
     color: #3730a3;
     font-size: 0.8rem;
     font-weight: 600;
+    transition: transform 0.25s var(--ease-out),
+                background-color 0.25s var(--ease-out),
+                color 0.25s var(--ease-out);
+}
+
+.tags span:hover {
+    transform: translateY(-2px);
+    background: var(--accent);
+    color: #fff;
+}
+
+.ticks li::before {
+    transition: transform 0.25s var(--ease-out);
+}
+
+.ticks li:hover::before {
+    transform: scale(1.25);
+}
+
+.flow li::before {
+    transition: transform 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out);
+}
+
+.flow li:hover::before {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .footer {
@@ -310,4 +494,91 @@ body {
     text-align: center;
     padding: 20px;
     font-size: 0.9rem;
+}
+
+.metric {
+    transition: transform 0.35s var(--ease-out);
+}
+
+.metric:hover {
+    transform: translateY(-3px);
+}
+
+.contact a {
+    transition: color 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
+}
+
+.contact a:hover {
+    color: var(--accent-light);
+}
+
+/* ---- Motion engine -------------------------------------------------- */
+/* Initial hidden states apply only when JS is running, so the page stays
+   fully readable with scripting disabled. */
+
+.js .reveal,
+.js .rise {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity var(--dur) var(--ease-out),
+                transform var(--dur) var(--ease-out);
+    will-change: opacity, transform;
+}
+
+.js .reveal-in,
+.js .rise-in {
+    opacity: 1;
+    transform: none;
+}
+
+.js .project.reveal {
+    transform: translateY(36px) scale(0.985);
+}
+
+.js .project.reveal-in {
+    transform: none;
+}
+
+.js .competencies li.reveal {
+    transform: translateX(-20px);
+}
+
+.js .competencies li.reveal-in {
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .header,
+    .header::before {
+        animation: none;
+    }
+
+    .js .reveal,
+    .js .rise,
+    .js .project.reveal,
+    .js .competencies li.reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .section h3::after {
+        width: 64px;
+        transition: none;
+    }
+
+    .role::after {
+        opacity: 1;
+        transform: scale(1);
+        transition: none;
+    }
+
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
 }
