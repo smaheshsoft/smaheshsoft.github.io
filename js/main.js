@@ -91,6 +91,7 @@
         '.section h3',
         '.section-intro',
         '.section > .container > p',
+        '.showcase-head p',
         '.skills-grid > div',
         '.competencies li',
         '.project',
@@ -137,7 +138,9 @@
                 );
                 observer.unobserve(entry.target);
             });
-        }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+        // threshold 0 (not a ratio) so panels taller than the viewport, which
+        // can never reach a meaningful visible ratio, still trigger.
+        }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
 
         Array.prototype.forEach.call(targets, function (el) {
             observer.observe(el);

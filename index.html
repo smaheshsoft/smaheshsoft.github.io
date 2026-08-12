@@ -94,130 +94,177 @@
     </div>
 </section>
 
-<section class="section" id="portfolio">
+<!-- ============ FEATURED PLATFORMS (dark infographic panels) ============ -->
+<section class="section showcase" id="portfolio">
     <div class="container">
-        <h3>Featured Platforms</h3>
-        <p class="section-intro">
-            Enterprise-scale platforms architected end to end &mdash; from tenancy model and event pipelines
-            to CI/CD, observability, and cost governance.
-        </p>
+        <div class="showcase-head">
+            <span class="showcase-eyebrow">Portfolio</span>
+            <h3>Featured Platforms</h3>
+            <p>
+                Enterprise-scale platforms architected end to end &mdash; from tenancy model and event pipelines
+                to CI/CD, observability, and cost governance.
+            </p>
+        </div>
 
-        <article class="project">
-            <div class="project-head">
-                <div>
-                    <span class="eyebrow">Enterprise</span>
-                    <h4>Battery Swapping &amp; Energy Management Platform</h4>
-                    <p class="project-sub">Cloud-Native | Scalable | Secure | High Availability</p>
+        <!-- ---------- Project 1 : Battery / Energy (lime + cyan) ---------- -->
+        <article class="project pcard pcard-energy">
+            <div class="pcard-top">
+                <div class="pcard-title">
+                    <span class="pcard-eyebrow">Enterprise</span>
+                    <h4>Battery Swapping &amp;<br><em>Energy Management Platform</em></h4>
+                    <p class="pcard-sub">Cloud-Native <i>|</i> Scalable <i>|</i> Secure <i>|</i> High Availability</p>
                 </div>
-                <span class="project-role">Principal Architect &middot; Wissen Technology</span>
+
+                <div class="pillbar">
+                    <div class="pill"><span class="pill-ico">📡</span><b>IoT</b><i>Integration</i></div>
+                    <div class="pill"><span class="pill-ico">⚡</span><b>Real-time</b><i>Processing</i></div>
+                    <div class="pill"><span class="pill-ico">🛡️</span><b>Secure</b><i>&amp; Reliable</i></div>
+                    <div class="pill"><span class="pill-ico">📈</span><b>Scalable</b><i>Architecture</i></div>
+                    <div class="pill"><span class="pill-ico">💰</span><b>Cost</b><i>Optimized</i></div>
+                </div>
             </div>
 
-            <p class="project-desc">
-                An IoT-driven energy platform connecting battery swapping stations, fleets, and billing across regions.
-                Telemetry streams from stations into an event-driven Azure pipeline that powers real-time monitoring,
-                battery lifecycle management, automated billing, and analytics.
-            </p>
-
-            <div class="project-grid">
-                <div>
-                    <h5>Capabilities</h5>
-                    <ul class="ticks">
+            <div class="pcard-body">
+                <div class="pcol">
+                    <ul class="feat">
                         <li>Real-time battery monitoring</li>
                         <li>IoT telemetry processing</li>
                         <li>Fleet &amp; station management</li>
                         <li>Multi-region deployment</li>
                         <li>Battery lifecycle management</li>
                         <li>Analytics &amp; reporting</li>
-                        <li>Automated billing &amp; multi-currency payments</li>
+                        <li>Automated billing &amp; payments</li>
                         <li>Alerts &amp; notifications</li>
                     </ul>
                 </div>
 
-                <div>
-                    <h5>Architecture Flow</h5>
-                    <ol class="flow">
-                        <li>Battery Swapping Stations</li>
-                        <li>Azure IoT Hub</li>
-                        <li>Azure Event Hub</li>
-                        <li>Azure Functions</li>
-                        <li>AKS Microservices</li>
-                        <li>PostgreSQL &middot; Redis &middot; Blob Storage</li>
-                    </ol>
-                    <p class="flow-note">
-                        <strong>Observability:</strong> Azure Monitor, Application Insights, Log Analytics<br>
-                        <strong>DevOps &amp; CI/CD:</strong> Azure DevOps, GitHub, Docker
+                <div class="pcol">
+                    <div class="builton">
+                        <span class="builton-ico">◆</span>
+                        <div>
+                            <strong>Built on Microsoft Azure</strong>
+                            <span>Event-Driven | Microservices | Highly Scalable</span>
+                        </div>
+                    </div>
+
+                    <p class="pcard-desc">
+                        Telemetry from swapping stations streams into an event-driven Azure pipeline that powers
+                        live monitoring, battery lifecycle management, automated multi-currency billing, and analytics.
                     </p>
                 </div>
             </div>
 
-            <div class="outcomes">
+            <h5 class="pcard-h5">Architecture Flow</h5>
+            <div class="flowline">
+                <div class="node"><span class="node-ico">🔋</span>Battery Swapping<br>Stations</div>
+                <div class="node"><span class="node-ico">📶</span>Azure<br>IoT Hub</div>
+                <div class="node"><span class="node-ico">🔀</span>Azure<br>Event Hub</div>
+                <div class="node"><span class="node-ico">⚡</span>Azure<br>Functions</div>
+                <div class="node"><span class="node-ico">⎈</span>AKS<br>Microservices</div>
+                <div class="node node-store">
+                    <span class="node-ico">🗄️</span>PostgreSQL<br>Redis &middot; Blob
+                </div>
+            </div>
+
+            <div class="subpanels">
+                <div class="subpanel">
+                    <h6>Monitoring &amp; Observability</h6>
+                    <p>Azure Monitor <i>|</i> Application Insights <i>|</i> Log Analytics</p>
+                </div>
+                <div class="subpanel">
+                    <h6>DevOps &amp; CI/CD</h6>
+                    <p>Azure DevOps <i>|</i> GitHub <i>|</i> Docker</p>
+                </div>
+            </div>
+
+            <div class="statbar">
                 <div class="outcome"><strong>99.99%</strong><span>Platform Availability</span></div>
                 <div class="outcome"><strong>30%</strong><span>Performance Improvement</span></div>
-                <div class="outcome"><strong>20%</strong><span>Cost Optimization (~₹80L/yr)</span></div>
+                <div class="outcome"><strong>20%</strong><span>Cost Optimization</span></div>
                 <div class="outcome"><strong>Multi-Region</strong><span>Scalable &amp; Ready</span></div>
                 <div class="outcome"><strong>Enterprise</strong><span>Grade Security</span></div>
             </div>
 
-            <div class="tags">
-                <span>Azure IoT Hub</span><span>Event Hub</span><span>Azure Functions</span><span>AKS</span>
-                <span>.NET 8</span><span>PostgreSQL</span><span>Redis</span><span>Blob Storage</span>
-                <span>Azure DevOps</span><span>Docker</span><span>Application Insights</span>
+            <div class="stackstrip">
+                <span>.NET 8</span><span>Azure IoT Hub</span><span>Event Hub</span><span>Azure Functions</span>
+                <span>AKS</span><span>PostgreSQL</span><span>Redis</span><span>Blob Storage</span>
+                <span>Azure DevOps</span><span>Docker</span>
             </div>
         </article>
 
-        <article class="project">
-            <div class="project-head">
-                <div>
-                    <span class="eyebrow">Enterprise</span>
-                    <h4>Multi-Tenant Developer Platform</h4>
-                    <p class="project-sub">Self-Service | Secure | Scalable | Automated</p>
+        <!-- ---------- Project 2 : Developer Platform (cyan + violet) ---------- -->
+        <article class="project pcard pcard-devplat">
+            <div class="pcard-top">
+                <div class="pcard-title">
+                    <span class="pcard-eyebrow">Enterprise</span>
+                    <h4>Multi-Tenant<br><em>Developer Platform</em></h4>
+                    <p class="pcard-sub">Self-Service <i>|</i> Secure <i>|</i> Scalable <i>|</i> Automated</p>
                 </div>
-                <span class="project-role">Platform &amp; Enterprise Architecture</span>
+
+                <div class="tenants">
+                    <div class="tenant"><span class="tenant-ico">👥</span><b>Tenant 1</b><i>Organization A</i></div>
+                    <div class="tenant"><span class="tenant-ico">👥</span><b>Tenant 2</b><i>Organization B</i></div>
+                    <div class="tenant tenant-dots">&hellip;</div>
+                    <div class="tenant"><span class="tenant-ico">👥</span><b>Tenant N</b><i>Organization N</i></div>
+                </div>
             </div>
 
-            <p class="project-desc">
-                A cloud-native internal developer platform that empowers engineering teams to provision infrastructure
-                on demand while enforcing governance across multiple tenant organizations. A single developer portal
-                fronts organizations, projects, environments, resources, pipelines, reports, and audit logs.
+            <p class="pcard-desc">
+                A cloud-native internal developer platform that lets engineering teams provision infrastructure
+                on demand while governance is enforced across every tenant organization.
             </p>
 
-            <div class="project-grid">
-                <div>
-                    <h5>Platform Pillars</h5>
-                    <ul class="ticks">
-                        <li>Secure multi-tenant architecture</li>
-                        <li>Self-service resource provisioning</li>
-                        <li>User &amp; access management</li>
-                        <li>Infrastructure automation (IaC)</li>
-                        <li>CI/CD pipelines</li>
-                        <li>Monitoring &amp; alerts</li>
-                        <li>Centralized reports &amp; analytics</li>
-                        <li>Audit, activity logs &amp; compliance readiness</li>
-                        <li>Cost &amp; usage management</li>
-                        <li>Scalable high availability</li>
+            <div class="kpis">
+                <div class="outcome kpi"><strong>12</strong><span>Total Tenants</span></div>
+                <div class="outcome kpi"><strong>248</strong><span>Total Users</span></div>
+                <div class="outcome kpi"><strong>86</strong><span>Active Projects</span></div>
+                <div class="outcome kpi"><strong>156</strong><span>Deployments / Month</span></div>
+                <div class="outcome kpi"><strong>34</strong><span>Environments</span></div>
+                <div class="outcome kpi"><strong>312</strong><span>Managed Resources</span></div>
+            </div>
+
+            <div class="pcard-body">
+                <div class="pcol">
+                    <h5 class="pcard-h5">Developer Portal</h5>
+                    <ul class="navlist">
+                        <li><span>🏠</span>Dashboard</li>
+                        <li><span>🏢</span>Organizations</li>
+                        <li><span>📁</span>Projects</li>
+                        <li><span>👤</span>Users</li>
+                        <li><span>🌐</span>Environments</li>
+                        <li><span>📦</span>Resources</li>
+                        <li><span>🔀</span>Pipelines</li>
+                        <li><span>📊</span>Reports</li>
+                        <li><span>📋</span>Audit Logs</li>
+                        <li><span>⚙️</span>Settings</li>
                     </ul>
                 </div>
 
-                <div>
-                    <h5>Developer Portal</h5>
-                    <p class="flow-note">
-                        A single pane of glass covering Dashboard, Organizations, Projects, Users, Environments,
-                        Resources, Pipelines, Reports, Audit Logs, and Settings &mdash; with live resource-usage
-                        trends (CPU / memory / storage), resource-type breakdown, deployment history, and per-tenant
-                        cost summaries.
-                    </p>
-                    <h5>Business Outcomes</h5>
-                    <ul class="ticks">
-                        <li>Accelerate developer productivity</li>
-                        <li>Reduce operational overhead</li>
-                        <li>Ensure security &amp; compliance</li>
-                        <li>Optimize costs &amp; resource utilization</li>
-                        <li>Scalable platform for future growth</li>
-                    </ul>
+                <div class="pcol">
+                    <h5 class="pcard-h5">Platform Capabilities</h5>
+                    <div class="capgrid">
+                        <div class="cap cap-1"><span>👥</span>User &amp; Access<br>Management</div>
+                        <div class="cap cap-2"><span>☁️</span>Self-Service<br>Provisioning</div>
+                        <div class="cap cap-3"><span>⚙️</span>Infrastructure<br>Automation (IaC)</div>
+                        <div class="cap cap-4"><span>🚀</span>CI / CD<br>Pipelines</div>
+                        <div class="cap cap-5"><span>📈</span>Monitoring<br>&amp; Alerts</div>
+                        <div class="cap cap-6"><span>📊</span>Reports &amp;<br>Analytics</div>
+                        <div class="cap cap-7"><span>📋</span>Audit &amp;<br>Activity Logs</div>
+                        <div class="cap cap-8"><span>💲</span>Cost &amp; Usage<br>Management</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="tags">
+            <h5 class="pcard-h5">Business Outcomes</h5>
+            <div class="benefits">
+                <div class="benefit"><span>🚀</span>Accelerate<br>Developer Productivity</div>
+                <div class="benefit"><span>⚙️</span>Reduce<br>Operational Overhead</div>
+                <div class="benefit"><span>🛡️</span>Ensure Security<br>&amp; Compliance</div>
+                <div class="benefit"><span>💲</span>Optimize Costs &amp;<br>Resource Utilization</div>
+                <div class="benefit"><span>📈</span>Scalable Platform<br>for Future Growth</div>
+            </div>
+
+            <div class="stackstrip">
                 <span>.NET 8</span><span>Azure</span><span>AKS</span><span>Kubernetes</span><span>Terraform</span>
                 <span>PostgreSQL</span><span>Redis</span><span>Azure DevOps</span><span>Docker</span>
             </div>
