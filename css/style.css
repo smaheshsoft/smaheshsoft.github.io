@@ -40,8 +40,36 @@ body {
     opacity: 0.9;
 }
 
+.tagline {
+    margin: 8px 0 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    color: #7dd3fc;
+}
+
 .location {
     margin-top: 10px;
+    opacity: 0.85;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.metric strong {
+    display: block;
+    font-size: 1.6rem;
+    color: #7dd3fc;
+    line-height: 1.2;
+}
+
+.metric span {
+    font-size: 0.85rem;
     opacity: 0.85;
 }
 
@@ -104,6 +132,176 @@ body {
 
 .role ul {
     margin-top: 10px;
+}
+
+/* ---- Featured Platforms / Portfolio ---- */
+
+.section-intro {
+    margin-top: -10px;
+    margin-bottom: 30px;
+    max-width: 780px;
+}
+
+.project {
+    border: 1px solid #e0e6ed;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 30px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(10, 37, 64, 0.06);
+}
+
+.project-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid #e0e6ed;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+}
+
+.eyebrow {
+    display: block;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.project-head h4 {
+    margin: 4px 0 6px;
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.project-sub {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.project-role {
+    font-size: 0.85rem;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.project-desc {
+    margin-top: 0;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.project-grid h5 {
+    margin: 0 0 10px;
+    font-size: 1rem;
+    color: var(--primary);
+}
+
+.project-grid h5 + h5,
+.flow-note + h5 {
+    margin-top: 22px;
+}
+
+.ticks {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.ticks li {
+    position: relative;
+    padding: 4px 0 4px 24px;
+    font-size: 0.95rem;
+}
+
+.ticks li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #16a34a;
+    font-weight: 700;
+}
+
+.flow {
+    list-style: none;
+    counter-reset: step;
+    padding-left: 0;
+    margin: 0;
+}
+
+.flow li {
+    position: relative;
+    counter-increment: step;
+    padding: 6px 0 6px 34px;
+    font-size: 0.95rem;
+}
+
+.flow li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 22px;
+}
+
+.flow-note {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.outcomes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+    padding: 20px;
+    background: var(--gray-bg);
+    border-radius: 8px;
+}
+
+.outcome strong {
+    display: block;
+    font-size: 1.4rem;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.outcome span {
+    font-size: 0.82rem;
+    color: #6b7280;
+}
+
+.tags {
+    margin-top: 22px;
+}
+
+.tags span {
+    display: inline-block;
+    margin: 0 8px 8px 0;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #eef2ff;
+    color: #3730a3;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 .footer {
