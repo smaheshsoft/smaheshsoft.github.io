@@ -91,6 +91,91 @@ body {
     opacity: 0.85;
 }
 
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 30px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: transform 0.3s var(--ease-out),
+                box-shadow 0.3s var(--ease-out),
+                background-color 0.3s var(--ease-out),
+                border-color 0.3s var(--ease-out),
+                color 0.3s var(--ease-out);
+}
+
+.btn-ico {
+    font-size: 0.95rem;
+    line-height: 1;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--accent), #38bdf8);
+    color: #fff;
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(56, 189, 248, 0.45);
+}
+
+.btn-ghost {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
+
+.btn-ghost:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent-light);
+    color: var(--accent-light);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-call {
+    border-color: rgba(125, 211, 252, 0.55);
+    color: var(--accent-light);
+}
+
+.btn-call:hover {
+    transform: translateY(-3px);
+    background: rgba(125, 211, 252, 0.14);
+    color: #fff;
+}
+
+.btn-wa {
+    background: #25d366;
+    color: #06301a;
+    box-shadow: 0 8px 22px rgba(37, 211, 102, 0.3);
+}
+
+.btn-wa:hover {
+    transform: translateY(-3px);
+    background: #2ee574;
+    box-shadow: 0 14px 30px rgba(37, 211, 102, 0.45);
+}
+
+.btn.is-busy {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 3px;
+}
+
 .metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
