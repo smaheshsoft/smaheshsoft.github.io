@@ -1253,3 +1253,30 @@ body {
         transition-duration: 0.001ms !important;
     }
 }
+
+/* ---- Structured professional summary ---- */
+
+.summary-list {
+    margin: 22px 0 0;
+    display: grid;
+    gap: 16px;
+}
+
+.summary-list dt {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.95rem;
+}
+
+.summary-list dd {
+    margin: 4px 0 0;
+    padding-left: 14px;
+    border-left: 3px solid var(--accent);
+}
+
+.pcard-role {
+    margin: 8px 0 0;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    letter-spacing: 0.3px;
+}
