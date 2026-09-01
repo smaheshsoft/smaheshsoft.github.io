@@ -279,6 +279,7 @@
     letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; }
   .sr-card-cat.cat-company   { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
   .sr-card-cat.cat-reference { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
+  .sr-card-cat.cat-ai        { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }
   .sr-card-cat.cat-deepdive  { background:#fff7ed; color:#ea580c; border:1px solid #fed7aa; }
   .sr-card-cat.cat-overview  { background:#f5f3ff; color:#7c3aed; border:1px solid #ddd6fe; }
   .sr-card-cat.cat-cloud     { background:#ecfdf5; color:#0d9488; border:1px solid #99f6e4; }

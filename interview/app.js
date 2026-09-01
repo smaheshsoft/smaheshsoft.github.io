@@ -70,8 +70,21 @@ const PAGE_META = {
   'ref-ui-frameworks':        { title:'Angular & React',               icon:'🎨', cat:'deepdive'  },
   'ref-llm-ai':               { title:'LLM & Modern AI Chatbots',      icon:'🤖', cat:'deepdive'  },
   'ref-infosecops':           { title:'InfoSec Operations',            icon:'🛡️', cat:'deepdive'  },
+  'ai-overview':              { title:'AI & LLM Engineering',         icon:'🧠', cat:'ai'        },
+  'ai-genai':                 { title:'Generative AI',                icon:'✨', cat:'ai'        },
+  'ai-llm':                   { title:'Large Language Models',        icon:'🧠', cat:'ai'        },
+  'ai-prompt':                { title:'Prompt Engineering',           icon:'📝', cat:'ai'        },
+  'ai-embeddings':            { title:'Embeddings & Semantic Search', icon:'🧩', cat:'ai'        },
+  'ai-vectordb':              { title:'Vector Databases',             icon:'🗂️', cat:'ai'        },
+  'ai-rag':                   { title:'RAG',                          icon:'🔎', cat:'ai'        },
+  'ai-mcp':                   { title:'Model Context Protocol (MCP)', icon:'🔌', cat:'ai'        },
+  'ai-agentic':               { title:'Agentic AI',                   icon:'🤖', cat:'ai'        },
+  'ai-orchestration':         { title:'AI Agents & Orchestration',    icon:'🎛️', cat:'ai'        },
+  'ai-azure-openai':          { title:'Azure OpenAI',                 icon:'🔷', cat:'ai'        },
+  'ai-foundry':               { title:'Azure AI Foundry',             icon:'🏭', cat:'ai'        },
+  'ai-cost-performance':      { title:'LLM Cost & Performance',       icon:'⚡', cat:'ai'        },
 };
-const CAT_LABEL = { company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
+const CAT_LABEL = { ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 
 // ── STORAGE NAMESPACE ───────────────────────────────────────────────────────────
 // Each page (index.html, companies.html, …) sets window.APP_NS so their remembered

@@ -34,6 +34,22 @@
   </div>
 
   <nav>
+    <div class="section-label" onclick="toggleGroup('grp-ai',this)">AI &amp; LLM Engineering <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-ai">
+      <a href="#" onclick="showPage('ai-overview',this);return false;">🧠 AI Overview &amp; Roadmap</a>
+      <a href="#" onclick="showPage('ai-genai',this);return false;">✨ Generative AI</a>
+      <a href="#" onclick="showPage('ai-llm',this);return false;">🧠 Large Language Models (LLM)</a>
+      <a href="#" onclick="showPage('ai-prompt',this);return false;">📝 Prompt Engineering</a>
+      <a href="#" onclick="showPage('ai-embeddings',this);return false;">🧩 Embeddings &amp; Semantic Search</a>
+      <a href="#" onclick="showPage('ai-vectordb',this);return false;">🗂️ Vector Databases</a>
+      <a href="#" onclick="showPage('ai-rag',this);return false;">🔎 RAG</a>
+      <a href="#" onclick="showPage('ai-mcp',this);return false;">🔌 Model Context Protocol (MCP)</a>
+      <a href="#" onclick="showPage('ai-agentic',this);return false;">🤖 Agentic AI</a>
+      <a href="#" onclick="showPage('ai-orchestration',this);return false;">🎛️ AI Agents &amp; Orchestration</a>
+      <a href="#" onclick="showPage('ai-azure-openai',this);return false;">🔷 Azure OpenAI</a>
+      <a href="#" onclick="showPage('ai-foundry',this);return false;">🏭 Azure AI Foundry</a>
+      <a href="#" onclick="showPage('ai-cost-performance',this);return false;">⚡ LLM Cost &amp; Performance</a>
+    </div>
     <div class="section-label" onclick="toggleGroup('grp-ref',this)">Architect Reference <span class="chevron">▼</span></div>
     <div class="nav-group" id="grp-ref">
       <a href="#" onclick="showPage('ref-microservices',this);return false;">🧩 Microservices Architecture</a>
@@ -193,6 +209,20 @@
 <script src="pages/ref-ui-frameworks.js"></script>
 <script src="pages/ref-llm-ai.js"></script>
 <script src="pages/ref-infosecops.js"></script>
+<script src="pages/ai/overview.js"></script>
+<script src="pages/ai/genai.js"></script>
+<script src="pages/ai/llm.js"></script>
+<script src="pages/ai/prompt.js"></script>
+<script src="pages/ai/embeddings.js"></script>
+<script src="pages/ai/vectordb.js"></script>
+<script src="pages/ai/rag.js"></script>
+<script src="pages/ai/mcp.js"></script>
+<script src="pages/ai/agentic.js"></script>
+<script src="pages/ai/orchestration.js"></script>
+<script src="pages/ai/azure-openai.js"></script>
+<script src="pages/ai/foundry.js"></script>
+<script src="pages/ai/cost-performance.js"></script>
+
 
 <script>window.APP_NS='interviewPrep';window.APP_HOME='home';</script>
 <script src="app.js"></script>
