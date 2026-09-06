@@ -76,6 +76,15 @@ window.Pages['companies-home'] = `
         <span class="tag">Frontend</span><span class="tag">Cloud Migration</span>
       </div>
     </div>
+    <div class="card" onclick="showPage('aezion', document.querySelector('[onclick*=aezion]'))">
+      <div class="card-icon">🧭</div>
+      <h3>Aezion – Round 1</h3>
+      <p>SOLID vs patterns, DI internals, service communication patterns, GC &amp; Dispose, MVC vs MVVM, AuthN/AuthZ, MFA, PII/GDPR, data consolidation design.</p>
+      <div class="card-meta">
+        <span class="tag blue">24 Questions</span><span class="tag">Security</span>
+        <span class="tag">.NET Internals</span><span class="tag">System Design</span>
+      </div>
+    </div>
   </div>
 
   <div class="alert" style="margin-top:24px;">

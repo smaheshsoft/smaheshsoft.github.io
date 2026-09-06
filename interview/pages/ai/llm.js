@@ -6,6 +6,26 @@ window.Pages['ai-llm'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">Text</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Tokens</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Context Window</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Model Reply</div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-box"><div class="num">Small</div><div class="label">fast · classify · route</div></div>
+      <div class="stat-box"><div class="num">Mid</div><div class="label">grounded Q&amp;A · RAG</div></div>
+      <div class="stat-box"><div class="num">Large</div><div class="label">reasoning · agentic</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What An Architect Must Actually Know</div>
   <div class="ref-body">
     <p>You do not need to derive attention maths. You need to reason correctly about

@@ -6,6 +6,20 @@ window.Pages['ai-foundry'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">📚</div><div class="principle-name">Model Catalogue</div><p>Many vendors, one API</p></div>
+      <div class="principle-card"><div class="principle-icon">🤖</div><div class="principle-name">Managed Agents</div><p>Threads, tools, state</p></div>
+      <div class="principle-card"><div class="principle-icon">📊</div><div class="principle-name">Evaluation</div><p>Groundedness, relevance scores</p></div>
+      <div class="principle-card"><div class="principle-icon">🔍</div><div class="principle-name">Tracing</div><p>Prompt → tool → token → latency</p></div>
+      <div class="principle-card"><div class="principle-icon">🛡️</div><div class="principle-name">Content Safety</div><p>Harm categories, jailbreak detection</p></div>
+      <div class="principle-card"><div class="principle-icon">🔑</div><div class="principle-name">Projects &amp; RBAC</div><p>Scoped access, per-project quota</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What It Is</div>
   <div class="ref-body">
     <p>Azure AI Foundry is Microsoft's platform layer for building, evaluating and operating AI applications.

@@ -6,6 +6,28 @@ window.Pages['ai-rag'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">Your Docs</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Chunk + Embed</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Vector Store</div>
+    </div>
+    <div class="flow-box">
+      <div class="flow-step">User Question</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Retrieve Top-K</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Re-rank</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">LLM Answer + Citations</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What It Is And Why It Exists</div>
   <div class="ref-body">
     <p>An LLM only knows its training data. It does not know your battery-station SOPs, your policy documents

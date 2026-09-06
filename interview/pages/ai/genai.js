@@ -6,6 +6,25 @@ window.Pages['ai-genai'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">Prompt + Context</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">LLM (generates)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">New Content</div>
+    </div>
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">📝</div><div class="principle-name">Text</div><p>Drafts, summaries, code</p></div>
+      <div class="principle-card"><div class="principle-icon">💬</div><div class="principle-name">Conversation</div><p>Chat, Q&amp;A assistants</p></div>
+      <div class="principle-card"><div class="principle-icon">🗂️</div><div class="principle-name">Structured Data</div><p>JSON extraction, forms</p></div>
+      <div class="principle-card"><div class="principle-icon">🎨</div><div class="principle-name">Media</div><p>Images, audio, video</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What It Is — In Plain Terms</div>
   <div class="ref-body">
     <p>Generative AI produces <b>new content</b> — text, code, images, audio, structured data — rather than

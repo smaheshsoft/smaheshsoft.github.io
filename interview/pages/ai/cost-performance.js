@@ -6,6 +6,25 @@ window.Pages['ai-cost-performance'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance — The Six Levers, By Impact</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step green">1. Model Routing</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">2. Context Discipline</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">3. Caching</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">4. Output Limits</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">5. Batch</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">6. Skip The Model</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Understand The Cost Model First</div>
   <div class="ref-body">
     <div class="code-box">COST PER CALL = (prompt tokens × input rate) + (completion tokens × output rate)

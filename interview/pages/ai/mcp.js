@@ -6,6 +6,26 @@ window.Pages['ai-mcp'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">AI App<br><span style="font-weight:400;font-size:11px;">MCP Host</span></div>
+      <div class="flow-arrow">↔</div>
+      <div class="flow-step blue">MCP Client</div>
+      <div class="flow-arrow">↔</div>
+      <div class="flow-step blue">MCP Server</div>
+      <div class="flow-arrow">↔</div>
+      <div class="flow-step green">Your System<br><span style="font-weight:400;font-size:11px;">DB, API, files</span></div>
+    </div>
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">🔧</div><div class="principle-name">Tools</div><p>Model-invoked actions</p></div>
+      <div class="principle-card"><div class="principle-icon">📄</div><div class="principle-name">Resources</div><p>App-controlled context</p></div>
+      <div class="principle-card"><div class="principle-icon">💬</div><div class="principle-name">Prompts</div><p>Reusable templates</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">The Problem MCP Solves</div>
   <div class="ref-body">
     <p>Every AI assistant needs access to the same enterprise systems — Jira, SharePoint, databases, internal

@@ -6,6 +6,28 @@ window.Pages['ai-agentic'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance — The Agent Loop</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">Goal</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Plan</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Call Tool</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Observe Result</div>
+      <div class="flow-arrow">↻</div>
+      <div class="flow-step green">Done / Escalate</div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-box"><div class="num">L0-1</div><div class="label">read-only · suggest</div></div>
+      <div class="stat-box"><div class="num">L2</div><div class="label">act, reversible</div></div>
+      <div class="stat-box"><div class="num">L3-4</div><div class="label">consequential · needs gates</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What Makes A System "Agentic"</div>
   <div class="ref-body">
     <p>A chatbot answers. An <b>agent decides what to do next</b>. Given a goal, it plans steps, calls tools,

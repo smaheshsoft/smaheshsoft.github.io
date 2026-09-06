@@ -6,6 +6,21 @@ window.Pages['ai-prompt'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">System Message<br><span style="font-weight:400;font-size:11px;">rules · stable</span></div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-step blue">Context<br><span style="font-weight:400;font-size:11px;">retrieved data</span></div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-step blue">User Message</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Output Contract<br><span style="font-weight:400;font-size:11px;">JSON schema</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Anatomy Of A Production Prompt</div>
   <div class="ref-body">
     <div class="code-box">SYSTEM MESSAGE   — role, rules, tone, refusal policy, output contract

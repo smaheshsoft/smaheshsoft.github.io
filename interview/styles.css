@@ -277,6 +277,7 @@
   .sr-card-title { font-size: 14px; font-weight: 700; color: var(--text); }
   .sr-card-cat { margin-left: auto; font-size: 10px; font-weight: 700; text-transform: uppercase;
     letter-spacing: .06em; padding: 2px 8px; border-radius: 4px; }
+  .sr-card-cat.cat-arch      { background:#eef2ff; color:#4338ca; border:1px solid #c7d2fe; }
   .sr-card-cat.cat-company   { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
   .sr-card-cat.cat-reference { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
   .sr-card-cat.cat-ai        { background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; }

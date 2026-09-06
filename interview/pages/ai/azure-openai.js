@@ -6,6 +6,26 @@ window.Pages['ai-azure-openai'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">App</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">APIM<br><span style="font-weight:400;font-size:11px;">rate limit · cache</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Managed Identity</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Azure OpenAI<br><span style="font-weight:400;font-size:11px;">Private Endpoint</span></div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-box"><div class="num">Standard</div><div class="label">pay-per-token · shared</div></div>
+      <div class="stat-box"><div class="num">PTU</div><div class="label">reserved · predictable</div></div>
+      <div class="stat-box"><div class="num">Batch</div><div class="label">discounted · async</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Why Enterprises Choose Azure OpenAI</div>
   <div class="ref-body">
     <div class="decision-table">

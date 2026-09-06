@@ -1,5 +1,9 @@
 // ── PAGE METADATA ─────────────────────────────────────────────────────────────
 const PAGE_META = {
+  'ref-core-principles':      { title:'Core Design Principles',       icon:'🧭', cat:'arch'       },
+  'ref-gof-patterns':         { title:'GoF Design Patterns',          icon:'🧱', cat:'arch'       },
+  'ref-cohesion':             { title:'Cohesion Types',                icon:'🔗', cat:'arch'       },
+  'ref-choreo-orch':          { title:'Choreography vs Orchestration', icon:'🎻', cat:'arch'       },
   'home':                     { title:'Home',                          icon:'🏠', cat:'overview'  },
   'wellsfargo':               { title:'Wells Fargo',                   icon:'🏦', cat:'company'   },
   'alstom1':                  { title:'Alstom – Round 1',              icon:'🚄', cat:'company'   },
@@ -8,6 +12,7 @@ const PAGE_META = {
   'cts':                      { title:'CTS',                           icon:'💼', cat:'company'   },
   'netsmart':                 { title:'Netsmart',                      icon:'🏥', cat:'company'   },
   'wipro':                    { title:'Wipro',                         icon:'🔷', cat:'company'   },
+  'aezion':                   { title:'Aezion – Round 1',              icon:'🧭', cat:'company'   },
   'topics':                   { title:'All Topics Index',              icon:'📚', cat:'overview'  },
   'ref-microservices':        { title:'Microservices Architecture',    icon:'🧩', cat:'reference' },
   'ref-kubernetes':           { title:'Kubernetes, AKS & OpenShift',  icon:'☸️', cat:'reference' },
@@ -84,7 +89,7 @@ const PAGE_META = {
   'ai-foundry':               { title:'Azure AI Foundry',             icon:'🏭', cat:'ai'        },
   'ai-cost-performance':      { title:'LLM Cost & Performance',       icon:'⚡', cat:'ai'        },
 };
-const CAT_LABEL = { ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
+const CAT_LABEL = { arch:'Architecture', ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 
 // ── STORAGE NAMESPACE ───────────────────────────────────────────────────────────
 // Each page (index.html, companies.html, …) sets window.APP_NS so their remembered

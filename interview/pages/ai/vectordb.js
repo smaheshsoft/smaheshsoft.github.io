@@ -6,6 +6,24 @@ window.Pages['ai-vectordb'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">🔷</div><div class="principle-name">Azure AI Search</div><p>Managed · hybrid + re-ranker · Entra ID native</p></div>
+      <div class="principle-card"><div class="principle-icon">🐘</div><div class="principle-name">pgvector</div><p>Extension on Postgres · full SQL filtering</p></div>
+      <div class="principle-card"><div class="principle-icon">🌲</div><div class="principle-name">Pinecone</div><p>Vector-first SaaS · very large scale</p></div>
+    </div>
+    <div class="flow-box">
+      <div class="flow-step">Query Vector</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">ANN Index</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Top-K Nearest</div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">The Problem They Solve</div>
   <div class="ref-body">
     <p>Finding the nearest vectors by brute force means comparing the query against every stored vector.

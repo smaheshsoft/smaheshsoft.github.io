@@ -6,6 +6,20 @@ window.Pages['ai-orchestration'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">1</div><div class="principle-name">Chain</div><p>Fixed pipeline, no branching</p></div>
+      <div class="principle-card"><div class="principle-icon">2</div><div class="principle-name">Router</div><p>Classify → dispatch</p></div>
+      <div class="principle-card"><div class="principle-icon">3</div><div class="principle-name">Tool-Calling Agent</div><p>Model + tools + loop</p></div>
+      <div class="principle-card"><div class="principle-icon">4</div><div class="principle-name">Planner / Executor</div><p>Strong plans, cheap executes</p></div>
+      <div class="principle-card"><div class="principle-icon">5</div><div class="principle-name">Multi-Agent</div><p>Supervisor + specialists</p></div>
+      <div class="principle-card"><div class="principle-icon">6</div><div class="principle-name">Reflection</div><p>Generate → critique → revise</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Orchestration Patterns — Pick The Simplest That Works</div>
   <div class="ref-body">
     <div class="code-box">1. CHAIN (deterministic pipeline)

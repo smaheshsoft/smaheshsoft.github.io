@@ -34,6 +34,14 @@
   </div>
 
   <nav>
+    <div class="section-label" onclick="toggleGroup('grp-arch',this)">Architecture <span class="chevron">▼</span></div>
+    <div class="nav-group" id="grp-arch">
+      <a href="#" onclick="showPage('ref-core-principles',this);return false;">🧭 Core Design Principles</a>
+      <a href="#" onclick="showPage('ref-gof-patterns',this);return false;">🧱 GoF Design Patterns (23)</a>
+      <a href="#" onclick="showPage('ref-cohesion',this);return false;">🔗 Cohesion Types</a>
+      <a href="#" onclick="showPage('ref-choreo-orch',this);return false;">🎻 Choreography vs Orchestration</a>
+    </div>
+
     <div class="section-label" onclick="toggleGroup('grp-ai',this)">AI &amp; LLM Engineering <span class="chevron">▼</span></div>
     <div class="nav-group" id="grp-ai">
       <a href="#" onclick="showPage('ai-overview',this);return false;">🧠 AI Overview &amp; Roadmap</a>
@@ -209,6 +217,10 @@
 <script src="pages/ref-ui-frameworks.js"></script>
 <script src="pages/ref-llm-ai.js"></script>
 <script src="pages/ref-infosecops.js"></script>
+<script src="pages/ref-core-principles.js"></script>
+<script src="pages/ref-gof-patterns.js"></script>
+<script src="pages/ref-cohesion.js"></script>
+<script src="pages/ref-choreography-orchestration.js"></script>
 <script src="pages/ai/overview.js"></script>
 <script src="pages/ai/genai.js"></script>
 <script src="pages/ai/llm.js"></script>

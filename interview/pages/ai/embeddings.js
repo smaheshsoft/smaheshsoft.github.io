@@ -6,6 +6,24 @@ window.Pages['ai-embeddings'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">At A Glance</div>
+  <div class="ref-body">
+    <div class="flow-box">
+      <div class="flow-step">Text</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step blue">Embedding Model</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step green">Vector [0.02, -0.11, ...]</div>
+    </div>
+    <div class="code-box">"battery swap failed"      → close in vector space
+"swap transaction error"  → close in vector space
+"quarterly revenue"       → far away in vector space
+
+Meaning becomes geometry — nearby points = similar meaning</div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">What An Embedding Is</div>
   <div class="ref-body">
     <p>An embedding turns text into a list of numbers — a <b>vector</b> — positioned so that text with similar
