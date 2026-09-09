@@ -7,9 +7,9 @@ window.Pages['companies-home'] = `
   </div>
 
   <div class="stats-bar">
-    <div class="stat-box"><div class="num">6</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">73+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">9</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">8</div><div class="label">Companies</div></div>
+    <div class="stat-box"><div class="num">107+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">11</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -83,6 +83,15 @@ window.Pages['companies-home'] = `
       <div class="card-meta">
         <span class="tag blue">24 Questions</span><span class="tag">Security</span>
         <span class="tag">.NET Internals</span><span class="tag">System Design</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('solera', document.querySelector('[onclick*=solera]'))">
+      <div class="card-icon">🔋</div>
+      <h3>Solera</h3>
+      <p>MCP usage &amp; rationale, GenAI/RAG + Agentic AI on Battery Swapping, currency handling, C# code review (LINQ deferred execution, SQL injection), concurrency &amp; load, platform architecture.</p>
+      <div class="card-meta">
+        <span class="tag blue">10 Questions</span><span class="tag">GenAI / MCP</span>
+        <span class="tag">Code Review</span><span class="tag">Concurrency</span>
       </div>
     </div>
   </div>

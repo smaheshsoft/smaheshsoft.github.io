@@ -6,13 +6,18 @@ window.Pages['ref-choreo-orch'] = `
 </div>
 
 <div class="ref-section">
-  <div class="ref-title">The Core Distinction</div>
+  <div class="ref-title">At A Glance</div>
   <div class="ref-body">
-    <p>Both coordinate a multi-step business process across services. The difference is <strong>where the decision-making authority lives</strong>.</p>
     <div class="flow-box">
-      <div class="flow-step">CHOREOGRAPHY — every service reacts to events; no one is in charge</div>
-      <div class="flow-arrow">vs</div>
-      <div class="flow-step blue">ORCHESTRATION — one coordinator tells each service what to do, in order</div>
+      <div class="flow-step">Every service reacts to events<br><span style="font-weight:400;font-size:11px;">no one is in charge</span></div>
+      <div class="flow-arrow">CHOREOGRAPHY vs ORCHESTRATION</div>
+      <div class="flow-step blue">One coordinator issues commands<br><span style="font-weight:400;font-size:11px;">owns the workflow</span></div>
+    </div>
+    <div class="principle-grid">
+      <div class="principle-card"><div class="principle-icon">📡</div><div class="principle-name">Choreography</div><p>Pub/Sub events, zero central authority, loose coupling</p></div>
+      <div class="principle-card"><div class="principle-icon">🎯</div><div class="principle-name">Orchestration</div><p>A coordinator commands each step, tracks state</p></div>
+      <div class="principle-card"><div class="principle-icon">🔒</div><div class="principle-name">2PC / 3PC</div><p>Classical distributed transaction — lock, vote, commit</p></div>
+      <div class="principle-card"><div class="principle-icon">↩️</div><div class="principle-name">Saga</div><p>Local transactions + compensations — the modern answer</p></div>
     </div>
   </div>
 </div>
@@ -36,6 +41,59 @@ Each service:
 
 No central brain. The "workflow" only exists as an emergent pattern
 across independently-deployed event handlers.</div>
+
+    <div class="ans-block"><div class="ans-label">In code — MassTransit over Azure Service Bus</div>
+    <div class="code-box">// ── Order Service — publishes only. Doesn't know who's listening. ──
+public class PlaceOrderConsumer : IConsumer&lt;PlaceOrder&gt;
+{
+    public async Task Consume(ConsumeContext&lt;PlaceOrder&gt; ctx)
+    {
+        var order = await _orders.CreateAsync(ctx.Message);
+
+        await ctx.Publish(new OrderPlaced           // fire the event, forget it
+        {
+            OrderId = order.Id,
+            Amount  = order.Total
+        });
+    }
+}
+
+// ── Payment Service — reacts to OrderPlaced, publishes its own event ──
+public class OrderPlacedConsumer : IConsumer&lt;OrderPlaced&gt;
+{
+    public async Task Consume(ConsumeContext&lt;OrderPlaced&gt; ctx)
+    {
+        var result = await _payments.ChargeAsync(ctx.Message.OrderId, ctx.Message.Amount);
+
+        if (result.Success)
+            await ctx.Publish(new PaymentCompleted { OrderId = ctx.Message.OrderId });
+        else
+            await ctx.Publish(new PaymentFailed    { OrderId = ctx.Message.OrderId });
+        // Payment Service has NO idea Inventory or Shipping even exist.
+    }
+}
+
+// ── Inventory Service — reacts to PaymentCompleted, on its own ──
+public class PaymentCompletedConsumer : IConsumer&lt;PaymentCompleted&gt;
+{
+    public async Task Consume(ConsumeContext&lt;PaymentCompleted&gt; ctx)
+    {
+        await _inventory.ReserveStockAsync(ctx.Message.OrderId);
+        await ctx.Publish(new StockReserved { OrderId = ctx.Message.OrderId });
+    }
+}
+
+// Program.cs — each service registers ONLY what it consumes; no wiring
+// between services exists anywhere in code. The broker is the only link.
+services.AddMassTransit(x =&gt;
+{
+    x.AddConsumer&lt;PaymentCompletedConsumer&gt;();
+    x.UsingAzureServiceBus((ctx, cfg) =&gt;
+    {
+        cfg.Host(connectionString);
+        cfg.ConfigureEndpoints(ctx);          // topic per event type
+    });
+});</div></div>
   </div>
 </div>
 
@@ -59,6 +117,65 @@ across independently-deployed event handlers.</div>
 The orchestrator issues explicit COMMANDS ("do this"), waits for the
 reply, and owns the entire state machine: what step comes next, what
 to do on failure, when the process is complete.</div>
+
+    <div class="ans-block"><div class="ans-label">In code — Azure Durable Functions orchestrator</div>
+    <div class="code-box">// The orchestrator function IS the visible state machine —
+// every step, retry, and compensation lives in ONE place, in order.
+[Function(nameof(OrderOrchestrator))]
+public async Task&lt;OrderResult&gt; RunOrchestrator(
+    [OrchestrationTrigger] TaskOrchestrationContext ctx)
+{
+    var order = ctx.GetInput&lt;OrderRequest&gt;();
+    var retry = TaskOptions.FromRetryPolicy(
+        new RetryPolicy(maxNumberOfAttempts: 3, firstRetryInterval: TimeSpan.FromSeconds(5)));
+
+    try
+    {
+        // STEP 1 — explicit command, orchestrator WAITS for the reply
+        var payment = await ctx.CallActivityAsync&lt;PaymentResult&gt;(
+            nameof(ChargeCardActivity), order, retry);
+
+        // STEP 2 — only runs because step 1 succeeded; orchestrator decides
+        var stock = await ctx.CallActivityAsync&lt;StockResult&gt;(
+            nameof(ReserveStockActivity), order, retry);
+
+        // STEP 3
+        var shipment = await ctx.CallActivityAsync&lt;ShipmentResult&gt;(
+            nameof(CreateShipmentActivity), order, retry);
+
+        return OrderResult.Success(shipment.TrackingId);
+    }
+    catch (TaskFailedException ex)
+    {
+        // ORCHESTRATOR owns compensation — reverse whatever already committed
+        await ctx.CallActivityAsync(nameof(ReleaseStockActivity), order);
+        await ctx.CallActivityAsync(nameof(RefundPaymentActivity), order);
+        return OrderResult.Failed(ex.FailureDetails.ErrorMessage);
+    }
+}
+// Durable Functions checkpoints state after every awaited activity, so a
+// crash mid-workflow resumes exactly where it left off — no lost steps.</div></div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <div class="ref-title">Side By Side — The Same Workflow, Two Ways</div>
+  <div class="ref-body">
+    <div class="code-box">CHOREOGRAPHY                              ORCHESTRATION
+─────────────                              ─────────────
+OrderService                                     OrderOrchestrator
+  publish OrderPlaced ──┐                          │
+                        ▼                    call ChargeCard ───────► PaymentService
+PaymentService ◄────────┘                          │◄──── result ────────┘
+  publish PaymentCompleted ──┐                call ReserveStock ─────► InventoryService
+                             ▼                      │◄──── result ────────┘
+InventoryService ◄───────────┘                call CreateShipment ───► ShippingService
+  publish StockReserved ──┐                         │◄──── result ────────┘
+                          ▼                          ▼
+ShippingService ◄─────────┘                    OrderResult
+
+No box "knows" the whole picture.          ONE box knows the ENTIRE picture.
+Find it by reading 4 codebases.            Find it by reading 1 function.</div>
   </div>
 </div>
 
@@ -124,6 +241,29 @@ PHASE 2 — COMMIT (or abort, if ANY participant said no)
 
 Every participant holds locks from "prepare" until "commit" arrives.
 ALL must agree, or ALL roll back — true ACID across services.</div>
+
+    <div class="ans-block"><div class="ans-label">In code — .NET's built-in 2PC (why it's rarely usable across microservices)</div>
+    <div class="code-box">// TransactionScope promotes to a DISTRIBUTED transaction (MSDTC/2PC)
+// the moment a SECOND durable resource enrolls — entirely automatic.
+using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+{
+    using var connA = new SqlConnection(accountsDbConnStr);
+    await connA.OpenAsync();
+    await connA.ExecuteAsync("UPDATE Accounts SET Balance -= @amt WHERE Id=@id", args);
+
+    using var connB = new SqlConnection(ledgerDbConnStr);   // 2nd resource →
+    await connB.OpenAsync();                                 // DTC coordinator
+    await connB.ExecuteAsync("INSERT INTO Ledger ...", args);  // kicks in HERE
+
+    scope.Complete();   // PHASE 2: both connections commit together, or
+}                        // neither does if scope.Complete() is never called
+
+// WHY THIS DOESN'T WORK FOR MICROSERVICES:
+//   • Both databases must be MSDTC-capable (SQL Server does; many don't)
+//   • A REST/HTTP call to another service cannot enrol in this transaction
+//   • Locks held on BOTH databases for the full scope — killed throughput
+//   • This is fine for two tables in the SAME service. It is NOT a
+//     cross-microservice solution — that is exactly why Sagas exist.</div></div>
   </div>
 </div>
 
@@ -166,6 +306,56 @@ If Step 3 fails:
 
 Choreography Saga   → each service knows its own compensation event
 Orchestration Saga   → coordinator explicitly calls each compensation</div>
+
+    <div class="ans-block"><div class="ans-label">In code — Orchestration-style Saga with explicit compensation</div>
+    <div class="code-box">public class OrderSaga
+{
+    // Each step pairs an ACTION with its COMPENSATION — defined together,
+    // so nobody can add a step and forget how to undo it.
+    private readonly List&lt;(Func&lt;Order, Task&gt; Do, Func&lt;Order, Task&gt; Undo)&gt; _steps = new()
+    {
+        (order =&gt; _payments.ReserveAsync(order),   order =&gt; _payments.ReleaseAsync(order)),
+        (order =&gt; _inventory.ReserveAsync(order),  order =&gt; _inventory.ReleaseAsync(order)),
+        (order =&gt; _shipping.CreateAsync(order),    order =&gt; _shipping.CancelAsync(order)),
+    };
+
+    public async Task&lt;SagaResult&gt; RunAsync(Order order)
+    {
+        var completed = new Stack&lt;Func&lt;Order, Task&gt;&gt;();   // undo actions, in order
+
+        foreach (var (doStep, undoStep) in _steps)
+        {
+            try
+            {
+                await doStep(order);
+                completed.Push(undoStep);              // only remember on SUCCESS
+            }
+            catch (Exception ex)
+            {
+                // Compensate everything that DID succeed — REVERSE order
+                while (completed.Count &gt; 0)
+                    await completed.Pop().Invoke(order);
+
+                return SagaResult.Failed(ex.Message);   // valid end state,
+            }                                            // just not the intended one
+        }
+        return SagaResult.Success();
+    }
+}</div></div>
+
+    <div class="ans-block"><div class="ans-label">In code — Choreography-style Saga: each service owns its own compensation</div>
+    <div class="code-box">// No central saga object. Inventory Service reacts to a FAILURE event
+// from further down the chain and undoes ONLY its own piece.
+public class ShipmentFailedConsumer : IConsumer&lt;ShipmentFailed&gt;
+{
+    public async Task Consume(ConsumeContext&lt;ShipmentFailed&gt; ctx)
+    {
+        await _inventory.ReleaseStockAsync(ctx.Message.OrderId);   // undo MY step
+        await ctx.Publish(new StockReleased { OrderId = ctx.Message.OrderId });
+        // Payment Service independently listens for StockReleased and
+        // refunds on its own — nobody orchestrates the unwind centrally.
+    }
+}</div></div>
 
     <div class="decision-table">
       <div class="dt-row dt-header" style="grid-template-columns:1.1fr 1.4fr 1.5fr;">

@@ -88,6 +88,7 @@ const PAGE_META = {
   'ai-azure-openai':          { title:'Azure OpenAI',                 icon:'🔷', cat:'ai'        },
   'ai-foundry':               { title:'Azure AI Foundry',             icon:'🏭', cat:'ai'        },
   'ai-cost-performance':      { title:'LLM Cost & Performance',       icon:'⚡', cat:'ai'        },
+  'ai-profile-qa':            { title:'Profile Q&A',                  icon:'🎤', cat:'ai'        },
 };
 const CAT_LABEL = { arch:'Architecture', ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 
