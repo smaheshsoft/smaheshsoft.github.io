@@ -7,9 +7,9 @@ window.Pages['companies-home'] = `
   </div>
 
   <div class="stats-bar">
-    <div class="stat-box"><div class="num">8</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">107+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">11</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">9</div><div class="label">Companies</div></div>
+    <div class="stat-box"><div class="num">120+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">12</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -92,6 +92,15 @@ window.Pages['companies-home'] = `
       <div class="card-meta">
         <span class="tag blue">10 Questions</span><span class="tag">GenAI / MCP</span>
         <span class="tag">Code Review</span><span class="tag">Concurrency</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('amtech', document.querySelector('[onclick*=amtech]'))">
+      <div class="card-icon">🧵</div>
+      <h3>AM Tech Software</h3>
+      <p>Timeout diagnosis, LLM caching &amp; cost, RAG accuracy tuning, parallel API calls &amp; cancellation, thread pool starvation, SemaphoreSlim, monolith→microservices buy-in, slow query diagnosis, AI cost justification, async non-blocking UI.</p>
+      <div class="card-meta">
+        <span class="tag blue">13 Questions</span><span class="tag">Concurrency</span>
+        <span class="tag">AI Cost</span><span class="tag">Performance</span>
       </div>
     </div>
   </div>
