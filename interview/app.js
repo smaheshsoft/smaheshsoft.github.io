@@ -100,6 +100,7 @@ const PAGE_META = {
   'ai-agentic-rag':           { title:'Agentic RAG Architecture (RAG²)', icon:'🧠', cat:'ai'      },
   'ai-python-implementation': { title:'Implementing AI Agents & RAG in Python', icon:'🐍', cat:'ai' },
   'ai-model-comparison':      { title:'Public Model Landscape & Comparison', icon:'⚖️', cat:'ai'    },
+  'ai-langchain-langgraph':   { title:'LangChain & LangGraph for RAG', icon:'🦜', cat:'ai'           },
 };
 const CAT_LABEL = { arch:'Architecture', ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 

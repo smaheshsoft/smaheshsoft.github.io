@@ -109,6 +109,36 @@ window.Pages['ai-model-comparison'] = `
 </div>
 
 <div class="ref-section">
+  <div class="ref-title">OpenAI's Own Lineup — Which Model For Which Job</div>
+  <div class="ref-body">
+    <div class="warn-box">⚠️ "OpenAI" is not one model — it's several model FAMILIES, each built for a different stage of a RAG/agent pipeline. Using GPT-4o to generate embeddings, or an embedding model to write an answer, is a category error — they're not interchangeable.</div>
+    <div class="decision-table">
+      <div class="dt-row dt-header" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div>Job</div><div>OpenAI Model</div><div>What It Actually Does</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Embedding (for retrieval/search)</div><div>text-embedding-3-small / text-embedding-3-large</div><div>Turns text into a vector for similarity search — never generates text, has no "answer" in it</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Searching / ranking retrieved results</div><div>No dedicated OpenAI re-ranker — use the embedding's cosine similarity, or an LLM-as-judge call with GPT-4o-mini</div><div>OpenAI doesn't ship a re-ranker like Cohere Rerank; ranking is either vector-similarity score or a cheap LLM scoring prompt</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">General-purpose generation / chat / RAG answers</div><div>GPT-4o (flagship), GPT-4o-mini (cheap/fast)</div><div>Takes retrieved context + question, produces the final grounded answer</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Deep multi-step reasoning</div><div>o1 / o3 ("reasoning" models)</div><div>Spends extra inference-time "thinking" tokens before answering — slower, pricier, for hard logic/math/planning</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Tool-calling / agent orchestration</div><div>GPT-4o, GPT-4o-mini (both support function calling)</div><div>Emits structured tool_calls — the Reasoning Engine / Planner role</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Vision / document understanding</div><div>GPT-4o (native multimodal)</div><div>Reads images, charts, scanned documents directly — no separate OCR step for most cases</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Content moderation / safety filtering</div><div>omni-moderation-latest (free moderation endpoint)</div><div>Flags harmful content before/after generation — a guardrail step, not a generator</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Speech-to-text</div><div>Whisper (whisper-1)</div><div>Transcribes audio to text — feeds into the same RAG/agent pipeline as any other text input</div></div>
+      <div class="dt-row" style="grid-template-columns:1.1fr 1.3fr 1.5fr;"><div class="dt-name">Text-to-speech</div><div>tts-1 / tts-1-hd</div><div>Converts the final generated answer to audio — last-mile output, not part of reasoning</div></div>
+    </div>
+    <div class="code-box">Mapping onto the RAG pipeline (same stages as the Implementation Flow above):
+
+  ① Router/classifier    → GPT-4o-mini
+  ② Embedding             → text-embedding-3-small (or -large for higher recall)
+  ③ Re-ranking            → cosine similarity from ② OR a GPT-4o-mini "score this" call
+  ④a Tool-calling agent   → GPT-4o / GPT-4o-mini (function calling)
+  ④b Deep reasoning       → o1 / o3
+  ④c Grounded generation  → GPT-4o-mini (cheap path) or GPT-4o (quality path)
+  ⑤ Guardrail/moderation  → omni-moderation-latest
+  (optional) voice I/O    → whisper-1 in, tts-1 out</div>
+    <div class="tip-box">✅ Interview line: "Within just OpenAI's lineup, a production RAG system already uses at least three different models — an embedding model for retrieval, a cheap chat model for routing and most generation, and reserves the reasoning models (o1/o3) for the fraction of queries that need genuine multi-step logic. Treating 'GPT' as a single model that does everything is the most common beginner mistake I see in system design answers."</div>
+  </div>
+</div>
+
+<div class="ref-section">
   <div class="ref-title">Public Model Families &amp; Primary Use Cases</div>
   <div class="ref-body">
     <div class="decision-table">
