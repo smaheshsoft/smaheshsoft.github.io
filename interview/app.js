@@ -4,6 +4,13 @@ const PAGE_META = {
   'ref-gof-patterns':         { title:'GoF Design Patterns',          icon:'🧱', cat:'arch'       },
   'ref-cohesion':             { title:'Cohesion Types',                icon:'🔗', cat:'arch'       },
   'ref-choreo-orch':          { title:'Choreography vs Orchestration', icon:'🎻', cat:'arch'       },
+  'ref-sdlc-ownership':       { title:'SDLC & Artifact Ownership',     icon:'📋', cat:'arch'       },
+  'ref-adr':                  { title:'Architecture Decision Records', icon:'📝', cat:'arch'       },
+  'ref-nfr-quality':          { title:'NFR & Quality Attributes',      icon:'📐', cat:'arch'       },
+  'ref-sad-hld-lld':          { title:'SAD vs HLD vs LLD',             icon:'🏛️', cat:'arch'       },
+  'ref-arch-governance':      { title:'Architecture Governance',       icon:'🏛️', cat:'arch'       },
+  'ref-well-architected':     { title:'Azure Well-Architected Framework', icon:'⭐', cat:'arch'    },
+  'ref-togaf':                { title:'TOGAF & Enterprise Architecture', icon:'🗺️', cat:'arch'     },
   'home':                     { title:'Home',                          icon:'🏠', cat:'overview'  },
   'wellsfargo':               { title:'Wells Fargo',                   icon:'🏦', cat:'company'   },
   'alstom1':                  { title:'Alstom – Round 1',              icon:'🚄', cat:'company'   },
@@ -89,6 +96,10 @@ const PAGE_META = {
   'ai-foundry':               { title:'Azure AI Foundry',             icon:'🏭', cat:'ai'        },
   'ai-cost-performance':      { title:'LLM Cost & Performance',       icon:'⚡', cat:'ai'        },
   'ai-profile-qa':            { title:'Profile Q&A',                  icon:'🎤', cat:'ai'        },
+  'ai-agentic-sdlc':          { title:'Agentic SDLC — Multi-Agent Factory', icon:'🏭', cat:'ai'  },
+  'ai-agentic-rag':           { title:'Agentic RAG Architecture (RAG²)', icon:'🧠', cat:'ai'      },
+  'ai-python-implementation': { title:'Implementing AI Agents & RAG in Python', icon:'🐍', cat:'ai' },
+  'ai-model-comparison':      { title:'Public Model Landscape & Comparison', icon:'⚖️', cat:'ai'    },
 };
 const CAT_LABEL = { arch:'Architecture', ai:'AI & LLM Engineering', company:'Company Round', reference:'Architect Reference', deepdive:'Deep Dive', overview:'Overview', cloud:'Cloud Services', sysdesign:'System Design' };
 

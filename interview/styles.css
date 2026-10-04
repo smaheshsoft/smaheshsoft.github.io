@@ -99,7 +99,7 @@
   #sidebar { transition: transform 0.25s ease; }
 
   /* ── MAIN CONTENT ── */
-  #main { margin-left: var(--sidebar-w); flex: 1; padding: 32px; max-width: 1100px; transition: margin-left 0.25s ease; }
+  #main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; padding: 32px; max-width: 1100px; transition: margin-left 0.25s ease; }
 
   /* Page header */
   .page-header { margin-bottom: 28px; }
@@ -207,7 +207,7 @@
 
   /* Decision table */
   .decision-table { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; width: 100%; }
-  .dt-row { display: grid; border-bottom: 1px solid var(--border); }
+  .dt-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); border-bottom: 1px solid var(--border); }
   .dt-row:last-child { border-bottom: none; }
   .dt-row > div { padding: 9px 12px; font-size: 12px; color: var(--text2); border-right: 1px solid var(--border); }
   .dt-row > div:last-child { border-right: none; }

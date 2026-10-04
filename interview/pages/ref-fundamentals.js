@@ -336,6 +336,76 @@ OSI model = conceptual reference / interview model.
 </div>
 
 <!-- ════════════════════════════════════════════════════════ -->
+<!--  ACID Properties                                         -->
+<!-- ════════════════════════════════════════════════════════ -->
+
+<div class="ref-section">
+  <div class="ref-title">ACID Properties — What "ACID Transaction" Actually Guarantees</div>
+  <div class="ref-body">
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:stretch;gap:14px;">
+        <div style="background:#7c3aed;color:#1e1030;font-weight:800;font-size:18px;border-radius:10px;width:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">A</div>
+        <div style="flex:1;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;">
+          <div style="background:#7c3aed;color:#1e1030;font-weight:700;font-size:14px;padding:10px 16px;">Atomicity</div>
+          <div style="background:#13102a;color:#ddd6fe;font-size:13px;padding:10px 16px;">All-or-nothing transactions — every statement in the transaction commits, or none do</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:stretch;gap:14px;">
+        <div style="background:#7c3aed;color:#1e1030;font-weight:800;font-size:18px;border-radius:10px;width:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">C</div>
+        <div style="flex:1;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;">
+          <div style="background:#7c3aed;color:#1e1030;font-weight:700;font-size:14px;padding:10px 16px;">Consistency</div>
+          <div style="background:#13102a;color:#ddd6fe;font-size:13px;padding:10px 16px;">Data is valid before and after — every constraint, trigger, and cascade rule holds at both ends of the transaction</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:stretch;gap:14px;">
+        <div style="background:#7c3aed;color:#1e1030;font-weight:800;font-size:18px;border-radius:10px;width:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">I</div>
+        <div style="flex:1;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;">
+          <div style="background:#7c3aed;color:#1e1030;font-weight:700;font-size:14px;padding:10px 16px;">Isolation</div>
+          <div style="background:#13102a;color:#ddd6fe;font-size:13px;padding:10px 16px;">Multiple transactions running at the same time don't see each other's uncommitted changes — concurrent execution looks like some serial order</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:stretch;gap:14px;">
+        <div style="background:#7c3aed;color:#1e1030;font-weight:800;font-size:18px;border-radius:10px;width:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">D</div>
+        <div style="flex:1;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;">
+          <div style="background:#7c3aed;color:#1e1030;font-weight:700;font-size:14px;padding:10px 16px;">Durability</div>
+          <div style="background:#13102a;color:#ddd6fe;font-size:13px;padding:10px 16px;">Once committed, data is never lost — it survives a crash, power loss, or restart (written to durable storage, not just memory)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <div class="ref-title">Isolation Levels — Where Most "ACID" Interview Follow-Ups Actually Go</div>
+  <div class="ref-body">
+    <div class="decision-table">
+      <div class="dt-row dt-header"><div>Level</div><div>Prevents</div><div>Still Allows</div></div>
+      <div class="dt-row"><div class="dt-name">Read Uncommitted</div><div>Nothing</div><div>Dirty reads, non-repeatable reads, phantom reads</div></div>
+      <div class="dt-row"><div class="dt-name">Read Committed</div><div>Dirty reads</div><div>Non-repeatable reads, phantom reads</div></div>
+      <div class="dt-row"><div class="dt-name">Repeatable Read</div><div>Dirty reads, non-repeatable reads</div><div>Phantom reads</div></div>
+      <div class="dt-row"><div class="dt-name">Serializable</div><div>All three</div><div>Nothing — but highest locking cost, lowest throughput</div></div>
+    </div>
+    <div class="warn-box">⚠️ Common trap: claiming "I use Serializable everywhere for safety." Serializable isolation maximizes locking and tanks throughput under concurrent load — most production systems default to Read Committed (SQL Server/PostgreSQL default) and reach for stronger isolation, optimistic concurrency (RowVersion), or explicit locking only on the specific operations that actually need it.</div>
+  </div>
+</div>
+
+<div class="ref-section">
+  <div class="ref-title">ACID vs BASE — Where This Connects To Other Topics On This Site</div>
+  <div class="ref-body">
+    <div class="code-box">ACID   → single database, strong consistency, the classical guarantee
+          (this page) and what Two-Phase Commit tries to extend ACROSS
+          multiple databases — see Choreography vs Orchestration &amp;
+          Multi-Phase Commit page for why that doesn't scale well.
+
+BASE   → Basically Available, Soft state, Eventual consistency — the
+          trade-off microservices/NoSQL make instead. Sagas (same page)
+          are how microservices get transactional-ish behavior WITHOUT
+          true cross-service ACID.</div>
+    <div class="tip-box">✅ Interview line: "ACID is what one database guarantees for one transaction. The moment a 'transaction' spans multiple services or databases, true ACID stops being realistically available — that's exactly why Sagas and eventual consistency exist, and why I pick Saga-based compensation over trying to force 2PC across microservice boundaries."</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
 <!--  SQL vs NoSQL                                            -->
 <!-- ════════════════════════════════════════════════════════ -->
 
