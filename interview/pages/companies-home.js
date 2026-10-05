@@ -8,8 +8,8 @@ window.Pages['companies-home'] = `
 
   <div class="stats-bar">
     <div class="stat-box"><div class="num">9</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">131+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">13</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">150+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">14</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -65,6 +65,15 @@ window.Pages['companies-home'] = `
       <p>EY project architecture, Azure Functions in containers, KEDA auto-scaling, CAP theorem, multi-tenant architecture.</p>
       <div class="card-meta">
         <span class="tag blue">6 Questions</span><span class="tag">KEDA</span><span class="tag">Multi-Tenant</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('netsmart2', document.querySelector('[onclick*=netsmart2]'))">
+      <div class="card-icon">🏥</div>
+      <h3>Netsmart – 2nd Attempt</h3>
+      <p>OAuth/PKCE &amp; grant types, Angular cross-component data, Docker ARG/ENV, AKS vs App Service, Repository pattern internals, LINQ vs SP, EF Core DB-First vs Code-First, async/sync &amp; thread starvation, why .NET Core, Chain of Responsibility middleware, scalable EHR system design.</p>
+      <div class="card-meta">
+        <span class="tag blue">21 Questions</span><span class="tag">OAuth/PKCE</span>
+        <span class="tag">System Design</span><span class="tag">EF Core</span>
       </div>
     </div>
     <div class="card" onclick="showPage('wipro', document.querySelector('[onclick*=wipro]'))">
