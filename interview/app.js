@@ -68,6 +68,7 @@ const PAGE_META = {
   'ref-docker':               { title:'Docker',                        icon:'🐳', cat:'deepdive'  },
   'ref-ha':                   { title:'High Availability',             icon:'🔄', cat:'deepdive'  },
   'ref-performance':          { title:'Performance Engineering',       icon:'⚡', cat:'deepdive'  },
+  'ref-pool-starvation':      { title:'ThreadPool & Connection Pool Starvation', icon:'🧵', cat:'deepdive' },
   'ref-caching':              { title:'Caching — Redis & In-Memory',   icon:'🗃️', cat:'deepdive'  },
   'ref-monitoring-advanced':  { title:'Monitoring & Observability',    icon:'📊', cat:'deepdive'  },
   'ref-security-advanced':    { title:'Security Deep Dive',            icon:'🔐', cat:'deepdive'  },
