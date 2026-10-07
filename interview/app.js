@@ -9,6 +9,7 @@ const PAGE_META = {
   'ref-nfr-quality':          { title:'NFR & Quality Attributes',      icon:'📐', cat:'arch'       },
   'ref-sad-hld-lld':          { title:'SAD vs HLD vs LLD',             icon:'🏛️', cat:'arch'       },
   'ref-arch-governance':      { title:'Architecture Governance',       icon:'🏛️', cat:'arch'       },
+  'ref-sdlc-governance-flow': { title:'SDLC Governance Flow (BRD to Production)', icon:'🧭', cat:'arch' },
   'ref-well-architected':     { title:'Azure Well-Architected Framework', icon:'⭐', cat:'arch'    },
   'ref-togaf':                { title:'TOGAF & Enterprise Architecture', icon:'🗺️', cat:'arch'     },
   'home':                     { title:'Home',                          icon:'🏠', cat:'overview'  },
