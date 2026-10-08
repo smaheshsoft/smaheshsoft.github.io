@@ -234,6 +234,167 @@ ENV API_BASE_URL=${"$"}{API_BASE_URL}</div></div>
             <div class="dt-row"><div class="dt-name">.NET upgrade pace</div><div>Must wait for the Functions host to support a new .NET version</div><div class="dt-yes">Can upgrade independently, faster adoption of new .NET releases</div></div>
             <div class="dt-row"><div class="dt-name">Fault isolation</div><div>A crash in function code can affect the host process</div><div class="dt-yes">Isolated process — a crash doesn't take down the host</div></div>
           </div>
+          <div class="ans-block"><div class="ans-label">Architecture — where your code runs relative to the Functions host</div>
+          <div class="code-box">IN-PROCESS — ONE process
+──────────────────────────────────
+Azure Functions Host
+│
+├── Functions Runtime
+├── .NET CLR  (the host's version)
+└── Your Function Code
+      └── Function1()
+
+Your code and the host share the runtime and dependencies.</div>
+          <div class="code-box">ISOLATED WORKER — TWO processes
+──────────────────────────────────
+┌──────────────────────────┐
+│ Azure Functions Host     │
+│ Trigger · Scaling        │
+│ Binding management       │
+└────────────┬─────────────┘
+             │ RPC (gRPC)
+┌────────────▼─────────────┐
+│ .NET Worker Process      │
+│ Your functions · DI      │
+│ Middleware · .NET runtime│
+└──────────────────────────┘
+
+The host handles triggers and scaling; your worker runs the code.</div></div>
+          <div class="warn-box">⚠️ Because the host and your code share one process in the in-process model, a serious problem in your application (memory exhaustion, an unhandled crash, a conflicting assembly) can affect the Functions host itself. In the isolated model the worker can fail without taking the host's trigger and scaling machinery down with it.</div>
+
+          <div class="ans-block"><div class="ans-label">Code-level differences you hit during migration</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div>Area</div><div>In-Process</div><div>Isolated Worker</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">Startup</div><div>FunctionsStartup class</div><div>Program.cs with the standard .NET Generic Host</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">Function attribute</div><div>[FunctionName("X")]</div><div>[Function("X")]</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">Binding packages</div><div>Microsoft.Azure.WebJobs.Extensions.*</div><div>Microsoft.Azure.Functions.Worker.Extensions.*</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">HTTP trigger types</div><div>HttpRequest / IActionResult (ASP.NET Core types)</div><div>HttpRequestData / HttpResponseData, or ASP.NET Core integration via ConfigureFunctionsWebApplication</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">Middleware</div><div>No worker middleware pipeline</div><div>IFunctionsWorkerMiddleware — ASP.NET Core style</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">Logging</div><div>ILogger passed as a function parameter</div><div>ILogger from DI, or FunctionContext.GetLogger</div></div>
+            <div class="dt-row" style="grid-template-columns:1.1fr 1.6fr 1.8fr;"><div class="dt-name">.NET version ceiling</div><div>Stops at .NET 8</div><div>Current and future .NET versions; .NET Framework also supported</div></div>
+          </div></div>
+
+          <div class="ans-block"><div class="ans-label">In code — the same Service Bus function, before and after</div>
+          <div class="code-box">// ── IN-PROCESS ─────────────────────────────────────────────
+[FunctionName("ProcessOrder")]
+public async Task Run(
+    [ServiceBusTrigger("orders")] string message,
+    ILogger log)
+{
+    log.LogInformation("Order received: {Message}", message);
+    await _orders.HandleAsync(message);
+}
+
+// ── ISOLATED WORKER ────────────────────────────────────────
+public class ProcessOrderFunction
+{
+    private readonly IOrderService _orders;
+    private readonly ILogger&lt;ProcessOrderFunction&gt; _log;
+
+    public ProcessOrderFunction(IOrderService orders, ILogger&lt;ProcessOrderFunction&gt; log)
+    {
+        _orders = orders;       // constructor DI — the normal .NET pattern
+        _log = log;
+    }
+
+    [Function("ProcessOrder")]
+    public async Task Run(
+        [ServiceBusTrigger("orders")] string message)
+    {
+        _log.LogInformation("Order received: {Message}", message);
+        await _orders.HandleAsync(message);
+    }
+}</div></div>
+
+          <div class="ans-block"><div class="ans-label">In code — Program.cs replaces FunctionsStartup (Generic Host, familiar DI)</div>
+          <div class="code-box">var builder = FunctionsApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton&lt;IOrderService, OrderService&gt;();
+builder.Services.AddScoped&lt;IRepository, Repository&gt;();
+
+builder.UseMiddleware&lt;ExceptionMiddleware&gt;();     // cross-cutting concerns, once
+builder.UseMiddleware&lt;LoggingMiddleware&gt;();
+
+builder.Build().Run();</div></div>
+
+          <div class="ans-block"><div class="ans-label">Middleware — the biggest practical gain for enterprise apps</div>
+          <div class="code-box">public class LoggingMiddleware : IFunctionsWorkerMiddleware
+{
+    public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
+    {
+        Console.WriteLine("Before function");
+        await next(context);              // run the next middleware / the function
+        Console.WriteLine("After function");
+    }
+}
+
+public class ExceptionMiddleware : IFunctionsWorkerMiddleware
+{
+    private readonly ILogger&lt;ExceptionMiddleware&gt; _logger;
+    public ExceptionMiddleware(ILogger&lt;ExceptionMiddleware&gt; logger) =&gt; _logger = logger;
+
+    public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
+    {
+        try { await next(context); }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Function failed");
+            throw;                        // rethrow so retry / dead-letter policies still apply
+        }
+    }
+}
+
+Pipeline:
+  Event → Logging → Authentication → Exception → Telemetry → Your Function</div></div>
+          <div class="tip-box">✅ Middleware means logging, authentication, exception handling and telemetry are written once and applied to every function — instead of copy-pasting the same try/catch and logging into each one. This is the same Chain of Responsibility pattern as ASP.NET Core middleware.</div>
+
+          <div class="ans-block"><div class="ans-label">Performance — do not oversell it either way</div>
+          <div class="code-box">Isolated does NOT automatically make a function faster. There is one more
+boundary to cross:
+
+   Host  ──RPC──▶  Worker  ──▶  your code
+
+so there can be some overhead compared with in-process. But for most real
+workloads the execution time is dominated by what the function DOES:
+
+   Event Hub read + database call + HTTP/API calls + serialization
+
+and the RPC hop is usually small next to those. Measure with your own
+workload before treating the overhead as a blocker.</div></div>
+
+          <div class="ans-block"><div class="ans-label">Scenario — high-throughput Event Hub → .NET → PostgreSQL</div>
+          <div class="code-box">IN-PROCESS:  Event Hub → Functions Host + .NET → Function → PostgreSQL
+
+ISOLATED:    Event Hub → Functions Host → (RPC) → .NET Worker
+                                                    → Function → PostgreSQL
+
+Isolated gives cleaner application boundaries. At very high volume
+(for example thousands of executions per second) the deciding factors are
+still: Event Hub partition count, Functions scale-out and concurrency
+settings, worker count, batch size, and DATABASE CONNECTION POOLING —
+not the process model.</div></div>
+
+          <div class="ans-block"><div class="ans-label">Do not confuse process isolation with instance isolation</div>
+          <div class="code-box">                  Azure Functions app
+                         │
+            ┌────────────┴────────────┐
+         Instance 1                Instance 2        ← scale-out units (VMs / containers)
+            │                         │
+       .NET Worker               .NET Worker         ← one isolated worker per instance
+
+"Isolated worker" means your code runs in its own PROCESS next to the host.
+It does NOT mean each function gets its own VM or container, and it is not the
+same thing as Functions scaling out to more instances.</div></div>
+
+          <div class="ans-block"><div class="ans-label">Should you migrate? — decision guidance</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header"><div>Situation</div><div>Recommendation</div></div>
+            <div class="dt-row"><div class="dt-name">New Azure Functions project</div><div class="dt-yes">Start on the isolated worker model — it is the strategic model</div></div>
+            <div class="dt-row"><div class="dt-name">Existing in-process app, no pressing need</div><div>Do not migrate just because isolated exists — weigh the runtime support lifecycle, dependency compatibility, bindings used, middleware needs, migration effort and deployment architecture</div></div>
+            <div class="dt-row"><div class="dt-name">You need .NET 9 or newer, middleware, or dependency control</div><div class="dt-yes">Migrate — these are only possible (or only practical) on isolated</div></div>
+          </div>
+          <div class="warn-box">⚠️ Support deadline — please verify: Microsoft has announced that support for the in-process model ends on 10 November 2026 (in line with .NET 8 end of support). This date is from my own knowledge, not from the shared source, so confirm it on the official Azure Functions documentation before quoting it. If it holds, in-process apps need a migration plan now rather than later.</div></div>
+
           <div class="tip-box">✅ Interview line: "The core driver was decoupling — in-process functions were hostage to whatever .NET version the Functions host itself supported, and shared its dependency graph. Isolated worker runs the function as its own process with its own DI container and dependencies, so teams can adopt new .NET versions, custom middleware, and third-party packages without waiting on or fighting the host runtime."</div>
         </div>
       </div>
