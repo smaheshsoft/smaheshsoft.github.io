@@ -66,6 +66,7 @@ const PAGE_META = {
   'ref-database-advanced':    { title:'Database Deep Dive',            icon:'🗄️', cat:'deepdive'  },
   'ref-messaging-advanced':   { title:'Messaging (Kafka/RabbitMQ)',    icon:'📨', cat:'deepdive'  },
   'ref-dotnet':               { title:'.NET Architecture',             icon:'⚙️', cat:'deepdive'  },
+  'ref-dotnet-ecosystem':     { title:'Modern .NET Backend Ecosystem', icon:'🧰', cat:'deepdive'  },
   'ref-db-first-code-first':  { title:'DB First vs Code First & EDMX', icon:'🗄️', cat:'deepdive'  },
   'ref-networking':           { title:'Networking',                    icon:'🌍', cat:'deepdive'  },
   'ref-docker':               { title:'Docker',                        icon:'🐳', cat:'deepdive'  },
