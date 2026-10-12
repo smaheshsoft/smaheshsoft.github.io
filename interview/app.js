@@ -20,6 +20,7 @@ const PAGE_META = {
   'cts':                      { title:'CTS',                           icon:'💼', cat:'company'   },
   'netsmart':                 { title:'Netsmart',                      icon:'🏥', cat:'company'   },
   'netsmart2':                { title:'Netsmart – 2nd Attempt',        icon:'🏥', cat:'company'   },
+  'amtech3':                  { title:'AM Tech Software – Round 3',    icon:'🚌', cat:'company'   },
   'wipro':                    { title:'Wipro',                         icon:'🔷', cat:'company'   },
   'aezion':                   { title:'Aezion – Round 1',              icon:'🧭', cat:'company'   },
   'topics':                   { title:'All Topics Index',              icon:'📚', cat:'overview'  },
@@ -61,6 +62,7 @@ const PAGE_META = {
   'sd-paytm':                 { title:'Paytm',                         icon:'💳', cat:'sysdesign'  },
   'sd-upi':                   { title:'UPI Payment System',            icon:'🇮🇳', cat:'sysdesign'  },
   'sd-parking-lot':           { title:'Parking Lot System',            icon:'🅿️', cat:'sysdesign'  },
+  'sd-bus-tracking':          { title:'City Bus Tracking & ETA',       icon:'🚌', cat:'sysdesign'  },
   'ref-architecture-advanced':{ title:'Architecture & DDD',            icon:'🏗️', cat:'deepdive'  },
   'ref-distributed':          { title:'Distributed Systems',           icon:'🌐', cat:'deepdive'  },
   'ref-database-advanced':    { title:'Database Deep Dive',            icon:'🗄️', cat:'deepdive'  },
@@ -105,6 +107,7 @@ const PAGE_META = {
   'ai-agentic-sdlc':          { title:'Agentic SDLC — Multi-Agent Factory', icon:'🏭', cat:'ai'  },
   'ai-agentic-rag':           { title:'Agentic RAG Architecture (RAG²)', icon:'🧠', cat:'ai'      },
   'ai-python-implementation': { title:'Implementing AI Agents & RAG in Python', icon:'🐍', cat:'ai' },
+  'ai-agent-project-structure': { title:'AI Agent Project Structure', icon:'🗂️', cat:'ai' },
   'ai-model-comparison':      { title:'Public Model Landscape & Comparison', icon:'⚖️', cat:'ai'    },
   'ai-langchain-langgraph':   { title:'LangChain & LangGraph for RAG', icon:'🦜', cat:'ai'           },
 };

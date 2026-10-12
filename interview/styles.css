@@ -146,7 +146,28 @@
   .qa-card.bonus { border-color: var(--orange-bd); background: var(--orange-bg); }
   .qa-num { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 6px; padding: 4px 8px; height: fit-content; white-space: nowrap; min-width: 36px; text-align: center; }
   .qa-card.bonus .qa-num { color: var(--orange); background: var(--orange-bg); border-color: var(--orange-bd); }
-  .qa-body { flex: 1; }
+  .qa-body { flex: 1; min-width: 0; }
+
+  /* Layered-architecture diagram cards (used in company-round system designs) */
+  .lyr-wrap { overflow-x: auto; }
+  .lyr-box { min-width: 540px; max-width: 800px; margin: 0 auto; border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: var(--surface); }
+  .lyr-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .lyr-card { border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 10px 14px; text-align: center; }
+  .lyr-card.hl, .lyr-grp.hl { border-color: var(--accent-bd); background: var(--accent-bg); }
+  .lyr-card b { display: block; color: var(--text); font-size: 13px; }
+  .lyr-card span { display: block; color: var(--text2); font-size: 11px; margin-top: 2px; }
+  .lyr-grp { border: 1px solid var(--border); background: var(--surface); border-radius: 10px; padding: 10px; }
+  .lyr-grp > b { display: block; text-align: center; color: var(--text); font-size: 13px; margin-bottom: 8px; }
+  .lyr-grid { display: grid; gap: 8px; }
+  .lyr-grid.c2 { grid-template-columns: repeat(2, 1fr); }
+  .lyr-grid.c3 { grid-template-columns: repeat(3, 1fr); }
+  .lyr-mini { border: 1px solid var(--border); background: var(--surface2); border-radius: 8px; padding: 10px; text-align: center; }
+  .lyr-mini b { display: block; color: var(--text); font-size: 12px; }
+  .lyr-mini span { display: block; color: var(--text2); font-size: 10px; margin-top: 2px; }
+  .lyr-down { text-align: center; color: var(--muted); padding: 4px 0; font-size: 12px; }
+  .lyr-cap { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: var(--muted); text-align: center; margin-bottom: 6px; }
+  .lyr-col { display: flex; flex-direction: column; gap: 6px; }
+  .lyr-small { font-size: 9px; color: var(--muted); margin-bottom: 2px; }
   .qa-question { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 14px; line-height: 1.5; }
   .qa-answer { font-size: 13px; color: var(--text2); line-height: 1.6; }
   .ans-block { margin-bottom: 12px; }
