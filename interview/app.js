@@ -21,6 +21,7 @@ const PAGE_META = {
   'netsmart':                 { title:'Netsmart',                      icon:'🏥', cat:'company'   },
   'netsmart2':                { title:'Netsmart – 2nd Attempt',        icon:'🏥', cat:'company'   },
   'amtech3':                  { title:'AM Tech Software – Round 3',    icon:'🚌', cat:'company'   },
+  'epam1':                    { title:'EPAM – Round 1',                icon:'🧩', cat:'company'   },
   'wipro':                    { title:'Wipro',                         icon:'🔷', cat:'company'   },
   'aezion':                   { title:'Aezion – Round 1',              icon:'🧭', cat:'company'   },
   'topics':                   { title:'All Topics Index',              icon:'📚', cat:'overview'  },

@@ -6,9 +6,9 @@ window.Pages['amtech3'] = `
     <p>IoT ingestion · real-time ETA · stop displays · mobile and web apps · Redis and database consistency · failover · fan-out · safe ETA algorithm rollout</p>
   </div>
   <div class="stats-bar" style="margin-bottom:20px;">
-    <div class="stat-box"><div class="num">10</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">11</div><div class="label">Questions</div></div>
     <div class="stat-box"><div class="num">1</div><div class="label">Full System Design</div></div>
-    <div class="stat-box"><div class="num">9</div><div class="label">Follow-Ups</div></div>
+    <div class="stat-box"><div class="num">10</div><div class="label">Follow-Ups</div></div>
   </div>
   <div class="alert" style="margin-bottom:16px;">
     <strong>📝 Reading note</strong>
@@ -162,6 +162,53 @@ NEW: the display is a VIEW over live predictions, not a queue.
             </div>
           </div>
           <div class="warn-box">⚠️ A typical reference flow shows displays with "Next 3 buses" — that is the exact limitation to remove. Stop Predictions keeps every upcoming bus per stop and each display shows as many as fit, paging through the rest.</div></div>
+
+          <div class="ans-block"><div class="ans-label">Step 3a-3 — Data flow diagram: from the bus to the passenger's mobile</div>
+          <div class="lyr-wrap"><div class="lyr-box" style="max-width:640px;">
+            <div class="lyr-card"><b>① 🚌 Bus GPS tracker</b><span>GNSS fix every ~5 s → report { busId, seq, ts, lat, lon, speed, heading } → written to the local flash buffer first</span></div>
+            <div class="lyr-down">↓ MQTT over TLS on 4G · per-device X.509 certificate · retried until acknowledged</div>
+            <div class="lyr-card"><b>② ☁️ IoT Hub</b><span>authenticates the device · accepts the report · routes it to the event stream</span></div>
+            <div class="lyr-down">↓ partition key = busId — one bus, one ordered partition</div>
+            <div class="lyr-card hl"><b>③ Event stream</b><span>durable and retained · ordered per bus · replayable</span></div>
+            <div class="lyr-down">↓ consumer group — processors read at their own pace</div>
+            <div class="lyr-card"><b>④ Vehicle State (stream processor)</b><span>validate · drop duplicates and late reports · map-match to the route · detect stop arrival</span></div>
+            <div class="lyr-down">↓ conditional write — only if seq is newer</div>
+            <div class="lyr-grp"><b>Redis — live state</b>
+              <div class="lyr-grid c3">
+                <div class="lyr-mini"><b>bus:{id}</b><span>latest position, speed, trip</span></div>
+                <div class="lyr-mini"><b>geo:buses</b><span>map-area queries</span></div>
+                <div class="lyr-mini"><b>stop:{id}:arrivals</b><span>sorted by ETA</span></div>
+              </div>
+            </div>
+            <div class="lyr-down">↓ a changed bus triggers recalculation</div>
+            <div class="lyr-card"><b>⑤ ETA Engine + Stop Predictions</b><span>ETA for the next ~10 stops of that bus → update each stop's arrival list</span></div>
+            <div class="lyr-down">↓ only what changed</div>
+            <div class="lyr-card"><b>⑥ Live Event Publisher</b><span>conflate: newest value per group every 1-5 s → groups bus:201A · route:201 · stop:MG-ROAD</span></div>
+            <div class="lyr-two" style="gap:12px;">
+              <div><div class="lyr-down">↓ WebSocket — app in the foreground</div><div class="lyr-card"><b>Real-time Hub</b><span>Web PubSub / SignalR groups</span></div></div>
+              <div><div class="lyr-down">↓ push — app in the background or closed</div><div class="lyr-card"><b>Favorites + Notification</b><span>alert rule matched → FCM / APNs</span></div></div>
+            </div>
+            <div class="lyr-down">↓ delta arrives on the phone</div>
+            <div class="lyr-card hl"><b>⑦ 📱 Passenger's mobile app</b><span>merge the delta into local state → redraw map and arrival list → show "updated 3 s ago" → grey the bus out if updates stop</span></div>
+          </div></div>
+          <div class="code-box">When the passenger opens the app (snapshot path):
+  Mobile app -> Edge + CDN -> APIM -> Mobile BFF -> Tracking Service -> Redis (current state)
+  The response returns current arrivals and positions; the app then joins its stop, route or bus
+  groups and receives only deltas. If the socket cannot connect it polls the same endpoint, which
+  is served from a short HTTP cache.</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div>Hop</div><div>Typical time</div><div>Note (illustrative — measure in production)</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Reporting interval (age of the data)</div><div>0-5 s</div><div>The bus may have moved since its last ping; the main floor on freshness</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Device to IoT Hub over 4G</div><div>~50-300 ms</div><div>Cellular latency varies; device buffers if the link is down</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">IoT Hub to processor</div><div>~50-150 ms</div><div>Consumer reads from the stream</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Validate, map-match, Redis write</div><div>~10-50 ms</div><div>Conditional write on seq</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">ETA and stop-list update</div><div>~10-50 ms</div><div>Next ~10 stops per ping</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Conflation wait</div><div>1-5 s</div><div>The largest tunable part: trades freshness against fan-out cost</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Real-time hub to phone</div><div>~50-300 ms</div><div>WebSocket; push notifications take longer and are best-effort</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Render on the phone</div><div>&lt; 50 ms</div><div>Delta applied to local state</div></div>
+            <div class="dt-row" style="grid-template-columns:1.5fr 1fr 2.2fr;"><div class="dt-name">Total from the GPS fix</div><div>~2-7 s typical</div><div>Dominated by the reporting interval and conflation, not by the cloud hops</div></div>
+          </div>
+          <div class="tip-box">✅ The cloud hops together take well under a second. Most of the end-to-end delay is deliberate — the GPS reporting interval and the conflation window — so shorten them only if fan-out cost and device battery allow.</div></div>
 
           <div class="ans-block"><div class="ans-label">Step 3b — Component responsibilities (high-level design of each box)</div>
           <div class="decision-table">
@@ -763,6 +810,102 @@ Alert when: buffer depth grows (outage in progress) BEFORE any device buffer is 
 
           <div class="warn-box">⚠️ The classic data-loss bug is acknowledging first and publishing afterwards — for example returning 200 immediately and sending to the event stream on a background thread. It looks fast and passes tests, and it silently loses every report that is in flight when a pod restarts.</div>
           <div class="tip-box">✅ Interview line: "Nothing is lost at the ingestion API provided the device buffers until it is acknowledged and the API acknowledges only after a durable publish. That gives at-least-once delivery, so I make the processing idempotent on busId and sequence number. The only real loss window is an outage longer than the device buffer, and for live tracking that costs almost nothing because the next ping restores the latest state — it only thins the history, which I protect with a large buffer, thinning of old points, and alerts on buffer depth."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qa-card">
+      <div class="qa-num">Q11</div>
+      <div class="qa-body">
+        <div class="qa-question">What happens when Event Hubs itself is down?</div>
+        <div class="qa-answer">
+          <div class="ans-block"><div class="ans-label">Short answer</div>
+          Live tracking degrades but does not crash, and nothing the stream already accepted is lost. Producers cannot publish, so they buffer; consumers get nothing, so Redis keys expire and passengers see buses flagged as estimated; when the stream returns, processors catch up. The design question is how long you can tolerate the degraded view and what you do to shorten it.</div>
+
+          <div class="ans-block"><div class="ans-label">First, what does "down" mean? — it is usually not a total outage</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div>Failure</div><div>Typical effect</div><div>Response</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div class="dt-name">Throttling (capacity exceeded) — the most common case</div><div>Sends return a server-busy error; the service is up but refusing some traffic</div><div>Producers back off with jitter; scale throughput units or processing units; turn on auto-inflate if your tier supports it</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div class="dt-name">One partition unavailable</div><div>Only the buses hashed to that partition are affected</div><div>Retry; partition keys keep other buses flowing</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div class="dt-name">Namespace or zone problem</div><div>Sends and receives fail for the whole stream</div><div>Fallback queue, degraded mode (below), wait for the platform</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div class="dt-name">Regional outage</div><div>The stream is unreachable, and the data inside may be unavailable until recovery</div><div>Failover to a second namespace or region; accept that unreplicated events may not come with you</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 1.6fr 1.8fr;"><div class="dt-name">Consumer side (your processors or checkpoint store)</div><div>Stream is healthy but nothing reads it</div><div>Consumer lag alarms; restart or scale processors; check the checkpoint storage</div></div>
+          </div>
+          <div class="warn-box">⚠️ With IoT Hub, the stream is its built-in Event Hubs-compatible endpoint and is part of IoT Hub itself. With a thin HTTPS ingestion API publishing to your own Event Hubs namespace, the namespace is a separate failure domain you must plan for.</div></div>
+
+          <div class="ans-block"><div class="ans-label">What each part of the system experiences during an outage</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header" style="grid-template-columns:1fr 2.6fr;"><div>Part</div><div>Behaviour</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">Devices</div><div>Reports are not confirmed, so each device keeps them in its buffer and retries with backoff — the same store-and-forward behaviour as in Q10. No loss until a buffer overflows</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">Ingestion API</div><div>The send fails after the client library's own retries; the API returns 503 with Retry-After (or writes to a fallback queue and returns 202)</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">Stream</div><div>Events accepted before the outage remain stored for the retention period and are not lost; no new events are accepted</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">Stream processors</div><div>Receive nothing and retry with backoff; they do not crash. Checkpoints live in a separate store, so they resume where they left off</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">Redis (live state)</div><div>No new writes, so bus keys expire after their TTL (about 30 seconds in this design) and arrival lists go stale</div></div>
+            <div class="dt-row" style="grid-template-columns:1fr 2.6fr;"><div class="dt-name">APIs, apps, displays</div><div>Keep working. Items change from LIVE to ESTIMATED to timetable-based, always labelled; displays show a banner. Reference data (routes, stops) is unaffected because it never depended on the stream</div></div>
+          </div>
+          <div class="code-box">Passenger view during an outage
+  0 s       bus 201A   4 min   LIVE
+  +30 s     bus 201A   4 min   ESTIMATED   (last position is getting old)
+  +2 min    bus 201A   ~4 min  SCHEDULED   (timetable only, banner: "live times unavailable")
+  recovery  first fresh ping restores LIVE within one reporting interval</div></div>
+
+          <div class="ans-block"><div class="ans-label">Protections — decide how much you need</div>
+          <div class="decision-table">
+            <div class="dt-row dt-header" style="grid-template-columns:1.2fr 2.6fr;"><div>Measure</div><div>What it gives you</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Zone-redundant namespace</div><div>Survives the loss of a zone. Check that your tier and region support it (it is generally the default on the higher tiers in zone-enabled regions)</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Fallback durable queue in a different service</div><div>When a send fails, the API writes the report to a separate durable store (for example a storage queue or Service Bus) and a replayer republishes later. A different service means a different failure domain</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Second namespace in another region</div><div>Regional resilience. Note that metadata-only geo-disaster-recovery pairing does not copy event data, whereas the newer geo-replication feature does — verify which one your tier offers and what a failover does to unconsumed events</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Degraded direct-to-Redis path (optional)</div><div>While the stream is down, the ingestion tier writes each bus's latest position straight into Redis with the same conditional write on seq, so the live view keeps working. History goes to the fallback queue. The cost is a second, simpler processing path to build and keep consistent</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Adequate retention</div><div>Keep events long enough that a slow recovery or a processor fix still finds them (set it deliberately against your tier's limit)</div></div>
+            <div class="dt-row" style="grid-template-columns:1.2fr 2.6fr;"><div class="dt-name">Capture to the data lake</div><div>An independent copy of what was accepted, usable to rebuild history and live state</div></div>
+          </div></div>
+
+          <div class="ans-block"><div class="ans-label">Recovery — catching up without hurting live tracking</div>
+          <div class="code-box">When the stream comes back, 5,000 buses' worth of backlog arrives at once.
+
+Use TWO consumers on the same stream:
+  LIVE consumer     latest-wins: for each bus only the NEWEST report matters.
+                    Skip old backlog for live state, jump toward recent data, and
+                    apply with the conditional write (only if seq is newer).
+  ARCHIVE consumer  full replay in order: writes every report to the lake so
+                    history and ETA training data have no gaps.
+
+Also: autoscale processors on consumer lag, rate-limit writes to Redis and the
+real-time hub so the catch-up does not become a second outage, and replay the
+fallback queue through the same ingestion path.</div>
+          <div class="code-box">// LIVE consumer: ignore stale backlog, never move a bus backwards
+processor.ProcessEventAsync += async args =&gt;
+{
+    var report = Parse(args.Data);
+    var age = DateTimeOffset.UtcNow - args.Data.EnqueuedTime;
+
+    if (age &lt; TimeSpan.FromSeconds(45))                 // recent enough to matter for live tracking
+        await ApplyIfNewerAsync(report);                // conditional write on seq (idempotent)
+
+    await args.UpdateCheckpointAsync();                 // still advance, so the backlog drains fast
+};
+
+// Fallback in the ingestion API: do not lose a report if the stream is down
+try   { await producer.SendAsync(events, ct); return Results.Accepted(); }
+catch { await fallbackQueue.SendMessageAsync(payload, ct);  return Results.Accepted(); }  // durable elsewhere</div></div>
+
+          <div class="ans-block"><div class="ans-label">How you find out — detect it in a minute, not from passengers</div>
+          <div class="code-box">Stream metrics:   server errors · throttled requests · incoming messages falling to zero
+Consumer:         lag and age of the oldest unprocessed event
+Fleet:            % of buses reporting in the last 60 s (drops sharply)
+Synthetic probe:  a "ghost bus" that sends a heartbeat through the whole pipeline every
+                  few seconds; alert if it does not appear in Redis within N seconds
+Platform:         subscribe to the cloud provider's service-health alerts</div></div>
+
+          <div class="ans-block"><div class="ans-label">Runbook in one line each</div>
+          <div class="code-box">1 detect (ghost bus, lag, error rate)   2 declare and switch on the status banner
+3 confirm whether it is throttling (scale up) or an outage (fallback queue, degraded path)
+4 communicate: displays and apps already show estimated or scheduled times
+5 recover: drain the backlog with the two-consumer approach   6 verify fleet freshness and the ghost bus
+7 post-incident review: measure how long live data was degraded and what was lost</div></div>
+
+          <div class="warn-box">⚠️ Do not answer this with "make Event Hubs multi-region active-active" by reflex. Live tracking tolerates gaps — the next ping restores the latest state — so decide with the business how long displays may show estimated times. For a city bus service a degraded view for a short period is usually acceptable, and the cheap protections (buffering, a fallback queue, latest-wins catch-up) cover most of the risk.</div>
+          <div class="tip-box">✅ Interview line: "If Event Hubs is down, producers stop getting acknowledgements so devices and the ingestion API buffer, and consumers see nothing so Redis keys expire and the apps show buses as estimated, then timetable-based, with a banner — it degrades, it does not fail. Everything the stream had already accepted is retained, and when it returns I catch up with a latest-wins consumer for live state plus a full-replay consumer for history, so recovery does not hurt live tracking. I tell throttling from a real outage first, because throttling is the common case and is fixed by scaling."</div>
         </div>
       </div>
     </div>

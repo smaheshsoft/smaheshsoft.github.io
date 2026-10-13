@@ -7,9 +7,9 @@ window.Pages['companies-home'] = `
   </div>
 
   <div class="stats-bar">
-    <div class="stat-box"><div class="num">9</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">160+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">15</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">10</div><div class="label">Companies</div></div>
+    <div class="stat-box"><div class="num">170+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">16</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -124,10 +124,19 @@ window.Pages['companies-home'] = `
     <div class="card" onclick="showPage('amtech3', document.querySelector('[onclick*=amtech3]'))">
       <div class="card-icon">🚌</div>
       <h3>AM Tech Software – Round 3</h3>
-      <p>City bus tracking system design — IoT Hub ingestion, real-time ETA, stop displays, Redis and database consistency, failover and data loss, cache staleness, fan-out to riders, telemetry scaling, ingestion-API failure and data loss, and safely rolling out a new ETA algorithm.</p>
+      <p>City bus tracking system design — IoT Hub ingestion, real-time ETA, stop displays, Redis and database consistency, failover and data loss, cache staleness, fan-out to riders, telemetry scaling, ingestion-API failure and data loss, event-stream outage and recovery, and safely rolling out a new ETA algorithm.</p>
       <div class="card-meta">
-        <span class="tag blue">10 Questions</span><span class="tag">System Design</span>
+        <span class="tag blue">11 Questions</span><span class="tag">System Design</span>
         <span class="tag">IoT</span><span class="tag">Real-Time</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('epam1', document.querySelector('[onclick*=epam1]'))">
+      <div class="card-icon">🧩</div>
+      <h3>EPAM – Round 1</h3>
+      <p>Pre-sales and proposal architecture — Battery Swapping platform walkthrough, proposal structure, architecture artifacts beyond UML and NFRs, C4 model, cost estimation, customer-facing design deliverables, a 4-hour time-boxed design, technology selection, AI adoption in the current project, upskilling, cost estimation for a RAG-based AI project, application security in transit, in storage and at rest, and the system integrations.</p>
+      <div class="card-meta">
+        <span class="tag blue">14 Questions</span><span class="tag">Proposal</span>
+        <span class="tag">C4 Model</span><span class="tag">Estimation</span>
       </div>
     </div>
   </div>

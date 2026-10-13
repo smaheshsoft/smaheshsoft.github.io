@@ -190,6 +190,58 @@ window.Pages['sd-bus-tracking'] = (function () {
     ]) +
     tip("Two paths meet in the middle. Telemetry flows down the left side into services that write Redis; passengers flow down the right side through the edge, APIM and the API layer into services that read Redis first and the database only on a miss. The database is never on the live path."), false));
 
+  // ---------- data flow diagram: bus to passenger's mobile ----------
+  function chain(items) {
+    return '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;">' +
+      items.map(function (i) { return mini(i[0], i[1]); }).join('<span style="color:var(--muted);">→</span>') + '</div>';
+  }
+  var dataFlow = '<div style="max-width:640px;margin:0 auto;border:1px solid var(--border);border-radius:14px;padding:16px;background:var(--surface);">' +
+    fc("① 🚌 Bus GPS tracker", "GNSS fix every ~5 s → report { busId, seq, ts, lat, lon, speed, heading } → written to the local flash buffer first") +
+    downL("MQTT over TLS on 4G · per-device X.509 certificate · retried until acknowledged") +
+    fc("② ☁️ IoT Hub", "authenticates the device · accepts the report · routes it to the event stream") +
+    downL("partition key = busId — one bus, one ordered partition") +
+    fc("③ Event stream", "durable and retained · ordered per bus · replayable", true) +
+    downL("consumer group — processors read at their own pace") +
+    fc("④ Vehicle State (stream processor)", "validate · drop duplicates and late reports · map-match to the route · detect stop arrival") +
+    downL("conditional write — only if seq is newer") +
+    grp("Redis — live state", grid(3, [mini("bus:{id}", "latest position, speed, trip"), mini("geo:buses", "map-area queries"), mini("stop:{id}:arrivals", "sorted by ETA")])) +
+    downL("a changed bus triggers recalculation") +
+    fc("⑤ ETA Engine + Stop Predictions", "ETA for the next ~10 stops of that bus → update each stop's arrival list") +
+    downL("only what changed") +
+    fc("⑥ Live Event Publisher", "conflate: newest value per group every 1-5 s → groups bus:201A · route:201 · stop:MG-ROAD") +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div>' + downL("WebSocket — app in the foreground") + fc("Real-time Hub", "Web PubSub / SignalR groups") +
+    '</div><div>' + downL("push — app in the background or closed") + fc("Favorites + Notification", "alert rule matched → FCM / APNs") + '</div></div>' +
+    downL("delta arrives on the phone") +
+    fc("⑦ 📱 Passenger's mobile app", "merge the delta into local state → redraw map and arrival list → show 'updated 3 s ago' → grey the bus out if updates stop", true) +
+    '</div>';
+
+  out.push(sec("Data Flow Diagram — From the Bus to the Passenger's Mobile", dataFlow +
+    strong("When the passenger opens the app (the snapshot path)") +
+    '<div style="margin:8px 0 14px;">' + chain([["📱 Mobile app", "open / refresh"], ["Edge + CDN", "static data cached"], ["APIM", "auth · limits"], ["Mobile BFF", "one call per screen"], ["Tracking Service", "live read model"], ["Redis", "current state"]]) +
+    p("The response returns the current arrivals and positions; the app then joins its stop, route or bus groups on the real-time hub and receives only deltas from then on. If the socket cannot connect it polls the same endpoint, which is served from a short HTTP cache.") + '</div>' +
+    strong("Time spent at each hop (illustrative — measure the real figures in production)") +
+    tbl([1.5, 1, 2.2], ["Hop", "Typical time", "Note"], [
+      ["Reporting interval (age of the data)", "0-5 s", "The bus may have moved since its last ping; the main floor on freshness"],
+      ["Device to IoT Hub over 4G", "~50-300 ms", "Cellular latency varies; device buffers if the link is down"],
+      ["IoT Hub to processor", "~50-150 ms", "Consumer reads from the stream"],
+      ["Validate, map-match, Redis write", "~10-50 ms", "Conditional write on seq"],
+      ["ETA and stop-list update", "~10-50 ms", "Next ~10 stops per ping"],
+      ["Conflation wait", "1-5 s", "The largest tunable part: trades freshness against fan-out cost"],
+      ["Real-time hub to phone", "~50-300 ms", "WebSocket; push notifications take longer and are best-effort"],
+      ["Render on the phone", "< 50 ms", "Delta applied to local state"],
+      ["Total from the GPS fix", "~2-7 s typical", "Dominated by the reporting interval and conflation, not by the cloud hops"]
+    ]) +
+    strong("If a hop fails") +
+    tbl([1.3, 2.6], ["Hop", "What happens"], [
+      ["Device or network", "Reports buffer on the bus and are sent in order when the link returns"],
+      ["IoT Hub or event stream", "Producers buffer; consumers see nothing; apps show ESTIMATED then timetable ETAs; accepted events stay retained (see the stream outage section)"],
+      ["Stream processor", "Another worker resumes from the checkpoint; writes are idempotent"],
+      ["Redis", "Fails over to its replica; state rebuilds from the next pings and stream replay"],
+      ["Real-time hub or the phone's socket", "App falls back to polling a cached endpoint; reconnect fetches a snapshot first"],
+      ["Phone offline or in the background", "Last data stays on screen with a stale flag; push notifications carry alerts"]
+    ]) +
+    tip("The cloud hops together take well under a second. Most of the end-to-end delay is deliberate: the GPS reporting interval and the conflation window. Shorten them only if the fan-out cost and device battery allow."), false));
+
   out.push(sec("High-Level Flow — Telemetry to Screen (reference view)", flow +
     '<div style="margin-top:16px;">' + tbl([1.3, 2.6], ["Box in the flow", "Specified in detail under"], [
       ["Device Ingestion", "Component: Ingestion — IoT Hub and the Event Stream"],
@@ -700,6 +752,7 @@ window.Pages['sd-bus-tracking'] = (function () {
     tbl([1.3, 2.4, 1.7], ["Failure", "Behaviour", "Recovery"], [
       ["Bus tracker offline", "Key expires -> bus shown offline; timetable ETA flagged as estimated", "Device buffers and sends a batch on reconnect"],
       ["Ingestion API failure", "Device gets an error or timeout and keeps the report; the API confirms only after a durable publish, so nothing it confirmed is lost", "Device retries with backoff; duplicates removed by (busId, seq). See the next section"],
+      ["Event stream (Event Hubs) down", "Producers buffer; consumers get nothing, so Redis keys expire and apps show ESTIMATED then timetable ETAs; accepted events stay retained", "Fallback queue, latest-wins catch-up for live plus full replay for history. See the stream outage section"],
       ["Stream processor crash", "Another worker takes the partition", "Resumes from checkpoint; idempotent writes"],
       ["Redis failure", "Replica failover in seconds; clients use circuit breaker and last-known cache", "State self-heals from the next pings and stream replay"],
       ["Primary database failure", "Live tracking unaffected; admin and favorite writes fail fast; reference reads from cache and replicas", "Zone-redundant standby is promoted automatically; reconnect with backoff"],
@@ -748,6 +801,42 @@ window.Pages['sd-bus-tracking'] = (function () {
     ]) +
     tip("Live tracking tolerates gaps — the next ping restores the latest position — so the real cost of loss is history, analytics and ETA training data. That is why devices batch-upload their buffer oldest-first on reconnect, and why processors use device event time rather than arrival time.") +
     warn("The classic bug is to return 200 immediately and publish on a background thread. It looks fast and passes tests, but it silently loses every report that is in flight when a pod restarts. IoT Hub follows the same principle (MQTT acknowledgements and SDK retries), which is one more reason to prefer it over a hand-built ingestion API.")));
+
+  out.push(sec("Event Stream Outage (Event Hubs or the IoT Hub endpoint is down)",
+    p("The stream is the backbone, so an outage there degrades the live view but does not lose what was already accepted. First work out what kind of failure it is: throttling is the common case and is fixed by scaling; a namespace, zone or regional outage needs the fallbacks below.") +
+    tbl([1.1, 1.8, 1.8], ["Failure", "Effect", "Response"], [
+      ["Throttling (capacity exceeded)", "Sends return server-busy; service is up but refusing some traffic", "Producers back off with jitter; scale throughput or processing units; auto-inflate where available"],
+      ["One partition unavailable", "Only the buses hashed to it are affected", "Retry; other buses keep flowing"],
+      ["Namespace or zone problem", "Sends and receives fail", "Fallback queue, degraded mode, wait for the platform"],
+      ["Regional outage", "Stream unreachable; stored data may be unavailable until recovery", "Fail over to a second namespace or region; unreplicated events may not come with you"],
+      ["Consumer side", "Stream healthy but nothing reads it", "Consumer-lag alarms; restart or scale processors; check the checkpoint store"]
+    ]) +
+    strong("What each part experiences") +
+    tbl([1, 2.6], ["Part", "Behaviour"], [
+      ["Devices", "No acknowledgement, so they keep reports in the buffer and retry with backoff — no loss until a buffer overflows"],
+      ["Ingestion API", "Returns 503 with Retry-After, or writes to a fallback queue and returns 202"],
+      ["Stream", "Events accepted before the outage stay retained; no new events accepted"],
+      ["Processors", "Receive nothing and retry; they do not crash; checkpoints live in a separate store so they resume correctly"],
+      ["Redis", "No new writes, so bus keys expire after their TTL and arrival lists go stale"],
+      ["APIs, apps, displays", "Keep working: LIVE becomes ESTIMATED, then timetable-based, always labelled, with a banner. Reference data is unaffected"]
+    ]) +
+    strong("Protections and recovery") +
+    tbl([1.2, 2.6], ["Measure", "What it gives you"], [
+      ["Zone-redundant namespace", "Survives a zone loss (check tier and region support)"],
+      ["Fallback durable queue in a different service", "A separate failure domain; a replayer republishes later"],
+      ["Second namespace in another region", "Regional resilience. Metadata-only geo-DR pairing does not copy event data; the newer geo-replication does — verify what your tier offers"],
+      ["Degraded direct-to-Redis path (optional)", "Latest positions written straight to Redis with the same conditional write while the stream is down; costs a second simpler path"],
+      ["Two consumers after recovery", "LIVE consumer is latest-wins (skip old backlog); ARCHIVE consumer replays everything for history"],
+      ["Ghost-bus synthetic probe", "A heartbeat bus through the whole pipeline; alert if it does not reach Redis within N seconds"]
+    ]) +
+    code(
+      "// LIVE consumer: ignore stale backlog, never move a bus backwards\n" +
+      "var age = DateTimeOffset.UtcNow - args.Data.EnqueuedTime;\n" +
+      "if (age < TimeSpan.FromSeconds(45))\n" +
+      "    await ApplyIfNewerAsync(report);       // conditional write on seq\n" +
+      "await args.UpdateCheckpointAsync();        // advance anyway so the backlog drains quickly"
+    ) +
+    warn("Do not reach for multi-region active-active by reflex. Live tracking tolerates gaps — the next ping restores the latest state — so agree with the business how long displays may show estimated times. Buffering, a fallback queue and latest-wins catch-up cover most of the risk cheaply.")));
 
   out.push(sec("Scalability Patterns",
     tbl([1.1, 2.6], ["Layer", "How it scales when more buses are added"], [
