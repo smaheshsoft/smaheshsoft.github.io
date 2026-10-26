@@ -8,8 +8,8 @@ window.Pages['companies-home'] = `
 
   <div class="stats-bar">
     <div class="stat-box"><div class="num">10</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">170+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">16</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">180+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">17</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -128,6 +128,15 @@ window.Pages['companies-home'] = `
       <div class="card-meta">
         <span class="tag blue">11 Questions</span><span class="tag">System Design</span>
         <span class="tag">IoT</span><span class="tag">Real-Time</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('amtech4', document.querySelector('[onclick*=amtech4]'))">
+      <div class="card-icon">🔄</div>
+      <h3>AM Tech Software – Round 4</h3>
+      <p>Legacy on-premises to multi-tenant SaaS migration — tenancy models, client data migration, on-prem and cloud synchronisation, tenant isolation, minimal-downtime cutover, rollback and reverse sync, schema differences, conflicts, duplicates and sync failures.</p>
+      <div class="card-meta">
+        <span class="tag blue">7 Questions</span><span class="tag">Migration</span>
+        <span class="tag">Multi-Tenant</span><span class="tag">Data Sync</span>
       </div>
     </div>
     <div class="card" onclick="showPage('epam1', document.querySelector('[onclick*=epam1]'))">
