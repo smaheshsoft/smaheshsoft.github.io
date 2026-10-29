@@ -1,5 +1,6 @@
 // ── PAGE METADATA ─────────────────────────────────────────────────────────────
 const PAGE_META = {
+  'ref-c4-model':             { title:'C4 Model Architecture',        icon:'🧩', cat:'arch'       },
   'ref-core-principles':      { title:'Core Design Principles',       icon:'🧭', cat:'arch'       },
   'ref-gof-patterns':         { title:'GoF Design Patterns',          icon:'🧱', cat:'arch'       },
   'ref-cohesion':             { title:'Cohesion Types',                icon:'🔗', cat:'arch'       },
