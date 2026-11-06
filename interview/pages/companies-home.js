@@ -8,8 +8,8 @@ window.Pages['companies-home'] = `
 
   <div class="stats-bar">
     <div class="stat-box"><div class="num">10</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">180+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">17</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">190+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">18</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -146,6 +146,15 @@ window.Pages['companies-home'] = `
       <div class="card-meta">
         <span class="tag blue">14 Questions</span><span class="tag">Proposal</span>
         <span class="tag">C4 Model</span><span class="tag">Estimation</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('epam2', document.querySelector('[onclick*=epam2]'))">
+      <div class="card-icon">🎓</div>
+      <h3>EPAM – Round 2</h3>
+      <p>DevOps CI/CD role and release process, plus a university online-learning platform case study: clarifying questions, architecture, auto-grading, subscriptions, offline-to-online migration, delivery approach and one-year plan, ROI, APIs, choosing an AI model, AI in the SDLC, common architect issues, event-driven result preparation, modular monolith versus microservices, the initial offline-to-online data load, and how to evaluate technology and design choices.</p>
+      <div class="card-meta">
+        <span class="tag blue">16 Questions</span><span class="tag">System Design</span>
+        <span class="tag">DevOps</span><span class="tag">ROI</span>
       </div>
     </div>
   </div>

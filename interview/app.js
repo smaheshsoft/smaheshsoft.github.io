@@ -24,6 +24,7 @@ const PAGE_META = {
   'amtech3':                  { title:'AM Tech Software – Round 3',    icon:'🚌', cat:'company'   },
   'amtech4':                  { title:'AM Tech Software – Round 4',    icon:'🔄', cat:'company'   },
   'epam1':                    { title:'EPAM – Round 1',                icon:'🧩', cat:'company'   },
+  'epam2':                    { title:'EPAM – Round 2',                icon:'🎓', cat:'company'   },
   'wipro':                    { title:'Wipro',                         icon:'🔷', cat:'company'   },
   'aezion':                   { title:'Aezion – Round 1',              icon:'🧭', cat:'company'   },
   'topics':                   { title:'All Topics Index',              icon:'📚', cat:'overview'  },
