@@ -7,9 +7,9 @@ window.Pages['companies-home'] = `
   </div>
 
   <div class="stats-bar">
-    <div class="stat-box"><div class="num">10</div><div class="label">Companies</div></div>
-    <div class="stat-box"><div class="num">190+</div><div class="label">Questions</div></div>
-    <div class="stat-box"><div class="num">18</div><div class="label">Rounds</div></div>
+    <div class="stat-box"><div class="num">11</div><div class="label">Companies</div></div>
+    <div class="stat-box"><div class="num">200+</div><div class="label">Questions</div></div>
+    <div class="stat-box"><div class="num">19</div><div class="label">Rounds</div></div>
   </div>
 
   <div class="alert tip">
@@ -155,6 +155,15 @@ window.Pages['companies-home'] = `
       <div class="card-meta">
         <span class="tag blue">16 Questions</span><span class="tag">System Design</span>
         <span class="tag">DevOps</span><span class="tag">ROI</span>
+      </div>
+    </div>
+    <div class="card" onclick="showPage('truevalue1', document.querySelector('[onclick*=truevalue1]'))">
+      <div class="card-icon">🏷️</div>
+      <h3>Truevaluelabs – Round 1</h3>
+      <p>Multi-tenant design and data isolation, tenant resolution and user-to-tenant mapping, zero trust, legacy application to agent and MCP tools, Angular state management, Microsoft token authentication with backend authorization, avoiding per-request tenant lookups, POST-only middleware, and resolving two implementations of one interface.</p>
+      <div class="card-meta">
+        <span class="tag blue">9 Questions</span><span class="tag">Multi-Tenant</span>
+        <span class="tag">Zero Trust</span><span class="tag">.NET</span>
       </div>
     </div>
   </div>
